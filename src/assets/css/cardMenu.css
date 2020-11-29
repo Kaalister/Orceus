@@ -1,0 +1,12 @@
+.card-img {
+    height: 421px;
+    width: 297.5px;
+    border-radius: 20px;
+    margin: 20px;
+    box-shadow: 9px 9px 21px -2px rgba(82,82,82,0.74);
+}
+
+.container-card-menu {
+    padding: 20px;
+    text-align: center;
+}
