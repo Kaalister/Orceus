@@ -1,0 +1,42 @@
+@media (max-width: 600px) {
+    .full-card {
+        height: auto;
+        width: 100vw;
+    }
+}
+
+.full-card {
+    border-radius: 15px;
+    height: 100vh;
+    width: auto;
+}
+
+.tool-btn {
+    position: absolute;
+    color: white;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.815);
+    padding: 15px;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+.tool-back-arrow {
+    left: 30px;
+    top: 15px;
+}
+
+.tool-zoomin {
+    right: 100px;
+    top: 15px;
+}
+
+.tool-zoomout {
+    right: 30px;
+    top: 15px;
+}
+
+.tool-reset {
+    bottom: 15px;
+    right: 30px;
+}
