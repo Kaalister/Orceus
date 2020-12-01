@@ -1,6 +1,6 @@
 const md5 = require("md5");
 
-module.exports = {
+let bcrypt = {
 
   hash(rawPassword, options = {}) {
 
@@ -27,3 +27,5 @@ module.exports = {
     }
   }
 };
+
+export default bcrypt;

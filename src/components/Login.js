@@ -3,10 +3,10 @@ import { Redirect } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AppProfile from '../Profile';
+import bcrypt from '../encrypt';
 
 import "../assets/css/login.css";
 
-const bcrypt = require('../encrypt.js');
 
 const USER_PASSWORD = "1606854672352$10$4e66ae393040ea5c5f1de1d855776d3f";
 const ADMIN_PASSWORD = "1606854764256$10$19687648d00d6ef02e1b1a18447067be";
