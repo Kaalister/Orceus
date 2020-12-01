@@ -32,15 +32,13 @@ export default class CardMenu extends React.Component {
 
     render() {
         return (
-            <div className="center">
-                <TransformWrapper
-                    defaultScale={1}
-                    >
+            <div className="center" style={{height: "100vh"}}>
+                <TransformWrapper defaultScale={1}>
                     {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
                         <React.Fragment>
                             <Link
                                 className="tool-btn tool-back-arrow"
-                                to="/cards">
+                                to="/Orceus/cards">
                                 <ArrowBack/>
                             </Link>
                             <div
@@ -62,13 +60,11 @@ export default class CardMenu extends React.Component {
                                 <ZoomOutMap/>
                             </div>
                             <TransformComponent>
-                                <div className="mx-auto">
                                 <img
                                     className="full-card"
                                     src={"data:image/png;base64," + this.state.card.img}
                                     alt=" "
                                     />
-                                </div>
                             </TransformComponent>
                         </React.Fragment>
                     )}

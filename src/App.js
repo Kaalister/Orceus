@@ -14,10 +14,10 @@ export default function App() {
 			<div>
 				{/* <div>Header</div> */}
 				<Switch>
-					<Route path="/cards">
+					<Route path="/Orceus/cards">
 						<Cards/>
 					</Route>
-					<Route path="/">
+					<Route path="/Orceus/">
 						<Login/>
 					</Route>
 				</Switch>

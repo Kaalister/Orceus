@@ -26,7 +26,7 @@ export default class CardMenu extends React.Component {
 
         let cards = this.state.cards.map( (card, index) => {
             return(
-                <Link to={"/cards/" + card.id} key={index}>
+                <Link to={"/Orceus/cards/" + card.id} key={index}>
                     <img
                         className="card-img"
                         src={"data:image/png;base64," + card.img}
