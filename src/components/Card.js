@@ -23,7 +23,7 @@ export default class CardMenu extends React.Component {
     }
 
     componentDidMount() {
-        let card = data();
+        let card = data(this.props.id);
 
         this.setState({
             card
