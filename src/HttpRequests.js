@@ -4,6 +4,7 @@ export async function HttpGetRequest(route) {
     try {
         let headers = new Headers ({
             'Accept': 'application/json',
+            'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
         });
 
@@ -21,6 +22,7 @@ export async function HttpPostRequest(route, body) {
     try {
         let headers = new Headers ({
             'Accept': 'application/json',
+            'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
 
@@ -39,6 +41,7 @@ export async function HttpPutRequest(route, body) {
     try {
         let headers = new Headers ({
             'Accept': 'application/json',
+            'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
 
@@ -57,6 +60,7 @@ export async function HttpDeleteRequest(route, body) {
     try {
         let headers = new Headers ({
             'Accept': 'application/json',
+            'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
 
