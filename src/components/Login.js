@@ -90,7 +90,7 @@ export default class Login extends React.Component {
 
         let isMobile = window.innerWidth <= 600;
         let inputClass = ['div-centered'];
-        
+
         if (!!this.state.loginState) {
             inputClass.push('d-none')
         }
