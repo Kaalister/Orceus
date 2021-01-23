@@ -4,10 +4,13 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import AppProfile from '../Profile';
+
 import { HttpPostRequest } from '../HttpRequests';
+import BackgroundVideo from './BackgroundVideo';
 
 import "../assets/css/login.css";
-import LoginVideo from '../assets/background/loginBackground.mp4';
+import loginBackground from '../assets/background/loginBackground.mp4';
+import successBackground from '../assets/background/successBackground.mp4';
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -16,11 +19,20 @@ export default class Login extends React.Component {
         this.state = {
             password: '',
             error: false,
+            loginState: null,
             connected: AppProfile.get('connected'),
         }
 
         this.handlePassword = this.handlePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        let savePassword = localStorage.getItem('Orceus');
+
+        if (savePassword !== null) {
+            this.handleSubmit(savePassword);
+        }
     }
 
     handlePassword(e) {
@@ -41,19 +53,28 @@ export default class Login extends React.Component {
             return response.json()
         })
         .then(data => {
-            this.setState({ connected: true }, () => {
+            this.setState({ loginState: "success" }, () => {
                 localStorage.setItem('Orceus', password);
                 AppProfile.profile = {
                     connected: data.connected,
                     isAdmin: data.is_admin,
                 }
+                setTimeout(() => {
+                    this.setState({
+                        connected: true,
+                        loginState: null,
+                    })
+                }, 1500);
             })
         })
         .catch(() => {
-            this.setState({ error: true }, () => {
+            this.setState({ error: true, loginState: "error" }, () => {
                 localStorage.removeItem('Orceus');
                 setTimeout(()=> {
-                    this.setState({ error: false});
+                    this.setState({
+                        error: false,
+                        loginState: null
+                    });
                 }, 5000);
             });
         })
@@ -61,25 +82,34 @@ export default class Login extends React.Component {
     }
 
     render() {
-
-        let savePassword = localStorage.getItem('Orceus');
-
-        if (savePassword !== null) {
-            this.handleSubmit(savePassword);
-        }
-
         if (this.state.connected) {
             return(
                 <Redirect to="/Orceus/cards"/>
             );
         }
 
+        let isMobile = window.innerWidth <= 600;
+        let inputClass = ['div-centered'];
+        
+        if (!!this.state.loginState) {
+            inputClass.push('d-none')
+        }
+
         return (
             <div className="login-container">
-                <video className='background' autoPlay loop muted>
-                    <source src={LoginVideo} type='video/mp4' />
-                </video>
-                <div className="div-centered password-background">
+                { (this.state.loginState === null && !isMobile) ? (
+                        <BackgroundVideo
+                        source={loginBackground}
+                        vKey={"login"}
+                        />
+                ) : null}
+                { (this.state.loginState === "success" && !isMobile) ? (
+                        <BackgroundVideo
+                        source={successBackground}
+                        vKey={"login-success"}
+                        />
+                ) : null}
+                <div className={inputClass.join(' ')}>
                     <TextField
                         onChange={this.handlePassword}
                         value={this.state.password}
