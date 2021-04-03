@@ -38,6 +38,9 @@ export default class CardMenu extends React.Component {
 
         return (
             <div className="container-card-menu">
+                <a href="/Orceus/AdminSettings" className="setting-btn">
+                    settings
+                </a>
                 {cards}
             </div>
         );

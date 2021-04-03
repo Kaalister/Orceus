@@ -1,0 +1,11 @@
+.adminsetting-container {
+    padding: 30px;
+}
+
+.action-btn {
+    margin: 20px 5px 0px 5px;    
+}
+
+.action-btn:hover{
+    cursor: pointer;
+}

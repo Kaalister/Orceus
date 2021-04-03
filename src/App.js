@@ -6,16 +6,19 @@ import {
 
 import Login from './components/Login';
 import Cards from './components/Cards';
+import AdminSettings from './components/AdminSettings';
 import './App.css';
 
 export default function App() {
 	return (
 		<Router>
 			<div>
-				{/* <div>Header</div> */}
 				<Switch>
 					<Route path="/Orceus/cards">
 						<Cards/>
+					</Route>
+					<Route path="/Orceus/AdminSettings">
+						<AdminSettings/>
 					</Route>
 					<Route path="/Orceus/">
 						<Login/>
