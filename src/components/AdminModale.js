@@ -188,7 +188,6 @@ export default class AdminModale extends React.Component {
 
     handleImg(key) {
         let input = document.getElementById(key);
-        let card = { ...this.state.card };
 
         input.click();
         input.addEventListener("change", (e) => {
@@ -290,7 +289,8 @@ export default class AdminModale extends React.Component {
             .then( data => {
                 if (!data)
                     throw Error();
-                this.props.close()
+                this.props.update();
+                this.props.close();
             })
             .catch( () => {
                 console.log("Erreur lors de l'update");
@@ -310,6 +310,7 @@ export default class AdminModale extends React.Component {
         .then( data => {
             if (!data)
                 throw Error();
+            this.props.update();
             this.props.close()
         })
         .catch( () => {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -11,6 +10,7 @@ import BackgroundVideo from './BackgroundVideo';
 import "../assets/css/login.css";
 import loginBackground from '../assets/background/loginBackground.mp4';
 import successBackground from '../assets/background/successBackground.mp4';
+import errorBackground from '../assets/background/errorBackground.mp4';
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -47,6 +47,7 @@ export default class Login extends React.Component {
             password
         })
         .then(response => {
+            console.log(0)
             if (!response.ok) {
                 throw Error();
             }
@@ -64,6 +65,11 @@ export default class Login extends React.Component {
                         connected: true,
                         loginState: null,
                     })
+                    if (!this.props.location.state) {
+                        this.props.history.push('/Orceus/cards');
+                    } else {
+                        this.props.history.push(this.props.location.state.referrer);
+                    }
                 }, 1500);
             })
         })
@@ -75,19 +81,13 @@ export default class Login extends React.Component {
                         error: false,
                         loginState: null
                     });
-                }, 5000);
+                }, 1666);
             });
         })
 
     }
 
     render() {
-        if (this.state.connected) {
-            return(
-                <Redirect to="/Orceus/cards"/>
-            );
-        }
-
         let isMobile = window.innerWidth <= 600;
         let inputClass = ['div-centered'];
 
@@ -106,6 +106,12 @@ export default class Login extends React.Component {
                 { (this.state.loginState === "success" && !isMobile) ? (
                         <BackgroundVideo
                         source={successBackground}
+                        vKey={"login-success"}
+                        />
+                ) : null}
+                { (this.state.loginState === "error" && !isMobile) ? (
+                        <BackgroundVideo
+                        source={errorBackground}
                         vKey={"login-success"}
                         />
                 ) : null}

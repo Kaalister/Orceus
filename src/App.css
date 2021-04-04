@@ -11,11 +11,10 @@ body {
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.rotate {
+  animation: App-logo-spin infinite 2s linear;
 }
+
 
 .App-header {
   background-color: #282c34;
@@ -86,15 +85,37 @@ body {
   padding-right: 2rem;
 }
 
+.p-1, .py-1, .pt-1 {
+  padding-top: 1rem;
+}
+
+.p-1, .py-1, .pb-1 {
+  padding-bottom: 1rem;
+}
+
+.p-1, .px-1, .pl-1 {
+  padding-left: 1rem;
+}
+
+.p-1, .px-1, .pr-1 {
+  padding-right: 1rem;
+}
+
 .right {
   float: right;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+
 
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(-360deg);
   }
 }

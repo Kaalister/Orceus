@@ -6,8 +6,74 @@ import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 import AdminModale from './AdminModale';
+import AppProfile from '../Profile';
 
 import '../assets/css/adminSettings.css'
+
+const TYPESOPTIONS = [{
+    label: 'Personnage',
+    value: 'character'
+}, {
+    label: 'Carte',
+    value: 'map'
+}, {
+    label: 'Peuple/Race',
+    value: 'class'
+}, {
+    label: 'Mineral',
+    value: 'mineral'
+}, {
+    label: 'Végétal',
+    value: 'vegetable'
+}, {
+    label: 'Ville',
+    value: 'city'
+}, {
+    label: 'Créature',
+    value: 'monster'
+}, {
+    label: 'Artefact',
+    value: 'artefact'
+}, {
+    label: 'Autre',
+    value: 'other'
+}];
+
+const SPECIESOPTIONS = [{
+    label: 'Inconnue',
+    value: 'Unknown'
+}, {
+    label: 'Ciheuphe',
+    value: 'ciheuphe'
+}, {
+    label: 'Humain',
+    value: 'human'
+}, {
+    label: 'Shashouille',
+    value: 'shashouille'
+}, {
+    label: 'Robot',
+    value: 'robot'
+}, {
+    label: 'Hanylice',
+    value: 'hanylice'
+}, {
+    label: 'Suhera',
+    value: 'suhera'
+}, {
+    label: 'Ao-Nesa',
+    value: 'ao-nesa'
+}, {
+    label: 'Biri-Ozi',
+    value: 'biri-ozi'
+}, {
+    label: 'Wibsa-Thu',
+    value: 'wibsa-thu'
+}, {
+    label: 'Autre',
+    value: 'other'
+}];
+
 
 export default class AdminSettings extends React.Component {
 
@@ -88,10 +154,26 @@ export default class AdminSettings extends React.Component {
             headerName: 'Type',
             field: 'type',
             width: 150,
+            renderCell: (params) => {
+                let value = params.value;
+                let obj = TYPESOPTIONS.filter( type => (type.value === value));
+
+                return (
+                    <span>{(obj.lenth !== 0) ? obj[0].label : null}</span>
+                );
+            }
         }, {
             headerName: 'Espèce',
             field: 'specie',
             width: 150,
+            renderCell: (params) => {
+                let value = params.value;
+                let obj = SPECIESOPTIONS.filter( species => (species.value === value));
+
+                return (
+                    <span>{(obj.lenth !== 0) ? obj[0].label : null}</span>
+                );
+            }
         }, {
             headerName: 'Tags',
             field: 'tags',
@@ -138,6 +220,7 @@ export default class AdminSettings extends React.Component {
                     { (this.state.openModal) ? (
                         <AdminModale
                          show={this.state.openModal}
+                         update={this.getCardList}
                          close={this.closeModal}
                          id={this.state.selectedCard}
                         />

@@ -9,18 +9,16 @@ import {
 import Card from './Card';
 import CardsMenu from './CardsMenu';
 
-// import AppProfile from '../Profile';
-
-export default function Cards() {
+export default function Cards({ history }) {
     let match = useRouteMatch();
 
     return (
         <Switch>
             <Route path={`${match.path}/:id`}>
-                <GetIDToCard/>
+                <GetIDToCard history={history}/>
             </Route>
             <Route path={match.path}>
-                <CardsMenu/>
+                <CardsMenu history={history}/>
             </Route>
         </Switch>
     )
