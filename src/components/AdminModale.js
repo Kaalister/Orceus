@@ -1,5 +1,6 @@
 import React from 'react';
 import { Close, Delete, AddCircleOutline } from '@material-ui/icons';
+import { Button } from '@material-ui/core';
 import Select from 'react-select';
 
 import { HttpGetRequest, HttpPostRequest } from '../HttpRequests';
@@ -71,6 +72,14 @@ const SPECIESOPTIONS = [{
 }];
 
 const THEMESELECT = {
+    placeholder: (provided) => ({
+        ...provided,
+        color: 'white'
+    }),
+    singleValue: (provided) => ({
+        ...provided,
+        color: 'white'
+    }),
     menu: (provided) => ({
       ...provided,
       color: 'white',
@@ -80,10 +89,11 @@ const THEMESELECT = {
         ...provided,
         color: 'white',
         background: 'black',
-        backgroundColor: 'white',
+        backgroundColor: 'black',
     }),
     option: (provided) => ({
         ...provided,
+        backgroundColor: 'black',
         "&:hover": {
             backgroundColor: 'rgb(131, 131, 131)'
         }
@@ -104,7 +114,8 @@ export default class AdminModale extends React.Component {
                 card: null,
                 big_card: null,
                 tags: [],
-            }
+            },
+            loading: false,
         }
 
         this.getCard = this.getCard.bind(this);
@@ -181,24 +192,47 @@ export default class AdminModale extends React.Component {
 
         input.click();
         input.addEventListener("change", (e) => {
-            var file = e.target.files[0];
-            var reader = new FileReader();
-            
-            if (!file) {
-                return;
-            }
+            let file = e.target.files[0];
+            let formData = new FormData();
 
-            reader.readAsDataURL(file);
+            formData.append('image', file);
             
-			reader.onload = () => {
-                if (key === 'card') {
-                    card.card = reader.result;
-                } else {
-                    card.big_card = reader.result;
-                }
-                this.setState({ card });
-			};
-        })
+            let url = 'https://api.imgur.com/3/image';
+            let headers= {
+                'Authorization': 'Client-ID af0b96c87fae8bf',
+            };
+
+            this.setState({
+                loading: true
+            }, () => {
+                fetch(url, {
+                    mode: 'cors',
+                    headers,
+                    method: 'POST',
+                    body: formData,
+                }).then(response => {
+                    if (!response.ok) {
+                        throw Error();
+                    }
+                    return response.json();
+                }).then(data => {
+                    let card = {...this.state.card}
+
+                    if (key === 'card') {
+                        card.card = data.data.link;
+                    } else {
+                        card.big_card = data.data.link;
+                    }
+
+                    this.setState({
+                        card,
+                        loading: false
+                    });
+                }).catch((error) => {
+                    console.log(error);
+                });
+            });
+        });
     }
 
     handleTags(index, value) {
@@ -261,7 +295,27 @@ export default class AdminModale extends React.Component {
             .catch( () => {
                 console.log("Erreur lors de l'update");
             });
+            return;
         }
+
+        let url = '/card/';
+
+        HttpPostRequest(url, { ...this.state.card })
+        .then( response => {
+            if (!response)
+                throw Error();
+            
+            return response.json();
+        })
+        .then( data => {
+            if (!data)
+                throw Error();
+            this.props.close()
+        })
+        .catch( () => {
+            console.log("Erreur lors de l'ajout");
+        });
+        return;        
     }
 
     render() {
@@ -292,7 +346,7 @@ export default class AdminModale extends React.Component {
 
         return (
             <div className={classModale.join(' ')}>
-                <div className="header-modale">
+                <div className="header-modale pb-2">
                     <Close className="close-modale-btn" onClick={this.close}/>
                     <div className="modale-title">{title} d'une carte</div>
                 </div>
@@ -391,10 +445,15 @@ export default class AdminModale extends React.Component {
                         </div>
                     ))}
                 </div>
-                <div className="footer-modale">
-                    <button className="submit-btn" onClick={this.submit}>
+                <div className="footer-modale pt-2">
+                    <Button
+                        className="submit-btn"
+                        variant="contained"
+                        color="primary"
+                        onClick={this.submit}
+                        disabled={this.state.loading}>
                         {submitText}
-                    </button>
+                    </Button>
                 </div>
             </div>
         );

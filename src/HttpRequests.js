@@ -26,6 +26,7 @@ export async function HttpPostRequest(route, body) {
 
         const response = await fetch(URL_API + route, {
             method: "POST",
+            mode:"cors",
             headers,
             body: JSON.stringify(body)
         });
@@ -43,7 +44,7 @@ export async function HttpPutRequest(route, body) {
         });
 
         const response = await fetch(URL_API + route, {
-            method: "PuT",
+            method: "PUT",
             headers,
             body: JSON.stringify(body)
         });

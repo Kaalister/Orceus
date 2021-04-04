@@ -38,6 +38,10 @@ body {
   background-color: #000000c2;
 }
 
+.MuiDataGrid-root {
+  width: 100%;
+}
+
 .MuiDataGrid-main {
   color: white;
 }
@@ -64,6 +68,26 @@ body {
 
 .p-0 {
   padding: 0 !important;
+}
+
+.p-2, .py-2, .pt-2 {
+  padding-top: 2rem;
+}
+
+.p-2, .py-2, .pb-2 {
+  padding-bottom: 2rem;
+}
+
+.p-2, .px-2, .pl-2 {
+  padding-left: 2rem;
+}
+
+.p-2, .px-2, .pr-2 {
+  padding-right: 2rem;
+}
+
+.right {
+  float: right;
 }
 
 @keyframes App-logo-spin {

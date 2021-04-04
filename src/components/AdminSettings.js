@@ -1,16 +1,13 @@
 import React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
-import { HttpGetRequest } from '../HttpRequests';
-import { Delete, Create } from '@material-ui/icons';
+import { HttpGetRequest, HttpDeleteRequest } from '../HttpRequests';
+import { Delete, Create, ArrowBackIos, AddCircleOutline } from '@material-ui/icons';
+import { Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 import AdminModale from './AdminModale';
 
 import '../assets/css/adminSettings.css'
-
-const IMGUR = {
-    id: 'af0b96c87fae8bf',
-    secret: '04b539a6b6e95548f3aa5905696e63e47f7cf79d',
-}
 
 export default class AdminSettings extends React.Component {
 
@@ -62,6 +59,22 @@ export default class AdminSettings extends React.Component {
         })
     }
 
+    deleteCard(id) {
+        HttpDeleteRequest('/card/' + id)
+        .then(response => {
+            if (!response.ok) {
+                throw Error()
+            }
+            return response.json();
+        })
+        .then(data => {
+            this.getCardList();
+        })
+        .catch(() => {
+            console.log('Erreur lors de la suppression');
+        })
+    }
+
     render() {
         const columns = [{
             headerName: 'Name',
@@ -94,7 +107,7 @@ export default class AdminSettings extends React.Component {
                      onClick={()=> this.configureCard(params.row.id)}
                     />
                     <Delete className="action-btn"
-                     onClick={()=> console.log(params.row.id)}
+                     onClick={()=> this.deleteCard(params.row.id)}
                     />
                 </div>
             ),
@@ -102,19 +115,34 @@ export default class AdminSettings extends React.Component {
 
         return (
             <div className='adminsetting-container'>
+                <div className="d-flex row pb-2">
+                    <Link to="/Orceus/cards/" style={{ color: 'white' }}>
+                        <ArrowBackIos />
+                    </Link>                        
+                    <Button
+                     className="right"
+                     variant="contained"
+                     color="primary"
+                     startIcon = {<AddCircleOutline />}
+                     onClick={() => { this.configureCard(null) }}>
+                        Nouveau
+                    </Button>
+                </div>
+                <div>
                     <DataGrid 
                      rows={this.state.cards}
                      columns={columns}
                      pageSize={10}
                      autoHeight
-                    />
+                     />
                     { (this.state.openModal) ? (
                         <AdminModale
-                        show={this.state.openModal}
-                        close={this.closeModal}
-                        id={this.state.selectedCard}
+                         show={this.state.openModal}
+                         close={this.closeModal}
+                         id={this.state.selectedCard}
                         />
                     ): null}
+                </div>
             </div>
         );
     }
