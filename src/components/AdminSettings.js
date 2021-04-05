@@ -6,7 +6,6 @@ import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 import AdminModale from './AdminModale';
-import AppProfile from '../Profile';
 
 import '../assets/css/adminSettings.css'
 

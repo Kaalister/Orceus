@@ -24,8 +24,6 @@ function PrivateRoute({...props}) {
 }
 
 export default function App() {
-	let history = useHistory();
-
 	return (
 		<Router>
 			<div>
