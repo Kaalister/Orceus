@@ -111,8 +111,8 @@ export default class AdminModale extends React.Component {
                 desc: '',
                 type: null,
                 specie: null,
-                card: null,
-                big_card: null,
+                card: '',
+                big_card: '',
                 tags: [],
             },
             loading: false,
@@ -216,6 +216,8 @@ export default class AdminModale extends React.Component {
                     return response.json();
                 }).then(data => {
                     let card = {...this.state.card}
+                    
+                    console.log(data);
 
                     if (key === 'card') {
                         card.card = data.data.link;

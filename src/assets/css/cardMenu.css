@@ -3,7 +3,7 @@
     width: 297.5px;
     border-radius: 20px;
     margin: 20px;
-    box-shadow: 9px 9px 21px -2px rgba(82,82,82,0.74);
+    background-color: transparent;
 }
 
 .container-card-menu {
