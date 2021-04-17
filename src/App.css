@@ -1,5 +1,5 @@
 body {
-  background-color: black;
+  background-color: black !important;
 }
 
 .App {
@@ -69,6 +69,46 @@ body {
   padding: 0 !important;
 }
 
+.d-flex {
+  display: flex;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.m-1, .my-1, .mt-1 {
+  margin-top: 1rem;
+}
+
+.m-1, .my-1, .mb-1 {
+  margin-bottom: 1rem;
+}
+
+.m-1, .mx-1, .ml-1 {
+  margin-left: 1rem;
+}
+
+.m-1, .mx-1, .mr-1 {
+  margin-right: 1rem;
+}
+
+.m-2, .my-2, .mt-2 {
+  margin-top: 2rem;
+}
+
+.m-2, .my-2, .mb-2 {
+  margin-bottom: 2rem;
+}
+
+.m-2, .mx-2, .ml-2 {
+  margin-left: 2rem;
+}
+
+.m-2, .mx-2, .mr-2 {
+  margin-right: 2rem;
+}
+
 .p-2, .py-2, .pt-2 {
   padding-top: 2rem;
 }
@@ -121,8 +161,8 @@ body {
 }
 
 .tsparticles-canvas-el {
-  height: 100vh !important;
-  width: 100vw !important;
+  height: 99vh !important;
+  width: 99vw !important;
 }
 
 @keyframes App-logo-spin {

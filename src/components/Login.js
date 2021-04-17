@@ -47,7 +47,6 @@ export default class Login extends React.Component {
             password
         })
         .then(response => {
-            console.log(0)
             if (!response.ok) {
                 throw Error();
             }

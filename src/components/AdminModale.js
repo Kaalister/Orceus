@@ -38,7 +38,7 @@ const TYPESOPTIONS = [{
 
 const SPECIESOPTIONS = [{
     label: 'Inconnue',
-    value: 'Unknown'
+    value: 'unknown'
 }, {
     label: 'Ciheuphe',
     value: 'ciheuphe'
@@ -173,7 +173,7 @@ export default class AdminModale extends React.Component {
     changeText(value, key) {
         let card = { ...this.state.card };
 
-        card[key] = value;
+        card[key] = value.toLowerCase();
 
         this.setState({ card });
     }
@@ -239,7 +239,7 @@ export default class AdminModale extends React.Component {
     handleTags(index, value) {
         let card = { ...this.state.card };
 
-        card.tags[index] = value;
+        card.tags[index] = value.toLowerCase();
 
         this.setState({ card });
     }

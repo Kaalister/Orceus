@@ -11,6 +11,38 @@
     text-align: center;
 }
 
+.input-filters {
+    background-color: black;
+    color: #f7dd5c;
+    border-color: #f7dd5c;
+    border-radius: 0;
+}
+
+.input-filters:hover {
+    border-color: #f7dd5c;
+}
+
+.input-filters .ant-select-selector {
+    background-color: black !important;
+    color: #f7dd5c !important;
+    border-color: #f7dd5c !important;
+    border-radius: 0 !important;
+}
+
+.input-filters .ant-select-arrow, .input-filters .ant-select-clear {
+    color: #f7dd5c !important;
+    background-color: black;
+}
+
+.input-filters .ant-select-selection-item {
+    background-color: #404040;
+    border: none;
+}
+
+.input-filters .ant-select-selection-item-remove {
+    color: #f7dd5c !important;
+}
+
 .setting-btn {
     position: absolute;
     top: 10px;

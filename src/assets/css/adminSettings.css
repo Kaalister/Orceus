@@ -9,3 +9,8 @@
 .action-btn:hover {
     cursor: pointer;
 }
+
+.add-card-btn {
+    position: absolute !important;
+    right: 30px;
+}

@@ -41,7 +41,7 @@ const TYPESOPTIONS = [{
 
 const SPECIESOPTIONS = [{
     label: 'Inconnue',
-    value: 'Unknown'
+    value: 'unknown'
 }, {
     label: 'Ciheuphe',
     value: 'ciheuphe'
@@ -289,6 +289,8 @@ export default class AdminSettings extends React.Component {
 
                 let obj = SPECIESOPTIONS.filter( species => (species.value === value));
 
+                console.log(obj);
+
                 return (
                     <span>{(obj.lenth !== 0) ? obj[0].label : null}</span>
                 );
@@ -321,7 +323,7 @@ export default class AdminSettings extends React.Component {
                         <ArrowBackIos />
                     </Link>                        
                     <Button
-                     className="right"
+                     className="add-card-btn"
                      variant="contained"
                      color="primary"
                      startIcon = {<AddCircleOutline />}
