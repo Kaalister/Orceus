@@ -216,8 +216,6 @@ export default class AdminModale extends React.Component {
                     return response.json();
                 }).then(data => {
                     let card = {...this.state.card}
-                    
-                    console.log(data);
 
                     if (key === 'card') {
                         card.card = data.data.link;

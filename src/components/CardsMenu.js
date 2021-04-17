@@ -248,7 +248,7 @@ export default class CardMenu extends React.Component {
         return (
             <div className="p-1">
                 <div style={{height: 35}}>
-                    <button onClick={this.logout}>
+                    <button className="invisible" onClick={this.logout}>
                         <img
                             src={logoutBtn}
                             alt=""

@@ -289,8 +289,6 @@ export default class AdminSettings extends React.Component {
 
                 let obj = SPECIESOPTIONS.filter( species => (species.value === value));
 
-                console.log(obj);
-
                 return (
                     <span>{(obj.lenth !== 0) ? obj[0].label : null}</span>
                 );
