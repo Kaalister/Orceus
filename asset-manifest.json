@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/Orceus/static/css/main.a8e222fd.chunk.css",
-    "main.js": "/Orceus/static/js/main.cb9c46e1.chunk.js",
-    "main.js.map": "/Orceus/static/js/main.cb9c46e1.chunk.js.map",
+    "main.css": "/Orceus/static/css/main.bc3f84cc.chunk.css",
+    "main.js": "/Orceus/static/js/main.ce9a9941.chunk.js",
+    "main.js.map": "/Orceus/static/js/main.ce9a9941.chunk.js.map",
     "runtime-main.js": "/Orceus/static/js/runtime-main.bcd959bc.js",
     "runtime-main.js.map": "/Orceus/static/js/runtime-main.bcd959bc.js.map",
     "static/css/2.45f96635.chunk.css": "/Orceus/static/css/2.45f96635.chunk.css",
@@ -12,7 +12,7 @@
     "static/js/3.bd5a33e8.chunk.js.map": "/Orceus/static/js/3.bd5a33e8.chunk.js.map",
     "index.html": "/Orceus/index.html",
     "static/css/2.45f96635.chunk.css.map": "/Orceus/static/css/2.45f96635.chunk.css.map",
-    "static/css/main.a8e222fd.chunk.css.map": "/Orceus/static/css/main.a8e222fd.chunk.css.map",
+    "static/css/main.bc3f84cc.chunk.css.map": "/Orceus/static/css/main.bc3f84cc.chunk.css.map",
     "static/js/2.9aba36a0.chunk.js.LICENSE.txt": "/Orceus/static/js/2.9aba36a0.chunk.js.LICENSE.txt",
     "static/media/errorBackground.909f594d.mp4": "/Orceus/static/media/errorBackground.909f594d.mp4",
     "static/media/loginBackground.c0f87895.mp4": "/Orceus/static/media/loginBackground.c0f87895.mp4",
@@ -23,7 +23,7 @@
     "static/js/runtime-main.bcd959bc.js",
     "static/css/2.45f96635.chunk.css",
     "static/js/2.9aba36a0.chunk.js",
-    "static/css/main.a8e222fd.chunk.css",
-    "static/js/main.cb9c46e1.chunk.js"
+    "static/css/main.bc3f84cc.chunk.css",
+    "static/js/main.ce9a9941.chunk.js"
   ]
 }
