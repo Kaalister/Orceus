@@ -114,6 +114,7 @@ export default class AdminModale extends React.Component {
                 card: '',
                 big_card: '',
                 tags: [],
+                card_num: -1,
             },
             loading: false,
         }
@@ -352,6 +353,12 @@ export default class AdminModale extends React.Component {
                     <div className="modale-title">{title} d'une carte</div>
                 </div>
                 <div className="body-modale">
+                    <label className="label-modale">Numéro :</label><br/>
+                    <input className="input-modale" 
+                     type="number"
+                     value={(this.state.card.card_num) ? this.state.card.card_num : 0}
+                     onChange={(e) => this.changeText(e.target.value, 'card_num')}
+                    />
                     <label className="label-modale">Nom :</label><br/>
                     <input className="input-modale" 
                      type="text"

@@ -26,7 +26,6 @@ export async function HttpPostRequest(route, body) {
 
         const response = await fetch(URL_API + route, {
             method: "POST",
-            mode:"cors",
             headers,
             body: JSON.stringify(body)
         });

@@ -252,6 +252,10 @@ export default class AdminSettings extends React.Component {
 
     render() {
         const columns = [{
+            headerName: 'N°',
+            field: 'card_num',
+            width: 80,
+        }, {
             headerName: 'Name',
             field: 'name',
             width: 150,
@@ -297,7 +301,7 @@ export default class AdminSettings extends React.Component {
             headerName: 'Tags',
             field: 'tags',
             flex: 1,
-        },{
+        }, {
             headerName: 'Actions',
             sortable: false,
             field: 'actions',
