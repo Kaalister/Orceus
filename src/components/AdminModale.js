@@ -67,6 +67,15 @@ const SPECIESOPTIONS = [{
     label: 'Wibsa-Thu',
     value: 'wibsa-thu'
 }, {
+    label: 'Démon',
+    value: 'demon'
+}, {
+    label: 'Dieu/Déesse',
+    value: 'god'
+}, {
+    label: 'Sentinelle',
+    value: 'sentry'
+}, {
     label: 'Autre',
     value: 'other'
 }];
