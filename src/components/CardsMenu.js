@@ -286,7 +286,7 @@ export default class CardMenu extends React.Component {
                     {(cards.length === 0 && !this.state.loading) ? (
                         <div style={{color: 'white'}}>Aucune donnée</div>
                     ) : null}
-                    {(!this.state.loading) ? (
+                    {(this.state.loading) ? (
                         <img
                             style={{ width: "50rem" }}
                             src={loading}
