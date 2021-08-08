@@ -69,7 +69,7 @@ export default class Login extends React.Component {
                     } else {
                         this.props.history.push(this.props.location.state.referrer);
                     }
-                }, 1500);
+                }, 4800);
             })
         })
         .catch(() => {
@@ -80,7 +80,7 @@ export default class Login extends React.Component {
                         error: false,
                         loginState: null
                     });
-                }, 1666);
+                }, 3800);
             });
         })
 
@@ -98,20 +98,20 @@ export default class Login extends React.Component {
             <div className="login-container">
                 { (this.state.loginState === null && !isMobile) ? (
                         <BackgroundVideo
-                        source={loginBackground}
-                        vKey={"login"}
+                            source={loginBackground}
+                            vKey={"login"}
                         />
                 ) : null}
                 { (this.state.loginState === "success" && !isMobile) ? (
                         <BackgroundVideo
-                        source={successBackground}
-                        vKey={"login-success"}
+                            source={successBackground}
+                            vKey={"login-success"}
                         />
                 ) : null}
                 { (this.state.loginState === "error" && !isMobile) ? (
                         <BackgroundVideo
-                        source={errorBackground}
-                        vKey={"login-success"}
+                            source={errorBackground}
+                            vKey={"login-success"}
                         />
                 ) : null}
                 <div className={inputClass.join(' ')}>
@@ -120,7 +120,7 @@ export default class Login extends React.Component {
                         value={this.state.password}
                         placeholder="Mot de passe"
                         style={{marginRight: "15px"}}
-                        />
+                    />
                     <Button
                         variant="contained"
                         onClick={() => { this.handleSubmit() }}

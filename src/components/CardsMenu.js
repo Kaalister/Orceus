@@ -2,13 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { HttpPostRequest } from '../HttpRequests';
-import { Settings, Loop } from '@material-ui/icons';
+import { Settings } from '@material-ui/icons';
 import { Select, Form, Input, Row, Space } from 'antd';
 import 'antd/dist/antd.css'
 
 import AppProfile from '../Profile';
 
 import logoutBtn from '../assets/images/logoutBtn.png';
+import loading from '../assets/images/loading.gif';
 import '../assets/css/cardMenu.css';
 
 const TYPESOPTIONS = [{
@@ -130,10 +131,12 @@ export default class CardMenu extends React.Component {
             return response.json();
         })
         .then(data => {
-            this.setState({
-                cards: data,
-                loading: false,
-            })
+            setTimeout(() => {
+                this.setState({
+                    cards: data,
+                    loading: false,
+                });
+            }, 2000);
         })
         .catch(() => {
             this.setState({loading: false});
@@ -283,10 +286,12 @@ export default class CardMenu extends React.Component {
                     {(cards.length === 0 && !this.state.loading) ? (
                         <div style={{color: 'white'}}>Aucune donnée</div>
                     ) : null}
-                    {(this.state.loading) ? (
-                        <div className="rotate">
-                            <Loop className="loading"/>
-                        </div>
+                    {(!this.state.loading) ? (
+                        <img
+                            style={{ width: "50rem" }}
+                            src={loading}
+                            alt="loading"
+                        />
                     ) : null}
                 </div>
             </div>
