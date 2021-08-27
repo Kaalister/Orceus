@@ -157,12 +157,18 @@ body {
   position: absolute;
   z-index: -10;
   width: 100vw;
-  height: 100vh
+  height: 100vh;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
-.tsparticles-canvas-el {
-  height: 99vh !important;
-  width: 99vw !important;
+.particles-js::-webkit-scrollbar {
+  display: none;
+}
+
+.particles-js > #tsparticles {
+  width: 100%;
+  height: 100%;
 }
 
 @keyframes App-logo-spin {
