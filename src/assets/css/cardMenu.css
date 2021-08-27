@@ -10,9 +10,15 @@
     padding: 20px 20px 0 20px;
     text-align: center;
     height: calc(100vh - 70px);
-    overflow-y: hidden;
+    overflow-y: scroll;
     position: relative;
     top: -20px;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.container-card-menu::-webkit-scrollbar {
+    display: none;
 }
 
 .input-filters {
