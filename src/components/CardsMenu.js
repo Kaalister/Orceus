@@ -258,8 +258,8 @@ export default class CardMenu extends React.Component {
         });
 
         return (
-            <div className="p-1">
-                <div style={{height: 35}}>
+            <div>
+                <div className="header-background">
                     <button className="invisible" onClick={this.logout}>
                         <img
                             src={logoutBtn}
@@ -274,13 +274,15 @@ export default class CardMenu extends React.Component {
                             }}
                         />
                     </button>
+                    <div>
+                        {this.displayFilters()}
+                    </div>
                     {(AppProfile.get('isAdmin')) ? (
                         <Link to="/Orceus/AdminSettings" className="setting-btn">
                            <Settings style={{color: 'white'}} className='clickable'/>
                         </Link>
                     ) : null}
                 </div>
-                {this.displayFilters()}
                 <div className="container-card-menu">
                     {cards}
                     {(cards.length === 0 && !this.state.loading) ? (

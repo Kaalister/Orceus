@@ -7,8 +7,12 @@
 }
 
 .container-card-menu {
-    padding: 20px;
+    padding: 20px 20px 0 20px;
     text-align: center;
+    height: calc(100vh - 70px);
+    overflow-y: scroll;
+    position: relative;
+    top: -20px;
 }
 
 .input-filters {
@@ -62,4 +66,12 @@
 .invisible {
     background-color: transparent;
     border: none;
+}
+
+.header-background {
+    width: 100vw;
+    height: 80px;
+    background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%);
+    position: relative;
+    z-index: 10;
 }
