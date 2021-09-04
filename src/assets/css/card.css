@@ -24,6 +24,16 @@
     top: 15px;
 }
 
+.tool-zoom-out {
+    right: 30px;
+    bottom: 15px;
+}
+
+.tool-zoom-in {
+    right: 30px;
+    bottom: 80px;
+}
+
 @media (max-width: 600px) {
     .full-card {
         height: 100%;

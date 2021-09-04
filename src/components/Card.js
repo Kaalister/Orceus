@@ -1,8 +1,8 @@
 import React from 'react';
 import {  
     ArrowBack,
-    // ZoomIn,
-    // ZoomOut,
+    Add,
+    Remove,
     ZoomOutMap,
 } from '@material-ui/icons';
 
@@ -27,6 +27,8 @@ export default class CardMenu extends React.Component {
 
         this.getCard = this.getCard.bind(this);
         this.reset = this.reset.bind(this);
+        this.zoomIn = this.zoomIn.bind(this);
+        this.zoomOut = this.zoomOut.bind(this);
     }
 
     componentDidMount() {
@@ -65,8 +67,33 @@ export default class CardMenu extends React.Component {
         });
     }
 
-    render() {
+    zoomIn() {
+        const zoom = this.state.infoImg.scale
 
+        this.setState({
+            infoImg: {
+                ...this.state.infoImg,
+                scale: zoom + 0.25,
+            }
+        });
+    }
+
+    zoomOut() {
+        const zoom = this.state.infoImg.scale
+
+        if (zoom === 0.25) {
+            return;
+        }
+            
+        this.setState({
+            infoImg: {
+                ...this.state.infoImg,
+                scale: zoom - 0.25,
+            }
+        });
+    }
+
+    render() {
         return (
             <div
                 className="center"
@@ -95,6 +122,18 @@ export default class CardMenu extends React.Component {
                     onClick={this.reset}
                 >
                     <ZoomOutMap/>
+                </div>
+                <div
+                    className="tool-btn tool-zoom-in"
+                    onClick={this.zoomIn}
+                >
+                    <Add/>
+                </div>
+                <div
+                    className="tool-btn tool-zoom-out"
+                    onClick={this.zoomOut}
+                >
+                    <Remove/>
                 </div>
             </div>
         );
