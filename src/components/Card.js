@@ -1,13 +1,13 @@
 import React from 'react';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import {  
     ArrowBack,
-    ZoomIn,
-    ZoomOut,
+    // ZoomIn,
+    // ZoomOut,
     ZoomOutMap,
 } from '@material-ui/icons';
 
 import "../assets/css/card.css";
+import { MapInteractionCSS } from 'react-map-interaction';
 import { Link } from 'react-router-dom';
 
 import { HttpGetRequest } from '../HttpRequests';
@@ -19,9 +19,14 @@ export default class CardMenu extends React.Component {
 
         this.state = {
             card: '',
-        }
+            infoImg: {
+                scale: 1,
+                translation: { x: 0, y: 0 }
+            }
+        };
 
         this.getCard = this.getCard.bind(this);
+        this.reset = this.reset.bind(this);
     }
 
     componentDidMount() {
@@ -51,45 +56,46 @@ export default class CardMenu extends React.Component {
             });
     }
 
+    reset() {
+        this.setState({
+            infoImg: {
+                scale: 1,
+                translation: { x: 0, y: 0 }
+            }
+        });
+    }
+
     render() {
+
         return (
-            <div className="center" style={{height: "100vh"}}>
-                <TransformWrapper defaultScale={1}>
-                    {({ zoomIn, zoomOut, resetTransform}) => (
-                        <React.Fragment>
-                            <Link
-                                className="tool-btn tool-back-arrow"
-                                to="/Orceus/cards">
-                                <ArrowBack/>
-                            </Link>
-                            <div
-                                className="tool-btn tool-zoomin"
-                                onClick={zoomIn}
-                            >
-                                <ZoomIn/>
-                            </div>
-                            <div
-                                className="tool-btn tool-zoomout"
-                                onClick={zoomOut}
-                            >
-                                <ZoomOut/>
-                            </div>
-                            <div
-                                className="tool-btn tool-reset"
-                                onClick={resetTransform}
-                            >
-                                <ZoomOutMap/>
-                            </div>
-                            <TransformComponent>
-                                <img
-                                    className="full-card"
-                                    src={this.state.card.big_card}
-                                    alt=" "
-                                    />
-                            </TransformComponent>
-                        </React.Fragment>
-                    )}
-                </TransformWrapper>
+            <div
+                className="center"
+                style={{
+                    height: "100vh",
+                    width: "100vw"
+                }}
+            >
+                <MapInteractionCSS
+                    value={this.state.infoImg}
+                    onChange={(infoImg) => this.setState({infoImg})}
+                >
+                    <img
+                        className="full-card" 
+                        src={this.state.card.big_card}
+                        alt=""
+                    />
+                </MapInteractionCSS>
+                <Link
+                    className="tool-btn tool-back-arrow"
+                    to="/Orceus/cards">
+                    <ArrowBack/>
+                </Link>
+                <div
+                    className="tool-btn tool-reset"
+                    onClick={this.reset}
+                >
+                    <ZoomOutMap/>
+                </div>
             </div>
         );
     }
