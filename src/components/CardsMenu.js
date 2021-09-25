@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { HttpPostRequest } from '../HttpRequests';
-import { Settings } from '@material-ui/icons';
+import { Settings, Casino } from '@material-ui/icons';
 import { Select, Form, Input, Row, Space } from 'antd';
 import 'antd/dist/antd.css'
 
@@ -277,11 +277,23 @@ export default class CardMenu extends React.Component {
                     <div>
                         {this.displayFilters()}
                     </div>
-                    {(AppProfile.get('isAdmin')) ? (
-                        <Link to="/Orceus/AdminSettings" className="setting-btn">
-                           <Settings style={{color: 'white'}} className='clickable'/>
-                        </Link>
-                    ) : null}
+                    <div className="menu-links">
+                        {(AppProfile.get('isAdmin')) ? ([(
+                            <Link to="/Orceus/Rolls">
+                                <Casino
+                                    style={{ color: 'white' }}
+                                    className='clickable'
+                                />
+                            </Link>
+                        ),(
+                            <Link to="/Orceus/AdminSettings">
+                                <Settings
+                                    style={{ color: 'white' }}
+                                    className='clickable'
+                                />
+                            </Link>
+                        )]) : null}
+                    </div>
                 </div>
                 <div className="container-card-menu">
                     {cards}

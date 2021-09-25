@@ -1,0 +1,12 @@
+.title-rolling {
+    color: white;
+    text-align: center;
+}
+
+.ant-form-item-label > label {
+    color: white;
+}
+
+.results-rolling {
+    border: solid 1px #f7dd5c;
+}
