@@ -62,6 +62,7 @@ export default class Login extends React.Component {
         .then(data => {
             this.setState({ loginState: "success" }, () => {
                 localStorage.setItem('Orceus', password);
+                console.log(data);
                 AppProfile.profile = {
                     connected: data.connected,
                     sessionType: data.session_type,
