@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Orceus/static/css/main.cf1f6bf2.chunk.css",
-    "main.js": "/Orceus/static/js/main.a820c95b.chunk.js",
-    "main.js.map": "/Orceus/static/js/main.a820c95b.chunk.js.map",
+    "main.js": "/Orceus/static/js/main.7a5af056.chunk.js",
+    "main.js.map": "/Orceus/static/js/main.7a5af056.chunk.js.map",
     "runtime-main.js": "/Orceus/static/js/runtime-main.a05a5abd.js",
     "runtime-main.js.map": "/Orceus/static/js/runtime-main.a05a5abd.js.map",
     "static/css/2.45f96635.chunk.css": "/Orceus/static/css/2.45f96635.chunk.css",
@@ -25,6 +25,6 @@
     "static/css/2.45f96635.chunk.css",
     "static/js/2.a8d66eef.chunk.js",
     "static/css/main.cf1f6bf2.chunk.css",
-    "static/js/main.a820c95b.chunk.js"
+    "static/js/main.7a5af056.chunk.js"
   ]
 }
