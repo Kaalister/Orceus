@@ -177,3 +177,9 @@ body {
     transform: rotate(-360deg);
   }
 }
+
+/* Antd Customs */
+
+.ant-notification-notice-message, .ant-notification-notice-close {
+  color: white !important;
+}

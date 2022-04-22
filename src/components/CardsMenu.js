@@ -115,7 +115,7 @@ export default class CardMenu extends React.Component {
     }
 
     getCardList() {
-        let filters = {...this.state.filters}
+        let filters = { ...this.state.filters }
 
         for (let value in filters) {
             if (!filters[value] || !filters[value].length) {
@@ -124,29 +124,29 @@ export default class CardMenu extends React.Component {
         }
 
         HttpPostRequest('/cards', filters)
-        .then(response => {
-            if (!response.ok) {
-                throw Error()
-            }
-            return response.json();
-        })
-        .then(data => {
-            setTimeout(() => {
-                this.setState({
-                    cards: data,
-                    loading: false,
-                });
-            }, 2000);
-        })
-        .catch(() => {
-            this.setState({loading: false});
-            console.log('Erreur lors de la recupération des datas');
-        })
+            .then(response => {
+                if (!response.ok) {
+                    throw Error()
+                }
+                return response.json();
+            })
+            .then(data => {
+                setTimeout(() => {
+                    this.setState({
+                        cards: data,
+                        loading: false,
+                    });
+                }, 2000);
+            })
+            .catch(() => {
+                this.setState({ loading: false });
+                console.log('Erreur lors de la recupération des datas');
+            })
     }
-    
+
     logout() {
         AppProfile.profile.connected = false;
-        AppProfile.profile.isAdmin = false;
+        AppProfile.profile.sessionType = "";
 
         localStorage.removeItem('Orceus');
         this.props.history.push('/Orceus/');
@@ -205,37 +205,37 @@ export default class CardMenu extends React.Component {
                 <Form ref={this.refFilters} {...layout}>
                     <Form.Item name="search">
                         <Input
-                         className="input-filters"
-                         placeholder="Recherche..." />
+                            className="input-filters"
+                            placeholder="Recherche..." />
                     </Form.Item>
                     <Form.Item name="type">
                         <Select
-                         options={TYPESOPTIONS}
-                         allowClear
-                         className="input-filters"
-                         placeholder="Type..."
-                         style={{width: 200}}/>
+                            options={TYPESOPTIONS}
+                            allowClear
+                            className="input-filters"
+                            placeholder="Type..."
+                            style={{ width: 200 }} />
                     </Form.Item>
                     <Form.Item
-                     name="specie"
-                     hidden={this.state.filters.type !== 'character'}>
+                        name="specie"
+                        hidden={this.state.filters.type !== 'character'}>
                         <Select
-                         options={SPECIESOPTIONS}
-                         allowClear
-                         className="input-filters"
-                         placeholder="Race..."
-                         style={{width: 200}} />
+                            options={SPECIESOPTIONS}
+                            allowClear
+                            className="input-filters"
+                            placeholder="Race..."
+                            style={{ width: 200 }} />
                     </Form.Item>
-                    <Space style={{height: 35}}>
+                    <Space style={{ height: 35 }}>
                         <Form.Item name="tags">
                             <Select
-                            allowClear
-                            mode="tags"
-                            showArrow={false}
-                            open={false}
-                            className="input-filters" 
-                            placeholder="Mot clées..."
-                            style={{minWidth: 200, maxWidth: 500}} />
+                                allowClear
+                                mode="tags"
+                                showArrow={false}
+                                open={false}
+                                className="input-filters"
+                                placeholder="Mot clées..."
+                                style={{ minWidth: 200, maxWidth: 500 }} />
 
                         </Form.Item>
                     </Space>
@@ -245,8 +245,8 @@ export default class CardMenu extends React.Component {
     }
 
     render() {
-        let cards = this.state.cards.map( (cardItem, index) => {
-            return(
+        let cards = this.state.cards.map((cardItem, index) => {
+            return (
                 <Link to={"/Orceus/cards/" + cardItem.id} key={index}>
                     <img
                         className="card-img"
@@ -258,7 +258,7 @@ export default class CardMenu extends React.Component {
         });
 
         return (
-            <div style={{width: '100vw', height: '100vh', overflow: 'hidden'}}>
+            <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
                 <div className="header-background">
                     <button className="invisible" onClick={this.logout}>
                         <img
@@ -278,27 +278,28 @@ export default class CardMenu extends React.Component {
                         {this.displayFilters()}
                     </div>
                     <div className="menu-links">
-                        {(AppProfile.get('isAdmin')) ? ([(
-                            <Link to="/Orceus/Rolls">
-                                <Casino
-                                    style={{ color: 'white' }}
-                                    className='clickable'
-                                />
-                            </Link>
-                        ),(
-                            <Link to="/Orceus/AdminSettings">
-                                <Settings
-                                    style={{ color: 'white' }}
-                                    className='clickable'
-                                />
-                            </Link>
-                        )]) : null}
+                        {(AppProfile.get('sessionType') === "09c71624"
+                            || AppProfile.get('sessionType') === "a238a5dd") ? ([(
+                                <Link to="/Orceus/Rolls">
+                                    <Casino
+                                        style={{ color: 'white' }}
+                                        className='clickable'
+                                    />
+                                </Link>
+                            ), (
+                                <Link to="/Orceus/AdminSettings">
+                                    <Settings
+                                        style={{ color: 'white' }}
+                                        className='clickable'
+                                    />
+                                </Link>
+                            )]) : null}
                     </div>
                 </div>
                 <div className="container-card-menu">
                     {cards}
                     {(cards.length === 0 && !this.state.loading) ? (
-                        <div style={{color: 'white'}}>Aucune donnée</div>
+                        <div style={{ color: 'white' }}>Aucune donnée</div>
                     ) : null}
                     {(this.state.loading) ? (
                         <img

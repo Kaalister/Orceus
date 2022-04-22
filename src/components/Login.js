@@ -30,6 +30,13 @@ export default class Login extends React.Component {
     componentDidMount() {
         let savePassword = localStorage.getItem('Orceus');
 
+        if (savePassword === null) {
+            let currentUrl = window.location.href;
+            let urlObject = new URL(currentUrl);
+            
+            savePassword = urlObject.searchParams.get("access");
+        }
+
         if (savePassword !== null) {
             this.handleSubmit(savePassword);
         }
@@ -57,7 +64,7 @@ export default class Login extends React.Component {
                 localStorage.setItem('Orceus', password);
                 AppProfile.profile = {
                     connected: data.connected,
-                    isAdmin: data.is_admin,
+                    sessionType: data.session_type,
                 }
                 setTimeout(() => {
                     this.setState({
@@ -78,11 +85,11 @@ export default class Login extends React.Component {
                 setTimeout(()=> {
                     this.setState({
                         error: false,
-                        loginState: null
+                        loginState: null,
                     });
                 }, 3800);
             });
-        })
+        });
 
     }
 

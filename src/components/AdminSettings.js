@@ -4,10 +4,13 @@ import { HttpGetRequest, HttpDeleteRequest } from '../HttpRequests';
 import { Delete, Create, ArrowBackIos, AddCircleOutline } from '@material-ui/icons';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { notification } from 'antd';
 import Particles from 'react-particles-js';
 
 import { paramsParticles } from '../constants.js';
 import AdminModale from './AdminModale';
+
+import AppProfile from '../Profile';
 
 import '../assets/css/adminSettings.css'
 
@@ -126,7 +129,28 @@ export default class AdminSettings extends React.Component {
         })
     }
 
+    unauthorized() {
+        notification.open({
+            message: 'Action non autorisée !',
+            description:
+              'Vous n\'êtes pas autorisé à faire des modifications. Profitez du site et touchez avec les yeux ;P',
+            placement: "top",
+            style: {
+                background: "rgba(255, 255, 255, 0.12)",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                backdropFilter: "blur(5px)",
+                WebkitBackdropFilter: "blur(5px)",
+                color: "white",
+            },
+        });
+    }
+
     configureCard(id) {
+        if (AppProfile.get('sessionType') !== "09c71624") {
+            this.unauthorized();
+            return;
+        }
+
         this.setState({
             selectedCard: id,
             openModal: true 
@@ -134,6 +158,10 @@ export default class AdminSettings extends React.Component {
     }
 
     deleteCard(id) {
+        if (AppProfile.get('sessionType') !== "09c71624") {
+            this.unauthorized();
+            return;
+        }
         HttpDeleteRequest('/card/' + id)
         .then(response => {
             if (!response.ok) {
@@ -205,30 +233,31 @@ export default class AdminSettings extends React.Component {
             sortable: false,
             field: 'actions',
             width: 150,
-            renderCell: (params) => (
+            renderCell: (params) =>(
                 <div>
                     <Create className="action-btn"
-                     onClick={()=> this.configureCard(params.row.id)}
+                        onClick={()=> this.configureCard(params.row.id)}
                     />
                     <Delete className="action-btn"
-                     onClick={()=> this.deleteCard(params.row.id)}
+                        onClick={()=> this.deleteCard(params.row.id)}
                     />
                 </div>
             ),
-          }];
+        }];
 
         return (
             <div className='adminsetting-container'>
                 <div className="d-flex row pb-2">
                     <Link to="/Orceus/cards/" style={{ color: 'white' }}>
                         <ArrowBackIos />
-                    </Link>                        
+                    </Link>                 
                     <Button
-                     className="add-card-btn"
-                     variant="contained"
-                     color="primary"
-                     startIcon = {<AddCircleOutline />}
-                     onClick={() => { this.configureCard(null) }}>
+                        className="add-card-btn"
+                        variant="contained"
+                        color="primary"
+                        startIcon = {<AddCircleOutline />}
+                        onClick={() => { this.configureCard(null) }}
+                    >
                         Nouveau
                     </Button>
                 </div>
