@@ -162,7 +162,7 @@ export default class CharacterMenu extends React.Component {
                 </div>
                 <div className="grid-character">
                     <DataGrid
-                        loading={true}
+                        loading={this.state.loading}
                         rows={this.state.characters}
                         components={{
                             ColumnMenu: CustomColumnMenu
