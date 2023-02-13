@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { HttpPostRequest } from '../HttpRequests';
-import { Settings, Casino } from '@material-ui/icons';
+import { Settings, Casino, Face } from '@material-ui/icons';
 import { Select, Form, Input, Row, Space } from 'antd';
 import 'antd/dist/antd.css'
 
@@ -274,20 +274,27 @@ export default class CardMenu extends React.Component {
                             }}
                         />
                     </button>
-                    <div>
+                    <div className="filters">
                         {this.displayFilters()}
                     </div>
                     <div className="menu-links">
+                        <Link to="/Orceus/SelectCharacters" key="toSelectCharacter">
+                            <Face
+                                style={{ color: 'white' }}
+                                className='clickable'
+                            />
+                        </Link>
                         {(AppProfile.get('sessionType') === "09c71624"
-                            || AppProfile.get('sessionType') === "a238a5dd") ? ([(
-                                <Link to="/Orceus/Rolls">
+                            || AppProfile.get('sessionType') === "a238a5dd") ? ([
+                            (
+                                <Link to="/Orceus/Rolls" key="toRoll">
                                     <Casino
                                         style={{ color: 'white' }}
                                         className='clickable'
                                     />
                                 </Link>
                             ), (
-                                <Link to="/Orceus/AdminSettings">
+                                <Link to="/Orceus/AdminSettings" key="toAdmin">
                                     <Settings
                                         style={{ color: 'white' }}
                                         className='clickable'

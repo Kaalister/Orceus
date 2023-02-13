@@ -183,3 +183,8 @@ body {
 .ant-notification-notice-message, .ant-notification-notice-close {
   color: white !important;
 }
+
+.notification {
+  background-color: black;
+  border: solid 1px #f7dd5c;
+}

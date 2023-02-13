@@ -1,0 +1,123 @@
+.margin-table {
+    margin-top: 50px;
+    padding: 0 50px;
+}
+
+.margin-table textarea {
+    resize: none;
+    border: none;
+    width: 100%;
+}
+
+.icon-header {
+    margin: auto;
+    display: block !important;
+}
+
+.ant-form-item-label > label {
+    color: black;
+}
+
+.inventory-table .ant-table {
+    border: solid 2px #f7dd5c;
+}
+
+.ant-table-thead th.ant-table-column-sort,
+.ant-table-thead th.ant-table-cell,
+td.ant-table-column-sort,
+td.ant-table-cell,
+.ant-table-cell-row-hover {
+    color: white;
+    border-bottom-color: #f7dd5c;
+    background: black !important;
+}
+
+.inventory-table .ant-select-selector {
+    background: black !important;
+    color: white;
+    border: solid 1px #f7dd5c !important;
+}
+
+.inventory-table .ant-pagination-item-link,
+.inventory-table .ant-pagination-item-active {
+    background: black;
+    color: white;
+    border: solid 1px #f7dd5c !important;
+}
+
+.inventory-table .ant-pagination-item-active > a {
+    color: #f7dd5c;
+}
+
+.inventory-table .ant-table .ant-table-cell .ant-input {
+    color: white;
+}
+
+.inventory-table .ant-select-arrow {
+    color: white;
+    border-bottom-color: #f7dd5c;
+    background: black !important;
+}
+
+.ant-table-thead th.ant-table-column-sort::before,
+.ant-table-thead th.ant-table-cell::before {
+    background-color: #f7dd5c !important;
+}
+
+.ant-table-tbody > tr > td {
+    border-bottom-color: #f7dd5c;
+}
+
+.modal-new-item .ant-modal-body {
+    padding-top: 50px;
+}
+
+.ant-modal-content {
+    background-color: black;
+    border: solid 1px #f7dd5c;
+}
+
+.ant-modal-content .ant-input {
+    background-color: black;
+    border: solid 1px #f7dd5c;
+    color: white;
+}
+
+.ant-select-selector {
+    background-color: black !important;
+    border-color: #f7dd5c !important;
+}
+
+.add-to-inventory .ant-select-arrow {
+    color: #f7dd5c;
+}
+
+.ant-modal-footer {
+    border-top: solid 1px #f7dd5c;
+}
+
+.ant-modal-footer .ant-btn-default {
+    background-color: black;
+    color: #f7dd5c;
+    border-color: #f7dd5c !important;
+}
+
+.ant-modal-footer .ant-btn-primary {
+    background-color: #f7dd5c;
+    color: black;
+    border-color: #f7dd5c;
+}
+
+.add-to-inventory {
+    background-color: black;
+    color: #f7dd5c;
+}
+
+.ant-form-item-label > label {
+    color: #f7dd5c;
+}
+
+.ant-pagination-item {
+    background-color: #f7dd5c;
+    border-color: #f7dd5c;
+}

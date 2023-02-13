@@ -6,31 +6,29 @@ import {
     useParams
 } from 'react-router-dom';
 
-import Card from './Card';
-import CardsMenu from './CardsMenu';
+import CharacterMenu from './CharacterMenu';
+import CharacterData from './CharacterData';
 
-
-export default function Cards({ history }) {
+export default function SwitchCharacters({ history }) {
     let match = useRouteMatch();
 
     return (
         <div>
             <Switch>
                 <Route path={`${match.path}/:id`}>
-                    <GetIDToCard history={history} />
+                    <GetCharacterId history={history} />
                 </Route>
                 <Route path={match.path}>
-                    <CardsMenu history={history} />
+                    <CharacterMenu history={history} />
                 </Route>
             </Switch>
         </div>
     )
 }
 
-function GetIDToCard() {
+function GetCharacterId() {
     let { id } = useParams();
+    let localisation = window.location.href.split("/").pop();
 
-    return (
-        <Card id={id} />
-    );
+    return (<CharacterData id={id} localisation={localisation}/>);
 }

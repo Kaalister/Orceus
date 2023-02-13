@@ -1,11 +1,10 @@
 import React from 'react';
-import Particles from 'react-particles-js';
 import { Link } from 'react-router-dom';
 
 import { Select, Form, Input, Button } from 'antd';
 import { ArrowBackIos } from '@material-ui/icons';
 
-import { paramsParticles, PLANTS_ABYSS, ROCKS_ABYSS } from '../constants.js';
+import { PLANTS_ABYSS, ROCKS_ABYSS } from '../constants.js';
 import '../assets/css/rollingPage.css';
 
 export default class RollingPage extends React.Component {
@@ -187,9 +186,6 @@ export default class RollingPage extends React.Component {
                             }
                         </ul>
                     )}
-                </div>
-                <div className="particles-js">
-                    <Particles params={paramsParticles} />
                 </div>
             </div>
         )

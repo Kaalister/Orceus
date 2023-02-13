@@ -1,0 +1,549 @@
+.character-container {
+    color: white;
+    width: 100%;
+}
+
+.info-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 400px;
+    grid-template-rows: 100px 100px 100px;
+    grid-template-areas: "lastname species image"
+                         "firstname job image"
+                         "age level image";
+    margin: 0px 40px 40px 40px;
+    place-items: center start;
+    padding: 30px;
+    border: solid 2px #f7dd5c;
+}
+
+.info-container > .lastname {
+    grid-area: lastname;
+}
+
+.info-container > .firstname {
+    grid-area: firstname;
+}
+
+.info-container > .age {
+    grid-area: age;
+}
+
+.info-container > .species {
+    grid-area: species;
+}
+
+.info-container > .job {
+    grid-area: job;
+}
+
+.info-container > .level {
+    grid-area: level;
+}
+
+.info-container > .image {
+    grid-area: image;
+    justify-self: center;
+    align-self: end;
+}
+
+.info-container > .hp > input.dead-hp {
+    color: red;
+}
+
+.info-container > .hp > input.critical-hp {
+    color: orange;
+}
+
+.info-container > .hp > input.over-hp {
+    color: green;
+}
+
+.info-container > .image .preview-image {
+    border: 1px solid #f7dd5c;
+    height: 300px;
+    width: 300px;
+    position: relative;
+}
+
+.info-container > .image .button-upload {
+    height: calc(300px - 2px);
+    width: calc(300px - 2px);
+    color: white !important;
+    padding: 0;
+}
+
+.info-container > .image .button-upload .modal-image {
+    position: relative;
+}
+
+.info-container > .image .preview-image .remove-image {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+}
+
+.info-container > .image .preview-image .remove-image.hidden {
+    display: none;
+}
+
+.info-container > .image .preview-image .background-image {
+    position: absolute;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
+    width: 100%;
+    height: 100%;
+    z-index: 50;
+    cursor: pointer;
+}
+
+.info-container > div > input {
+    background-color: transparent;
+    width: 200px;
+    height: 50px;
+    border: none;
+    font-size: 2.5rem;
+}
+
+.info-container > div > span {
+    color: rgb(147, 147, 147);
+    font-size: 2.5rem;
+}
+
+.info-container > div > .ant-select {
+    height: 50px;
+    border: none;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.info-container > div > .ant-select > .ant-select-selector {
+    background-color: transparent;
+    border: none;
+}
+
+.info-container > div > .ant-select > * {
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.ant-select-selection-search-input, .ant-select-selection-search {
+    color: white !important;
+    font-size: 2.5rem;
+    position: absolute;
+    min-width: 200px;
+}
+
+.ant-select-dropdown {
+    background-color: black !important;
+    border: 1px yellow solid;
+    color: white !important;
+}
+
+.ant-select-item-option {
+    color: white !important;
+}
+
+.ant-select-item-option-active:hover, .ant-select-item-option-active {
+    background-color: rgb(72, 72, 72) !important;
+}
+
+.ant-select-item-option-selected {
+    background-color: rgb(44, 44, 44) !important;
+}
+
+.row-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 40px;
+}
+
+.column-container {
+    display: flex;
+    width: calc(50% - 20px);
+    flex-direction: column;
+
+}
+
+.column-container > div {
+    margin-bottom: 40px;
+}
+
+.stats-container, .equip-container, .fight-container, .lore-container, .note-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: solid 2px #f7dd5c;
+    padding: 30px;
+    height: fit-content;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.grid {
+    display: grid;
+    font-size: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 50px;
+    place-items: center;
+}
+
+.grid > div {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    width: 100%;
+}
+
+.grid > div > input {
+    width: 100px;
+    background-color: transparent;
+    margin-left: 10px;
+    border: none;
+}
+
+.grid .graph-container {
+    place-self: end;
+    height: 30px;
+}
+
+.grid > .graph-container > .graph-background {
+    width: 100%;
+}
+
+.grid > .graph-container > .graph-background > .graph {
+    height: 30px;
+    background-color: #f7dd5c;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.grid > div > .name-cat {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.puissname > .ant-select-selector {
+    background-color: transparent !important;
+    border: none !important;
+    color: white !important;
+    font-size: 1.5rem;
+    padding: 0 !important;
+    min-width: 80px !important;
+}
+
+.puissname > .ant-select-selector > span, .puissname > .ant-select-selector > span > input {
+    min-width: 80px !important;
+}
+
+.puissname .ant-select-selection-item {
+    padding-right: 10px !important;
+}
+
+.ant-select-disabled > .ant-select-selector, .ant-select-disabled input {
+    cursor: default !important;
+}
+
+.list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(16, 50px);
+    grid-template-areas: "race job"
+                         "lvl hp"
+                         ". ."
+                         "att att"
+                         "def def"
+                         "vit vit"
+                         "agi agi"
+                         "puiss puiss"
+                         "stren stren"
+                         ". ."
+                         "cac cac"
+                         "dist dist"
+                         "mag mag"
+                         "def_phy def_phy"
+                         "def_mag def_mag"
+                         "dodge dodge";
+    place-items: center start;
+    font-size: 1.5rem;
+}
+
+.list > .species {
+    grid-area: race;
+}
+
+.list > .job {
+    grid-area: job;
+}
+
+.list > .level {
+    grid-area: lvl;
+}
+
+.list > .hp {
+    grid-area: hp;
+}
+
+.list > .att {
+    grid-area: att;
+}
+
+.list > .def {
+    grid-area: def;
+}
+
+.list > .vit {
+    grid-area: vit;
+}
+
+.list > .agi {
+    grid-area: agi;
+}
+
+.list > .puiss {
+    grid-area: puiss;
+}
+
+.list > .stren {
+    grid-area: stren;
+}
+
+.list > .cac {
+    grid-area: cac;
+}
+
+.list > .dist {
+    grid-area: dist;
+}
+
+.list > .mag {
+    grid-area: mag;
+}
+
+.list > .def_phy {
+    grid-area: def_phy;
+}
+
+.list > .def_mag {
+    grid-area: def_mag;
+}
+
+.list > .dodge {
+    grid-area: dodge;
+}
+
+.list input {
+    width: 70px;
+    background-color: transparent;
+    border: none;
+    margin-left: 5px;
+}
+
+.lore-container > textarea, .note-container > textarea {
+    background-color: black;
+    resize: none;
+}
+
+.equipment {
+    font-size: 1.5rem;
+}
+
+.tooltip-equipment {
+    background-color: black;
+}
+
+.ant-popover-arrow-content::before {
+    color: #f7dd5c;
+}
+
+.ant-popover-inner {
+    border: solid 1px #f7dd5c;
+    border-radius: 5px;
+}
+
+.add-equipment {
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+
+.select-equipment > .ant-select-selector {
+    background-color: black !important;
+    border: solid 1px #f7dd5c !important;
+}
+
+.select-equipment .ant-select-arrow {
+    color: #f7dd5c;
+}
+
+.select-equipment {
+    width: 150px;
+}
+
+.select-equipment {
+    background-color: transparent;
+    border: none;
+}
+
+.equiped-item {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-areas: "name carac actions";
+}
+
+.equiped-item-name {
+    grid-area: name;
+    border: solid 1px;
+    padding: 5px 10px;
+    align-items: center;
+    display: flex;
+}
+
+.equiped-item-carac {
+    grid-area: carac;
+    border: solid 1px;
+    padding: 5px 10px;
+    align-items: center;
+    display: flex;
+}
+
+.equiped-item-actions {
+    grid-area: actions;
+    display: flex;
+    justify-content: center;
+    border: solid 1px;
+    padding: 5px 10px;
+    align-items: center;
+}
+
+.ant-select-item-empty {
+    color: white;
+    display: flex;
+}
+
+@media screen and (min-width: 901px) and (max-width: 1000px) {
+    .info-container > div > span, .info-container > div > input, .info-container > div > .ant-select {
+        font-size: 1.5rem;
+    }
+    
+    .grid {
+        font-size: 1rem;
+        grid-template-columns: 100%;
+        grid-template-rows: repeat(22, 30px);
+    }
+
+    .grid > div > .name-cat {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .puissname > .ant-select-selector {
+        font-size: 1rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .list {
+        grid-template-rows: repeat(12, 40px);
+        grid-template-areas: "race job"
+                             "lvl lvl"
+                             ". ."
+                             "att att"
+                             "def def"
+                             "vit vit"
+                             "agi agi"
+                             "puiss puiss"
+                             "stren stren"
+                             ". ."
+                             "deg armor"
+                             "parad dodge";
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .info-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 300px 30px 100px 100px 100px;
+        grid-template-areas: "image image"
+                             ". ."
+                             "lastname species"
+                             "firstname job"
+                             "age level";
+        margin: 40px;
+        place-items: center start;
+        padding: 30px;
+    }
+
+    .info-container > div > span, .info-container > div > input, .info-container > div > .ant-select {
+        font-size: 1.5rem;
+    }
+    
+    .grid {
+        font-size: 1rem;
+        grid-template-columns: 100%;
+        grid-template-rows: repeat(22, 30px);
+    }
+
+    .grid > div > .name-cat {
+        width: 50%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .grid > div > input {
+        width: 50px;
+    }
+
+    .puissname {
+        width: 50%;
+    }
+
+    .puissname > .ant-select-selector {
+        font-size: 1rem;
+    }
+
+    .grid > .graph-container > .graph-background > .graph {
+        height: 20px;
+    }
+
+    .title {
+        font-size: 1.2rem;
+    }
+
+    .list {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(15, 40px);
+        grid-template-areas: "race"
+                             "job"
+                             "lvl"
+                             "."
+                             "att"
+                             "def"
+                             "vit"
+                             "agi"
+                             "puiss"
+                             "stren"
+                             "."
+                             "deg"
+                             "armor"
+                             "parad"
+                             "dodge";
+        font-size: 1rem;
+    }
+
+    .list input {
+        width: 50px;
+    }
+}

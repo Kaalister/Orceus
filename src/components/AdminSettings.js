@@ -5,9 +5,7 @@ import { Delete, Create, ArrowBackIos, AddCircleOutline } from '@material-ui/ico
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { notification } from 'antd';
-import Particles from 'react-particles-js';
 
-import { paramsParticles } from '../constants.js';
 import AdminModale from './AdminModale';
 
 import AppProfile from '../Profile';
@@ -263,22 +261,19 @@ export default class AdminSettings extends React.Component {
                 </div>
                 <div>
                     <DataGrid 
-                     rows={this.state.cards}
-                     columns={columns}
-                     pageSize={10}
-                     autoHeight
+                        rows={this.state.cards}
+                        columns={columns}
+                        pageSize={10}
+                        autoHeight
                      />
                     { (this.state.openModal) ? (
                         <AdminModale
-                         show={this.state.openModal}
-                         update={this.getCardList}
-                         close={this.closeModal}
-                         id={this.state.selectedCard}
+                            show={this.state.openModal}
+                            update={this.getCardList}
+                            close={this.closeModal}
+                            id={this.state.selectedCard}
                         />
                     ): null}
-                </div>
-                <div className="particles-js">
-                    <Particles params={paramsParticles} />
                 </div>
             </div>
         );

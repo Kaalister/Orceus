@@ -1,0 +1,16 @@
+.character-header-container {
+    display: flex;
+    margin: 10px 40px;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.ch-btn-container {
+    max-width: 50%;
+}
+
+.ch-btn-container > *, .ch-btn-container > *:hover {
+    margin: 0 5px;
+    color: #f7dd5c;
+    cursor: pointer;
+}

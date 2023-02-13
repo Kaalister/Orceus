@@ -91,3 +91,9 @@
 .menu-links > * {
     margin: 0 5px;
 }
+
+@media screen and (max-width: 900px) {
+    .header-background .filters {
+        display: none;
+    }
+}

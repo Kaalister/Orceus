@@ -1,0 +1,43 @@
+.header-character {
+    padding: 10px;
+    height: 50px;
+    width: 100vw;
+}
+
+.header-link-container {
+    float: right;
+}
+
+.header-link-container > * {
+    margin: 0 5px;
+}
+
+.new-character-container {
+    width: 100vw;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.new-character-btn {
+    margin: 10px 20px;
+}
+
+.new-character-btn:hover {
+    color: black;
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+.grid-character{
+    padding: 20px;
+    height: 600px;
+}
+
+.MuiCircularProgress-colorPrimary {
+    color: #f7dd5c !important; 
+}
+
+.action-btn {
+    color: white;
+}
