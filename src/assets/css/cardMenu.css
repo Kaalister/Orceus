@@ -92,7 +92,24 @@
     margin: 0 5px;
 }
 
+.loading-cards {
+    width: 50rem;
+}
+
 @media screen and (max-width: 900px) {
+    .container-card-menu {
+        padding: 0px;
+    }
+
+    .card-img {
+        width: 100vw;
+        margin: 10px 0px;
+    }
+
+    .loading-cards {
+        width: 100vw;
+    }
+
     .header-background .filters {
         display: none;
     }

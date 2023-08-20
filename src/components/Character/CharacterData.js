@@ -5,6 +5,8 @@ import Inventory from './Inventory';
 import loadingImg from '../../assets/images/loading.gif';
 import { HttpGetRequest, HttpPutRequest } from "../../HttpRequests";
 
+import "../../assets/css/character.css";
+
 export default class CharacterData extends React.Component {
     constructor(props) {
         super(props);
@@ -73,7 +75,7 @@ export default class CharacterData extends React.Component {
             return (
                 <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
                     <img
-                        style={{ width: "50rem" }}
+                        className="loading-character"
                         src={loadingImg}
                         alt="loading"
                     />

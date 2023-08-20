@@ -310,7 +310,7 @@ export default class CardMenu extends React.Component {
                     ) : null}
                     {(this.state.loading) ? (
                         <img
-                            style={{ width: "50rem" }}
+                            className='loading-cards'
                             src={loading}
                             alt="loading"
                         />

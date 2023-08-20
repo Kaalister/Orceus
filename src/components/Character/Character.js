@@ -1,13 +1,27 @@
 import React from 'react';
-import { CloseOutlined, PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import {
+    CloseOutlined,
+    PlusCircleOutlined,
+    MinusCircleOutlined,
+    EditOutlined,
+    DeleteOutlined,
+    CloseCircleOutlined,
+    CheckCircleOutlined
+} from '@ant-design/icons';
 import {
     Select,
     Upload,
     Button,
-    Popover
+    Popover,
+    Modal,
+    Form,
+    Input
 } from 'antd';
+import { v4 as uuid } from 'uuid';
 import CharacterHeader from './ChararcterHeader';
 import "../../assets/css/character.css";
+
+const { TextArea } = Input;
 
 const CHAR_BASE = {
     shashouille: {
@@ -368,8 +382,8 @@ const JOBS = {
         label: 'Sorcière',
         value: 'sorciere',
     }, {
-        label: 'Angliste',
-        value: 'angliste',
+        label: 'Angéliste',
+        value: 'angeliste',
     }, {
         label: 'Distordeur',
         value: 'distordeur',
@@ -400,9 +414,14 @@ export default class Character extends React.Component {
 
         this.state = {
             loading: true,
+            modalIsOpen: false,
+            selectedSkill: null,
+            modifiedSkill: {
+                name: "",
+                desc: "",
+            },
             character: {
                 id: null,
-                competencies: {},
                 equipment: {
                     weapon: [],
                     plastron: [],
@@ -422,7 +441,7 @@ export default class Character extends React.Component {
                     agi: 0,
                     puiss: 0,
                     stren: 0,
-        
+                    
                     cac: 0,
                     dist: 0,
                     mag: 0,
@@ -457,15 +476,26 @@ export default class Character extends React.Component {
                 },
                 lore: '',
                 notes: '',
-                inventory: []
+                inventory: [],
+                skills: []
             }
         }
+
+        this.newForm = React.createRef();
 
         this.changeCharacterInfo = this.changeCharacterInfo.bind(this);
         this.changeCharacterStats = this.changeCharacterStats.bind(this);
         this.changeCharacterFight = this.changeCharacterFight.bind(this);
         this.setImageCharacter = this.setImageCharacter.bind(this);
         this.removeImageCharacter = this.removeImageCharacter.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.addSkill = this.addSkill.bind(this);
+        this.selectSkill = this.selectSkill.bind(this);
+        this.changeSkill = this.changeSkill.bind(this);
+        this.deleteSkill = this.deleteSkill.bind(this);
+        this.validateSkillModification = this.validateSkillModification.bind(this);
+        this.renderSkills = this.renderSkills.bind(this);
         this.renderEquipment = this.renderEquipment.bind(this);
         this.renderEquiped = this.renderEquiped.bind(this);
     }
@@ -504,11 +534,17 @@ export default class Character extends React.Component {
 
         character.hp_max = base.att + (8 * base.def) + (3 * base.vit) + (3 * base.agi) + base.puiss + (6 * base.stren);
         character.fight.cac = Math.round(Math.sqrt(character.level * base.att) + (Math.pow(base.stren, 2) / 15));
-        character.fight.dist = Math.round(Math.pow(character.level, 2) / 10 + ( Math.pow(base.att, 2) * 0.02) * (1 + base.stren * 0.02))
+        character.fight.dist = Math.round(Math.pow(character.level, 2) / 10 + ( Math.pow(base.att, 2) * 0.02) * (1 + base.stren * 0.2));
         character.fight.mag = Math.round((base.att + base.puiss + (character.level / 10)) * (base.puiss / 20 + base.att / 40 + character.level / 100));
         character.fight.def_phy = Math.round(13 * Math.log(base.def));
         character.fight.def_mag = Math.round(13 * Math.log(base.def));
         character.fight.dodge = 6 + Math.round((4 * Math.log((base.vit + base.agi) / 2)) / 1.3);
+
+        if (character.specie === "suhera" || character?.specie === "hanylice") {
+            character.fight.cac = 0;
+            character.fight.dist = 0;
+            character.fight.mag = Math.round(Math.pow(character.level, 2) / 10 + ( Math.pow(base.puiss, 2) * 0.02) * (1 + base.att * 0.2));
+        }
 
         this.setState({statsFightChange: false}, () => this.props.actualizeCharacter(character));
     }
@@ -566,18 +602,6 @@ export default class Character extends React.Component {
         this.setState({ character }, () => this.props.actualizeCharacter(character));
     }
 
-    resizeTextarea(e) {
-        e.target.style.height = 'inherit';
-
-        let height = e.target.scrollHeight + 30;
-
-        if (height > 500) {
-            height = 500;
-        }
-
-        e.target.style.height = `${height}px`; 
-    }
-
     unequipItem(part, id) {
         let { character } = this.state;
         let equipedPartIDs = [...character.equipment[part]];
@@ -585,6 +609,180 @@ export default class Character extends React.Component {
         character.equipment[part] = equipedPartIDs.filter((item) => item !== id);
 
         this.setState({ character }, () => this.props.actualizeCharacter(character))
+    }
+
+    openModal() {
+        this.setState({ modalIsOpen : true });
+    }
+
+    closeModal() {
+        this.setState({ modalIsOpen: false }, () => this.newForm.current.resetFields());
+    }
+
+    addSkill() {
+        let { character } = this.state;
+
+        let form = this.newForm.current.getFieldsValue();
+
+        let skill = {
+            id: uuid(),
+            name: form.name,
+            desc: form.desc,
+        };
+
+        if (!skill.name | !skill.desc)
+            return;
+
+        if (!character.skills)
+            character.skills = [];
+
+        character.skills.push(skill);
+
+        this.setState({
+            character,
+            modalIsOpen: false
+        }, () => {
+            this.newForm.current.resetFields();
+            this.props.actualizeCharacter(this.state.character);
+        });
+    }
+
+    selectSkill(id) {
+        let modifiedSkill = {...this.state.modifiedSkill};
+        let skills = !!this.state.character.skills ? [...this.state.character.skills] : [];
+
+        if (id !== null) {
+            skills.forEach((skill) => {
+                if (skill.id === id) {
+                    modifiedSkill  = {
+                        name: skill.name,
+                        desc: skill.desc
+                    }
+                }
+            })
+        } else {
+            modifiedSkill  = {
+                name: "",
+                desc: ""
+            }
+        }
+        
+        this.setState({
+            selectedSkill: id,
+            modifiedSkill
+        });
+    }
+
+    changeSkill(part, value) {
+        let modifiedSkill = {...this.state.modifiedSkill};
+
+        modifiedSkill[part] = value;
+
+        this.setState({ modifiedSkill });
+    }
+
+    validateSkillModification() {
+        let selectedSkill = this.state.selectedSkill;
+        let modifiedSkill = {...this.state.modifiedSkill};
+        let character = this.state.character;
+        let skills = !!character.skills ? [...character.skills] : [];
+
+        skills.forEach((skill) => {
+            if (skill.id === selectedSkill) {
+                skill.name = modifiedSkill.name;
+                skill.desc = modifiedSkill.desc;
+            }
+        })
+
+        modifiedSkill  = {
+            name: "",
+            desc: ""
+        }
+
+        character.skills = skills;
+
+        this.setState({
+            modifiedSkill,
+            character,
+            modalIsOpen: false,
+            selectedSkill: null
+        });
+    }
+
+    deleteSkill(id) {
+        let character = this.state.character;
+        let skills = !!character.skills ? [...character.skills] : [];
+
+        character.skills = skills.filter(skill => {
+            return skill.id !== id;
+        })
+
+        this.setState({ character });
+    }
+
+    renderSkills() {
+        let skills = !!this.state.character.skills ? [...this.state.character.skills] : [];
+        let modifiedSkill = {...this.state.modifiedSkill};
+
+        return skills.map(skill => {
+            if (!this.state.selectedSkill || this.state.selectedSkill !== skill.id) {
+                return (
+                    <div className="skill-container">
+                    <div className="skill-title-container">
+                        <div className="skill-name-text">
+                            {skill.name} :
+                        </div>
+                        <EditOutlined
+                         className="skill-icon clickable"
+                         onClick={() => this.selectSkill(skill.id)}
+                        />
+                        <DeleteOutlined
+                         className="skill-icon clickable"
+                         onClick={() => this.deleteSkill(skill.id)}
+                        />
+                    </div>
+                    <div className="skill-desc-text">
+                        <TextArea
+                            defaultValue={skill.desc}
+                            readOnly
+                            autoSize
+                        />
+                    </div>
+                </div>
+                )
+            }
+            return (
+                <div className="skill-container" key={skill.id}>
+                    <div className="skill-title-container">
+                        <div className="skill-edited-name-text">
+                            <Input
+                             type="text" 
+                             defaultValue={modifiedSkill.name}
+                             onChange={(e) => this.changeSkill("name", e.target.value)}
+                            /> :
+                            <CloseCircleOutlined
+                             className="skill-icon clickable"
+                             onClick={() => this.selectSkill(null)}
+                            />
+                            <CheckCircleOutlined
+                             className="skill-icon clickable"
+                             onClick={() => this.validateSkillModification()}
+                            />
+                        </div>
+                    </div>
+                    <div className="skill-edited-desc-text">
+                        <TextArea 
+                         autoSize={{
+                            minRows: 2,
+                            maxRows: 5,
+                         }}
+                         defaultValue={modifiedSkill.desc}
+                         onChange={(e) => this.changeSkill("desc", e.target.value)}
+                        />
+                    </div>
+                </div>
+            );
+        });
     }
 
     renderEquiped(part) {
@@ -651,7 +849,7 @@ export default class Character extends React.Component {
     }
 
     render() {
-        const { character } = this.state;
+        const { character, modalIsOpen } = this.state;
 
         return (
             <div className="character-container">
@@ -715,7 +913,7 @@ export default class Character extends React.Component {
                         />
                     </div>
                     <div className='hp'>
-                        <span>P.V. : </span>
+                        <span>P.V. : </span><br/>
                         <input
                             className={
                                 (character?.hp <= 0) ? 
@@ -1166,6 +1364,71 @@ export default class Character extends React.Component {
                     </div>
 
                     <div className="column-container">
+                        <div className="competencies-container">
+                            <div className="title">
+                                Competences
+                                <PlusCircleOutlined
+                                    onClick={this.openModal}
+                                    className="add-competency clickable"
+                                />
+                            </div>
+                            <div>
+                                <Modal
+                                    className="modal-new-item"
+                                    visible={modalIsOpen}
+                                    onOk={this.addSkill}
+                                    onCancel={this.closeModal}
+                                >
+                                    <Form
+                                        className="add-to-inventory"
+                                        ref={this.newForm}
+                                        initialValues={{
+                                            name: "",
+                                            type: null,
+                                            stage: null,
+                                            desc: "",
+                                            carac: "",
+                                            nb: null
+                                        }}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                        labelAlign="left"
+                                        onFinish={this.addItem}
+                                    >
+                                        <Form.Item
+                                            key={"name"}
+                                            label="Nom"
+                                            name="name"
+                                            rules={[{
+                                                required: true,
+                                                message: 'Le nom est obligatoire.',
+                                            }]}
+                                        >
+                                            <Input type="text" />
+                                        </Form.Item>
+
+                                        <Form.Item
+                                            key={"desc"}
+                                            label="Description"
+                                            name="desc"
+                                            rules={[{
+                                                required: true,
+                                                message: 'La description est obligatoire.',
+                                            }]}
+                                        >
+                                            <TextArea 
+                                                autoSize={{
+                                                    minRows: 2,
+                                                    maxRows: 5,
+                                                }}
+                                            />
+                                        </Form.Item>
+                                    </Form>
+                                </Modal>
+                                {this.renderSkills()}
+                            </div>
+                        </div>
+                        
                         <div className="equip-container">
                             <div className="title">Équipement</div>
                             <div className="equipment">
@@ -1307,18 +1570,18 @@ export default class Character extends React.Component {
 
                         <div className="lore-container">
                             <div className="title">Lore</div>
-                            <textarea
+                            <TextArea
                                 value={character?.lore}
-                                onKeyDown={this.resizeTextarea}
+                                autoSize
                                 onChange={(val) => this.changeCharacterInfo("lore", val.target.value)}
                             />
                         </div>
-
+                        
                         <div className="note-container">
                             <div className="title">Notes</div>
-                            <textarea
+                            <TextArea
                                 value={character?.notes}
-                                onKeyDown={this.resizeTextarea}
+                                autoSize
                                 onChange={(val) => this.changeCharacterInfo("notes", val.target.value)}
                             />
                         </div>

@@ -9,7 +9,7 @@
     grid-template-rows: 100px 100px 100px;
     grid-template-areas: "lastname species image"
                          "firstname job image"
-                         "age level image";
+                         "age hp image";
     margin: 0px 40px 40px 40px;
     place-items: center start;
     padding: 30px;
@@ -36,14 +36,14 @@
     grid-area: job;
 }
 
-.info-container > .level {
-    grid-area: level;
-}
-
 .info-container > .image {
     grid-area: image;
     justify-self: center;
     align-self: end;
+}
+
+.info-container > .hp {
+    grid-area: hp;
 }
 
 .info-container > .hp > input.dead-hp {
@@ -120,8 +120,8 @@
 }
 
 .info-container > div > .ant-select > .ant-select-selector {
-    background-color: transparent;
-    border: none;
+    height: 45px;
+    align-items: center;
 }
 
 .info-container > div > .ant-select > * {
@@ -146,7 +146,8 @@
     color: white !important;
 }
 
-.ant-select-item-option-active:hover, .ant-select-item-option-active {
+.ant-select-item-option-active:hover,
+.ant-select-item-option-active {
     background-color: rgb(72, 72, 72) !important;
 }
 
@@ -172,7 +173,12 @@
     margin-bottom: 40px;
 }
 
-.stats-container, .equip-container, .fight-container, .lore-container, .note-container {
+.stats-container,
+.equip-container,
+.fight-container,
+.lore-container,
+.note-container,
+.competencies-container {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -239,7 +245,8 @@
     min-width: 80px !important;
 }
 
-.puissname > .ant-select-selector > span, .puissname > .ant-select-selector > span > input {
+.puissname > .ant-select-selector > span,
+.puissname > .ant-select-selector > span > input {
     min-width: 80px !important;
 }
 
@@ -247,7 +254,8 @@
     padding-right: 10px !important;
 }
 
-.ant-select-disabled > .ant-select-selector, .ant-select-disabled input {
+.ant-select-disabled > .ant-select-selector,
+.ant-select-disabled input {
     cursor: default !important;
 }
 
@@ -348,7 +356,13 @@
 
 .lore-container > textarea, .note-container > textarea {
     background-color: black;
+    color: white;
     resize: none;
+}
+
+.add-competency {
+    font-size: 1.2rem;
+    margin-left: 10px;
 }
 
 .equipment {
@@ -427,6 +441,66 @@
     display: flex;
 }
 
+.skill-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.skill-title-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.skill-edited-name-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.skill-edited-name-text > input  {
+    margin-right: 10px;
+    color: white;
+    background-color: black;
+    border-color: #f7dd5c !important;
+}
+
+.skill-edited-desc-text > textarea {
+    color: white;
+    background-color: black;
+    border-color: #f7dd5c !important;
+}
+
+.skill-name-text {
+    font-size: 1.2rem;
+    text-decoration: underline;
+}
+
+.skill-icon {
+    font-size: 1.3rem;
+    opacity: 0;
+    margin-left: 10px;
+}
+
+.skill-icon:hover,
+.skill-edited-desc-text .skill-icon,
+.skill-edited-name-text .skill-icon {
+    opacity: 1;
+}
+
+.skill-desc-text > textarea {
+    color: white;
+    background-color: black;
+    border: none !important;
+    box-shadow: none;
+    resize: none;
+    width: 100%;
+}
+
+.loading-character {
+    width: 50rem;
+}
+
 @media screen and (min-width: 901px) and (max-width: 1000px) {
     .info-container > div > span, .info-container > div > input, .info-container > div > .ant-select {
         font-size: 1.5rem;
@@ -471,18 +545,30 @@
 }
 
 @media screen and (max-width: 900px) {
+    .loading-character {
+        width: 100vw;
+    }
+
+    .ant-modal-mask, .ant-modal-wrap {
+        width: 100vw;
+    }
+
     .info-container {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 300px 30px 100px 100px 100px;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 80vw 20px 1fr 1fr 1fr;
         grid-template-areas: "image image"
                              ". ."
                              "lastname species"
                              "firstname job"
-                             "age level";
-        margin: 40px;
+                             "age hp";
+        margin: 10px;
         place-items: center start;
-        padding: 30px;
+        padding: 10px;
+    }
+
+    .info-container > div > input {
+        width: 95%;
     }
 
     .info-container > div > span, .info-container > div > input, .info-container > div > .ant-select {
@@ -523,11 +609,12 @@
     }
 
     .list {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(15, 40px);
-        grid-template-areas: "race"
+        grid-template-columns: 100%;
+        grid-template-rows: repeat(18, 40px);
+        grid-template-areas: "race" 
                              "job"
                              "lvl"
+                             "hp"
                              "."
                              "att"
                              "def"
@@ -536,14 +623,33 @@
                              "puiss"
                              "stren"
                              "."
-                             "deg"
-                             "armor"
-                             "parad"
+                             "cac"
+                             "dist"
+                             "mag"
+                             "def_phy"
+                             "def_mag"
                              "dodge";
         font-size: 1rem;
     }
 
     .list input {
-        width: 50px;
+        width: 80px;
+    }
+
+    .equipment {
+        font-size: 1rem;
+    }
+
+    .row-container {
+        flex-direction: column;
+        margin: 10px;
+    }
+
+    .column-container {
+        width: 100%;
+    }
+
+    .ant-select-selection-search-input, .ant-select-selection-search {
+        min-width: auto;
     }
 }

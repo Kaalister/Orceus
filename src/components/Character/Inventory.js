@@ -59,7 +59,8 @@ export default class Inventory extends React.Component {
 
         this.state = {
             character: null,
-            modalIsOpen: false
+            modalIsOpen: false,
+            searchValue: ""
         };
 
         this.newForm = React.createRef();
@@ -162,19 +163,37 @@ export default class Inventory extends React.Component {
         this.setState({ newItem });
     }
 
+    sortByType(a, b) {
+        let objectA = TYPES.find(item => item.value === a.type);
+        let objectB = TYPES.find(item => item.value === b.type);
+
+        let labelA = objectA.label;
+        let labelB = objectB.label;
+
+        return labelA.localeCompare(labelB);
+    }
+
     render() {
-        let { character } = this.state;
+        let { character, searchValue } = this.state;
         let { modalIsOpen } = this.state;
 
+        let isMobile = window.screen.width < 900;
+        let isTablet = window.screen.width >= 900 && window.screen.width < 1000;
         let inventory = (!!character?.inventory) ? [...character.inventory] : [];
 
-        const columns = [{
+        if (!!searchValue) {
+            inventory = inventory.filter(item => (
+                item.name.toLowerCase().includes(searchValue.toLowerCase())
+            ));
+        }
+
+        const columns = (isMobile) ? [{
             title: "Nom",
             dataIndex: "name",
             key: "name",
-            width: 200,
             defaultSortOrder: 'descend',
-            sorter: (a, b) => a.name.localeCompare(b.first_name),
+            width: 150,
+            sorter: (a, b) => a.name.localeCompare(b.name),
             render: (name, item) => (
                 <div title={name}>
                     <Input
@@ -190,10 +209,99 @@ export default class Inventory extends React.Component {
             key: "type",
             defaultSortOrder: 'descend',
             width: 150,
-            sorter: (a, b) => a.name.localeCompare(b.first_name),
+            sorter: this.sortByType,
             render: (type, item) => (
                 <Select
-                    style={{width: 125}}
+                    style={{width: 100}}
+                    value={type}
+                    options={TYPES}
+                    onChange={(val) => this.onChangeItem(val, item.id, "type")} 
+                />
+            )
+        }, {
+            title: "Étage",
+            dataIndex: "stage",
+            key: "stage",
+            defaultSortOrder: 'descend',
+            width: 100,
+            sorter: (a, b) => a.stage - b.stage,
+            render: (stage, item) => (
+                <Input
+                    type='number'
+                    value={stage}
+                    bordered={false}
+                    onChange={(val) => this.onChangeItem(val.target.value, item.id, "stage")}
+                />
+            )
+        }, {
+            title: "Description",
+            dataIndex: "desc",
+            key: "desc",
+            render: (desc, item) => (
+                <TextArea
+                    autoSize
+                    value={desc}
+                    bordered={false}
+                    onChange={(val) => this.onChangeItem(val.target.value, item.id, "desc")}
+                />
+            )
+        }, {
+            title: "Nombre",
+            dataIndex: "nb",
+            key: "nb",
+            width: 50,
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.nb - b.nb,
+            render: (nb, item) => (
+                <Input
+                    type="number"
+                    value={nb}
+                    bordered={false}
+                    onChange={(val) => this.onChangeItem(val.target.value, item.id, "nb")}
+                />
+            )
+        }, {
+            title: (
+                <AddCircleOutline
+                    className="icon-header clickable"
+                    onClick={this.openModal}
+                />
+            ),
+            key: "action",
+            width: 50,
+            render: (_, item) => (
+                <DeleteOutline 
+                    className="clickable"
+                    onClick={() => this.removeItem(item.id)}
+                />
+            )
+        }]
+        : [{
+            title: "Nom",
+            dataIndex: "name",
+            key: "name",
+            width: 200,
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            render: (name, item) => (
+                <div title={name}>
+                    <Input
+                        value={name}
+                        bordered={false}
+                        onChange={(val) => this.onChangeItem(val.target.value, item.id, "name")}
+                    />
+                </div>
+            )
+        }, {
+            title: "Type",
+            dataIndex: "type",
+            key: "type",
+            defaultSortOrder: 'descend',
+            width: 150,
+            sorter: this.sortByType,
+            render: (type, item) => (
+                <Select
+                    style={{width: (isTablet) ? 100 : 125}}
                     value={type}
                     options={TYPES}
                     onChange={(val) => this.onChangeItem(val, item.id, "type")} 
@@ -205,7 +313,7 @@ export default class Inventory extends React.Component {
             key: "stage",
             width: 100,
             defaultSortOrder: 'descend',
-            sorter: (a, b) => a.nb < b.nb,
+            sorter: (a, b) => a.stage - b.stage,
             render: (stage, item) => (
                 <Input
                     type='number'
@@ -268,11 +376,20 @@ export default class Inventory extends React.Component {
                     onClick={() => this.removeItem(item.id)}
                 />
             )
-        }]
+        }];
 
         return (
             <div className="character-container">
                 <CharacterHeader saveCharacter={this.props.saveCharacter}/>
+                <div className="search-container">
+                    <Input
+                        className="search-input"
+                        placeholder="Nom Recherché..."
+                        value={searchValue}
+                        allowClear
+                        onChange={(val) => this.setState({ searchValue: val.target.value })}
+                    />
+                </div>
                 <div className="margin-table">
                     <Table 
                         className="inventory-table"

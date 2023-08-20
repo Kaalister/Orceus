@@ -1,3 +1,23 @@
+.search-container {
+    padding : 20px 50px 0 50px;
+    display: flex;
+}
+
+.search-input {
+    width: 250px;
+    background-color: transparent;
+    border: solid 1px #f7dd5c !important;
+}
+
+.search-input input {
+    background-color: transparent;
+    color: white;
+}
+
+.search-input .ant-input-clear-icon {
+    color: white;
+}
+
 .margin-table {
     margin-top: 50px;
     padding: 0 50px;
@@ -86,6 +106,7 @@ td.ant-table-cell,
 .ant-select-selector {
     background-color: black !important;
     border-color: #f7dd5c !important;
+    color: white;
 }
 
 .add-to-inventory .ant-select-arrow {
@@ -120,4 +141,11 @@ td.ant-table-cell,
 .ant-pagination-item {
     background-color: #f7dd5c;
     border-color: #f7dd5c;
+}
+
+@media screen and (max-width: 900px) {
+    .margin-table {
+        padding: 10px;
+        margin: 0px;
+    }
 }

@@ -89,7 +89,8 @@ export default class CharacterMenu extends React.Component {
             headerName: 'Personnage',
             field: "firstname",
             disableColumnSelector: true,
-            flex: 1,
+            flex: 2,
+            minWidth: 150,
             key: "lastname",
             renderCell: (params) => {
                 return <span>{params.row.firstname} {params.row.lastname}</span>
@@ -98,7 +99,8 @@ export default class CharacterMenu extends React.Component {
         }, {
             headerName: 'Level',
             field: 'level',
-            width: 150,
+            minWidth: 100,
+            flex: 1,
             disableColumnFilter: true,
             disableColumnMenu: true,
         }, {
