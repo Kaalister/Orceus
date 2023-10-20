@@ -501,7 +501,7 @@
     width: 50rem;
 }
 
-@media screen and (min-width: 901px) and (max-width: 1000px) {
+@media screen and (min-width: 901px) and (max-width: 1024px) {
     .info-container > div > span, .info-container > div > input, .info-container > div > .ant-select {
         font-size: 1.5rem;
     }
@@ -542,6 +542,10 @@
                              "parad dodge";
         font-size: 1rem;
     }
+
+    .skill-icon {
+        opacity: 1;
+    }
 }
 
 @media screen and (max-width: 900px) {
@@ -573,6 +577,10 @@
 
     .info-container > div > span, .info-container > div > input, .info-container > div > .ant-select {
         font-size: 1.5rem;
+    }
+
+    .info-container > .image {
+        align-self: unset;
     }
     
     .grid {
@@ -651,5 +659,9 @@
 
     .ant-select-selection-search-input, .ant-select-selection-search {
         min-width: auto;
+    }
+
+    .skill-icon {
+        opacity: 1;
     }
 }
