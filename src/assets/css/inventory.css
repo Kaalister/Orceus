@@ -143,6 +143,51 @@ td.ant-table-cell,
     border-color: #f7dd5c;
 }
 
+.ant-pagination-item:hover,
+.ant-pagination-item:hover > a {
+    background-color: black;
+    border-color: #f7dd5c;
+    color: #f7dd5c;
+}
+
+.ant-pagination-jump-next,
+.ant-pagination-jump-next .ant-pagination-item-link {
+    display: flex;
+    border-color: #f7dd5c;
+    background: #f7dd5c;
+    text-align: center;
+    color: black;
+}
+
+.ant-pagination-jump-next:hover,
+.ant-pagination-jump-next .ant-pagination-item-link:hover {
+    border-color: #f7dd5c;
+    background: black;
+    color: #f7dd5c;
+}
+
+.ant-pagination-item-container {
+    width: 32px;
+}
+
+.ant-pagination-item-container svg {
+    color: #f7dd5c;
+}
+
+.ant-pagination-jump-next .ant-pagination-item-container .ant-pagination-item-ellipsis {
+    display: block;
+    border-color: #f7dd5c;
+    background: #f7dd5c;
+    text-align: center;
+    color: black;
+}
+
+.inventory-table .ant-select-selection-search,
+.inventory-table .ant-select-selection-search-input {
+    width: 0;
+    min-width: 0;
+}
+
 @media screen and (max-width: 900px) {
     .margin-table {
         padding: 10px;

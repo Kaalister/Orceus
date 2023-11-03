@@ -7,6 +7,7 @@ import {
     Modal
 } from 'antd';
 import { DeleteOutline, AddCircleOutline } from '@mui/icons-material';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { v4 as uuid } from 'uuid'; 
 
 import CharacterHeader from './ChararcterHeader';
@@ -60,7 +61,16 @@ export default class Inventory extends React.Component {
         this.state = {
             character: null,
             modalIsOpen: false,
-            searchValue: ""
+            searchValue: "",
+            initialForm: {
+                id: null,
+                name: "",
+                type: null,
+                stage: null,
+                desc: "",
+                carac: "",
+                nb: null
+            }
         };
 
         this.newForm = React.createRef();
@@ -68,9 +78,11 @@ export default class Inventory extends React.Component {
         this.onChangeItem = this.onChangeItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
         this.openModal = this.openModal.bind(this);
+        this.openEditModal = this.openEditModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.onChangeNewItem = this.onChangeNewItem.bind(this);
         this.addItem = this.addItem.bind(this);
+        this.editItem = this.editItem.bind(this);
     }
 
     componentDidMount() {
@@ -92,7 +104,18 @@ export default class Inventory extends React.Component {
 
     openModal = () => {
         this.setState({
-            modalIsOpen: true
+            modalIsOpen: true,
+            initialForm: {
+                id: null,
+                name: "",
+                type: null,
+                stage: null,
+                desc: "",
+                carac: "",
+                nb: null
+            }
+        }, () => {
+            this.newForm.current.resetFields();
         });
     }
 
@@ -125,10 +148,68 @@ export default class Inventory extends React.Component {
         this.setState({ character }, () => this.props.actualizeCharacter(this.state.character));
     }
 
+    openEditModal = (id) => {
+        let items = this.state.character.inventory;
+        let item = items.find(item => item.id === id);
+        this.setState({
+            modalIsOpen: true,
+            initialForm: {
+                id: id,
+                name: item.name,
+                type: item.type,
+                stage: item.stage,
+                desc: item.desc,
+                carac: item.carac,
+                nb: item.nb
+            }
+        }, () => {
+            this.newForm.current.resetFields();
+        });
+    }
+
+    editItem = (form) => {
+        let character = this.state.character;
+        let item = {
+            id: form.id,
+            name: form.name,
+            type: form.type,
+            stage: form.stage,
+            desc: form.desc,
+            carac: form.carac,
+            nb: form.nb,
+        };
+        let indexCurrentItem = character.inventory.findIndex(item => item.id === form.id);
+
+        character.inventory[indexCurrentItem] = item;
+        this.setState({
+            character,
+            initialForm: {
+                id: null,
+                name: "",
+                type: null,
+                stage: null,
+                desc: "",
+                carac: "",
+                nb: null
+            },
+            modalIsOpen: false,
+        }, () => {
+            this.newForm.current.resetFields();
+            this.props.actualizeCharacter(this.state.character);
+        });
+
+    }
+
     addItem = () => {
         let { character } = this.state;
 
         let form = this.newForm.current.getFieldsValue();
+
+        if (form.id !== null) {
+            this.editItem(form);
+            return;
+        }
+
         let item = {
             id: uuid(),
             name: form.name,
@@ -174,7 +255,7 @@ export default class Inventory extends React.Component {
     }
 
     render() {
-        let { character, searchValue } = this.state;
+        let { character, searchValue, initialForm } = this.state;
         let { modalIsOpen } = this.state;
 
         let isMobile = window.screen.width < 900;
@@ -204,49 +285,7 @@ export default class Inventory extends React.Component {
                 </div>
             )
         }, {
-            title: "Type",
-            dataIndex: "type",
-            key: "type",
-            defaultSortOrder: 'descend',
-            width: 150,
-            sorter: this.sortByType,
-            render: (type, item) => (
-                <Select
-                    style={{width: 100}}
-                    value={type}
-                    options={TYPES}
-                    onChange={(val) => this.onChangeItem(val, item.id, "type")} 
-                />
-            )
-        }, {
-            title: "Étage",
-            dataIndex: "stage",
-            key: "stage",
-            defaultSortOrder: 'descend',
-            width: 100,
-            sorter: (a, b) => a.stage - b.stage,
-            render: (stage, item) => (
-                <Input
-                    type='number'
-                    value={stage}
-                    bordered={false}
-                    onChange={(val) => this.onChangeItem(val.target.value, item.id, "stage")}
-                />
-            )
-        }, {
-            title: "Description",
-            dataIndex: "desc",
-            key: "desc",
-            render: (desc, item) => (
-                <TextArea
-                    autoSize
-                    value={desc}
-                    bordered={false}
-                    onChange={(val) => this.onChangeItem(val.target.value, item.id, "desc")}
-                />
-            )
-        }, {
-            title: "Nombre",
+            title: "Nb",
             dataIndex: "nb",
             key: "nb",
             width: 50,
@@ -268,12 +307,18 @@ export default class Inventory extends React.Component {
                 />
             ),
             key: "action",
-            width: 50,
+            width: 100,
             render: (_, item) => (
-                <DeleteOutline 
-                    className="clickable"
-                    onClick={() => this.removeItem(item.id)}
-                />
+                <div className="right">
+                    <ModeEditIcon 
+                     className="clickable mr-1"
+                     onClick={() => this.openEditModal(item.id)}
+                    />
+                    <DeleteOutline 
+                     className="clickable"
+                     onClick={() => this.removeItem(item.id)}
+                    />
+                </div>
             )
         }]
         : [{
@@ -380,7 +425,7 @@ export default class Inventory extends React.Component {
 
         return (
             <div className="character-container">
-                <CharacterHeader saveCharacter={this.props.saveCharacter}/>
+                <CharacterHeader saveCharacter={this.props.saveCharacter} currentPage="inventory"/>
                 <div className="search-container">
                     <Input
                         className="search-input"
@@ -406,24 +451,25 @@ export default class Inventory extends React.Component {
                     <Form
                         className="add-to-inventory"
                         ref={this.newForm}
-                        initialValues={{
-                            name: "",
-                            type: null,
-                            stage: null,
-                            desc: "",
-                            carac: "",
-                            nb: null
-                        }}
+                        initialValues={initialForm}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 16 }}
                         labelAlign="left"
                         onFinish={this.addItem}
                     >
                         <Form.Item
+                            label="id"
+                            name="id"
+                            hidden
+                        >
+                            <Input type="hidden" />
+                        </Form.Item>
+
+                        <Form.Item
                             label="Nom"
                             name="name"
                             rules={[{
-                                required: true,
+                                required: false,
                                 message: 'Le nom est obligatoire.',
                             }]}
                         >

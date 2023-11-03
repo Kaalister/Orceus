@@ -56,6 +56,10 @@ body {
   color: rgb(150, 150, 150) !important;
 }
 
+.center {
+  text-align: center;
+}
+
 .d-none {
   display: none;
 }
@@ -70,6 +74,14 @@ body {
 
 .d-flex {
   display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-2  {
+  flex: 2;
 }
 
 .row {

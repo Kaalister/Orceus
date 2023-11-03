@@ -853,7 +853,7 @@ export default class Character extends React.Component {
 
         return (
             <div className="character-container">
-                <CharacterHeader saveCharacter={this.props.saveCharacter}/>
+                <CharacterHeader saveCharacter={this.props.saveCharacter} currentPage="character"/>
                 <div className="info-container">
                     <div className="lastname">
                         <span>Nom : </span>
@@ -1490,7 +1490,7 @@ export default class Character extends React.Component {
                                 <div>Gants : 
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("armor", "glove")}
+                                        content={this.renderEquipment("clothes", "glove")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1503,7 +1503,7 @@ export default class Character extends React.Component {
                                 <div>Chaussures : 
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("armor", "shoe")}
+                                        content={this.renderEquipment("clothes", "shoe")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"

@@ -14,3 +14,25 @@
     color: #f7dd5c;
     cursor: pointer;
 }
+
+.modal-back-button-container {
+    text-align: right;
+}
+
+.modal-back {
+    color: white;
+}
+
+.modal-back-button-container .ok-button,
+.modal-back-button-container .cancel-button:hover {
+    background-color: black;
+    color: #f7dd5c;
+    border-color: #f7dd5c;
+}
+
+.modal-back-button-container .cancel-button,
+.modal-back-button-container .ok-button:hover {
+    background-color: #f7dd5c;
+    color: black;
+    border-color: #f7dd5c;
+}
