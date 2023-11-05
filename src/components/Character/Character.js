@@ -6,7 +6,9 @@ import {
     EditOutlined,
     DeleteOutlined,
     CloseCircleOutlined,
-    CheckCircleOutlined
+    CheckCircleOutlined,
+    DownOutlined,
+    UpOutlined
 } from '@ant-design/icons';
 import {
     Select,
@@ -478,6 +480,14 @@ export default class Character extends React.Component {
                 notes: '',
                 inventory: [],
                 skills: []
+            },
+            sectionState: {
+                statisitcs: true,
+                comptencies: true,
+                fight: true,
+                equipment: true,
+                story: true,
+                notes: true
             }
         }
 
@@ -495,6 +505,7 @@ export default class Character extends React.Component {
         this.changeSkill = this.changeSkill.bind(this);
         this.deleteSkill = this.deleteSkill.bind(this);
         this.validateSkillModification = this.validateSkillModification.bind(this);
+        this.swithSection = this.swithSection.bind(this);
         this.renderSkills = this.renderSkills.bind(this);
         this.renderEquipment = this.renderEquipment.bind(this);
         this.renderEquiped = this.renderEquiped.bind(this);
@@ -720,6 +731,35 @@ export default class Character extends React.Component {
         this.setState({ character });
     }
 
+    swithSection(section) {
+        let sectionState = this.state.sectionState;
+
+        switch(section) {
+            case "statisitcs":
+                sectionState.statisitcs = !sectionState.statisitcs;
+                break;
+            case "comptencies":
+                sectionState.comptencies = !sectionState.comptencies;
+                break;
+            case "fight":
+                sectionState.fight = !sectionState.fight;
+                break;
+            case "equipment":
+                sectionState.equipment = !sectionState.equipment;
+                break;
+            case "story":
+                sectionState.story = !sectionState.story;
+                break;
+            case "notes":
+            sectionState.notes = !sectionState.notes;
+                break;
+            default:
+                break;
+        }
+
+        this.setState({ sectionState });
+    }
+
     renderSkills() {
         let skills = !!this.state.character.skills ? [...this.state.character.skills] : [];
         let modifiedSkill = {...this.state.modifiedSkill};
@@ -849,7 +889,7 @@ export default class Character extends React.Component {
     }
 
     render() {
-        const { character, modalIsOpen } = this.state;
+        const { character, modalIsOpen, sectionState } = this.state;
 
         return (
             <div className="character-container">
@@ -913,7 +953,7 @@ export default class Character extends React.Component {
                         />
                     </div>
                     <div className='hp'>
-                        <span>P.V. : </span><br/>
+                        <span>P.V. : </span>
                         <input
                             className={
                                 (character?.hp <= 0) ? 
@@ -969,8 +1009,21 @@ export default class Character extends React.Component {
                 <div className="row-container">
                     <div className="column-container">
                         <div className="stats-container">
-                            <div className="title">Statistiques</div>
-                            <div className="grid">
+                            <div className="d-flex row">
+                                <div className="title flex-2">Statistiques</div>
+                                {(sectionState.statisitcs) ? (
+                                    <DownOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("statisitcs")}
+                                    />
+                                ) : (
+                                    <UpOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("statisitcs")}
+                                    />
+                                )}
+                            </div>
+                            <div className={(sectionState.statisitcs) ? "grid" : "d-none"}>
                                 <div>
                                     <div className="name-cat">
                                         Attaque :
@@ -1215,8 +1268,21 @@ export default class Character extends React.Component {
                         </div>
 
                         <div className="fight-container">
-                            <div className="title">Statistiques de combat</div>
-                            <div className="list">
+                            <div className="d-flex row">
+                                <div className="title flex-2">Statistiques de combat</div>
+                                {(sectionState.fight) ? (
+                                    <DownOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("fight")}
+                                    />
+                                ) : (
+                                    <UpOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("fight")}
+                                    />
+                                )}
+                            </div>
+                            <div className={(sectionState.fight) ? "list" : "d-none"}>
                                 <div className="species">
                                     Race : {
                                         (!!character?.specie)
@@ -1365,14 +1431,27 @@ export default class Character extends React.Component {
 
                     <div className="column-container">
                         <div className="competencies-container">
-                            <div className="title">
-                                Competences
-                                <PlusCircleOutlined
-                                    onClick={this.openModal}
-                                    className="add-competency clickable"
-                                />
+                            <div className="d-flex row">
+                                <div className="title flex-2">
+                                    Competences
+                                    <PlusCircleOutlined
+                                        onClick={this.openModal}
+                                        className="add-competency clickable"
+                                    />
+                                </div>
+                                {(sectionState.comptencies) ? (
+                                    <DownOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("comptencies")}
+                                    />
+                                ) : (
+                                    <UpOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("comptencies")}
+                                    />
+                                )}
                             </div>
-                            <div>
+                            <div className={(sectionState.comptencies) ? "" : "d-none"}>
                                 <Modal
                                     className="modal-new-item"
                                     visible={modalIsOpen}
@@ -1430,8 +1509,21 @@ export default class Character extends React.Component {
                         </div>
                         
                         <div className="equip-container">
-                            <div className="title">Équipement</div>
-                            <div className="equipment">
+                            <div className="d-flex row">
+                                <div className="title flex-2">Équipement</div>
+                                {(sectionState.equipment) ? (
+                                    <DownOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("equipment")}
+                                    />
+                                ) : (
+                                    <UpOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("equipment")}
+                                    />
+                                )}
+                            </div>
+                            <div className={(sectionState.equipment) ? "equipment" : "d-none"}>
                                 <div>
                                     Arme :
                                     <Popover
@@ -1569,8 +1661,22 @@ export default class Character extends React.Component {
                         </div>
 
                         <div className="lore-container">
-                            <div className="title">Lore</div>
+                            <div className="d-flex row">
+                                <div className="title flex-2">Lore</div>
+                                {(sectionState.story) ? (
+                                    <DownOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("story")}
+                                    />
+                                ) : (
+                                    <UpOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("story")}
+                                    />
+                                )}
+                            </div>
                             <TextArea
+                                className={(sectionState.story) ? "" : "d-none"}
                                 value={character?.lore}
                                 autoSize
                                 onChange={(val) => this.changeCharacterInfo("lore", val.target.value)}
@@ -1578,8 +1684,22 @@ export default class Character extends React.Component {
                         </div>
                         
                         <div className="note-container">
-                            <div className="title">Notes</div>
+                            <div className="d-flex row">
+                                <div className="title flex-2">Notes</div>
+                                {(sectionState.notes) ? (
+                                    <DownOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("notes")}
+                                    />
+                                ) : (
+                                    <UpOutlined 
+                                        className="icon-section"
+                                        onClick={() => this.swithSection("notes")}
+                                    />
+                                )}
+                            </div>
                             <TextArea
+                                className={(sectionState.notes) ? "" : "d-none"}
                                 value={character?.notes}
                                 autoSize
                                 onChange={(val) => this.changeCharacterInfo("notes", val.target.value)}

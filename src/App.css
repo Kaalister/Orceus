@@ -88,6 +88,10 @@ body {
   flex-direction: row;
 }
 
+.ai-center{
+  align-items: center;
+}
+
 .m-1, .my-1, .mt-1 {
   margin-top: 1rem;
 }
