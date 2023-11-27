@@ -92,6 +92,7 @@ export default class AdminSettings extends React.Component {
             cards: [],
             selectedCard: null,
             openModal: false,
+            loading: true,
         }
 
         this.getCardList = this.getCardList.bind(this);
@@ -103,6 +104,10 @@ export default class AdminSettings extends React.Component {
     }
 
     getCardList() {
+        this.setState({
+            loading : true
+        });
+
         HttpGetRequest('/cards')
         .then(data => {
             if (!data) {
@@ -112,7 +117,8 @@ export default class AdminSettings extends React.Component {
         })
         .then(data => {
             this.setState({
-                cards: data
+                cards: data,
+                loading: false,
             })
         })
         .catch(() => {
@@ -227,6 +233,11 @@ export default class AdminSettings extends React.Component {
             field: 'tags',
             flex: 1,
         }, {
+            headerName: 'Cachée',
+            field: 'hidden',
+            flex: 1,
+            renderCell: (params) => (params.value === "true" ? "oui" : "")
+        }, {
             headerName: 'Actions',
             sortable: false,
             field: 'actions',
@@ -263,8 +274,9 @@ export default class AdminSettings extends React.Component {
                     <DataGrid 
                         rows={this.state.cards}
                         columns={columns}
-                        pageSize={10}
+                        pageSize={20}
                         autoHeight
+                        loading={this.state.loading}
                      />
                     { (this.state.openModal) ? (
                         <AdminModale

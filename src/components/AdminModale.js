@@ -2,6 +2,8 @@ import React from 'react';
 import { Close, Delete, AddCircleOutline } from '@material-ui/icons';
 import { Button } from '@material-ui/core';
 import Select from 'react-select';
+import { Checkbox } from 'antd';
+import loading from '../assets/images/loading.gif';
 
 import { HttpGetRequest, HttpPostRequest } from '../HttpRequests';
 
@@ -124,12 +126,14 @@ export default class AdminModale extends React.Component {
                 big_card: '',
                 tags: [],
                 card_num: -1,
+                hidden: "false"
             },
-            loading: false,
+            loading: true,
         }
 
         this.getCard = this.getCard.bind(this);
         this.close = this.close.bind(this);
+        this.switchHiddenCard = this.switchHiddenCard.bind(this);
         this.changeText = this.changeText.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.handleTags = this.handleTags.bind(this);
@@ -148,6 +152,8 @@ export default class AdminModale extends React.Component {
             return;
         let url = "/cards/" + this.props.id;
 
+        this.setState({ loading: true });
+
         HttpGetRequest(url)
             .then( response => {
                 if (!response)
@@ -159,7 +165,10 @@ export default class AdminModale extends React.Component {
                 if (!data)
                     throw Error();
 
-                this.setState({card: data[0]})
+                this.setState({
+                    card: data[0],
+                    loading: false
+                })
             })
             .catch( () => {
                 console.log("Erreur lors de l'update");
@@ -178,6 +187,14 @@ export default class AdminModale extends React.Component {
                 })
             }, 300)
         })
+    }
+
+    switchHiddenCard() {
+        let card = this.state.card;
+
+        card.hidden = (card.hidden === "true") ? "false" : "true";
+        
+        this.setState({ card })
     }
 
     changeText(value, key) {
@@ -355,6 +372,25 @@ export default class AdminModale extends React.Component {
             bigCardImage = this.state.card.big_card;
         }
 
+        if (this.state.loading) {
+            return (
+                <div className={classModale.join(' ')}>
+                    <div className="header-modale pb-2">
+                        <Close className="close-modale-btn" onClick={this.close}/>
+                    </div>
+                    <div className="body-modale">
+                        <img
+                            className='loading-cards'
+                            src={loading}
+                            alt="loading"
+                        />
+                    </div>
+                    <div className="footer-modale p-2">
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div className={classModale.join(' ')}>
                 <div className="header-modale pb-2">
@@ -362,6 +398,11 @@ export default class AdminModale extends React.Component {
                     <div className="modale-title">{title} d'une carte</div>
                 </div>
                 <div className="body-modale">
+                    <label className="label-modale">Cachée :</label><br/>
+                    <Checkbox
+                        checked={(this.state.card.hidden === "true") ? true : false}
+                        onChange={() => this.switchHiddenCard()}
+                    /><br/>
                     <label className="label-modale">Numéro :</label><br/>
                     <input className="input-modale" 
                      type="number"
@@ -462,7 +503,7 @@ export default class AdminModale extends React.Component {
                         </div>
                     ))}
                 </div>
-                <div className="footer-modale pt-2">
+                <div className="footer-modale p-2">
                     <Button
                         className="submit-btn"
                         variant="contained"
