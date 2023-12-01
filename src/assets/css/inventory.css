@@ -7,11 +7,14 @@
     width: 250px;
     background-color: transparent;
     border: solid 1px #f7dd5c !important;
+    box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
 }
 
 .search-input input {
     background-color: transparent;
     color: white;
+    box-shadow: none !important;
 }
 
 .search-input .ant-input-clear-icon {
@@ -40,6 +43,8 @@
 
 .inventory-table .ant-table {
     border: solid 2px #f7dd5c;
+    box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
 }
 
 .ant-table-thead th.ant-table-column-sort,
@@ -79,34 +84,8 @@ td.ant-table-cell,
     background: black !important;
 }
 
-.ant-table-thead th.ant-table-column-sort::before,
-.ant-table-thead th.ant-table-cell::before {
-    background-color: #f7dd5c !important;
-}
-
-.ant-table-tbody > tr > td {
-    border-bottom-color: #f7dd5c;
-}
-
 .modal-new-item .ant-modal-body {
     padding-top: 50px;
-}
-
-.ant-modal-content {
-    background-color: black;
-    border: solid 1px #f7dd5c;
-}
-
-.ant-modal-content .ant-input {
-    background-color: black;
-    border: solid 1px #f7dd5c;
-    color: white;
-}
-
-.ant-select-selector {
-    background-color: black !important;
-    border-color: #f7dd5c !important;
-    color: white;
 }
 
 .add-to-inventory .ant-select-arrow {
@@ -150,8 +129,9 @@ td.ant-table-cell,
     color: #f7dd5c;
 }
 
-.ant-pagination-jump-next,
-.ant-pagination-jump-next .ant-pagination-item-link {
+.ant-pagination-jump-next, .ant-pagination-jump-prev,
+.ant-pagination-jump-next .ant-pagination-item-link,
+.ant-pagination-jump-prev .ant-pagination-item-link {
     display: flex;
     border-color: #f7dd5c;
     background: #f7dd5c;
@@ -159,8 +139,9 @@ td.ant-table-cell,
     color: black;
 }
 
-.ant-pagination-jump-next:hover,
-.ant-pagination-jump-next .ant-pagination-item-link:hover {
+.ant-pagination-jump-prev:hover, .ant-pagination-jump-next:hover,
+.ant-pagination-jump-next .ant-pagination-item-link:hover,
+.ant-pagination-jump-prev .ant-pagination-item-link:hover {
     border-color: #f7dd5c;
     background: black;
     color: #f7dd5c;
@@ -174,7 +155,8 @@ td.ant-table-cell,
     color: #f7dd5c;
 }
 
-.ant-pagination-jump-next .ant-pagination-item-container .ant-pagination-item-ellipsis {
+.ant-pagination-jump-next .ant-pagination-item-container .ant-pagination-item-ellipsis,
+.ant-pagination-jump-prev .ant-pagination-item-container .ant-pagination-item-ellipsis {
     display: block;
     border-color: #f7dd5c;
     background: #f7dd5c;

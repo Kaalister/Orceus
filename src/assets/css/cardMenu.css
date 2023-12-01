@@ -40,6 +40,11 @@
     border-radius: 0 !important;
 }
 
+.ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector input {
+    font-size: 1rem;
+    margin-top: -12px;
+}
+
 .input-filters .ant-select-arrow, .input-filters .ant-select-clear {
     color: #f7dd5c !important;
     background-color: black;

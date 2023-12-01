@@ -148,7 +148,7 @@ export default class RollingPage extends React.Component {
             <div style={{width: '100vw', height: '100vh', overflow: 'hidden'}}>
                 <div className="p-2">
                     <Link to="/Orceus/cards/" style={{ color: 'white' }}>
-                        <ArrowBackIos />
+                        <ArrowBackIos className="back-arrow" />
                     </Link>
                 </div>
                 <h1 className="title-rolling">Recherches des aventuriers :</h1>
@@ -169,7 +169,7 @@ export default class RollingPage extends React.Component {
                     </Form.Item>
                 </Form>
                 <div style={{ textAlign: 'center' }}>
-                    <Button onClick={this.submitForm}>Lancer</Button>
+                    <Button className="roll-button" onClick={this.submitForm}>Lancer</Button>
                 </div>
                 <div className="results-rolling m-2 p-1" style={{color: 'white'}}>
                     <div className="mb-1">Résultats :</div>

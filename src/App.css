@@ -203,4 +203,86 @@ body {
 .notification {
   background-color: black;
   border: solid 1px #f7dd5c;
+  box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
+}
+
+.ant-select-selection-search-input, .ant-select-selection-search {
+  color: white !important;
+  font-size: 2.5rem;
+  position: absolute;
+  min-width: 200px;
+}
+
+.ant-select-dropdown {
+  background-color: black !important;
+  border: 1px #f7dd5c solid;
+  box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
+  color: white !important;
+}
+
+.ant-select-item-option {
+  color: white !important;
+}
+
+.ant-select-item-option-active:hover,
+.ant-select-item-option-active {
+  background-color: rgb(72, 72, 72) !important;
+}
+
+.ant-select-item-option-selected {
+  background-color: rgb(44, 44, 44) !important;
+}
+
+.ant-table-thead th.ant-table-column-sort::before,
+.ant-table-thead th.ant-table-cell::before {
+    background-color: #f7dd5c !important;
+}
+
+.ant-table-tbody > tr > td {
+    border-bottom-color: #f7dd5c;
+}
+
+.ant-modal-content {
+  background-color: black;
+  border: solid 1px #f7dd5c;
+  box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
+}
+
+.ant-modal-content .ant-input {
+  background-color: black;
+  border: solid 1px #f7dd5c;
+  color: white;
+  box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
+}
+
+.ant-select-selector,
+.ant-select-selector:hover,
+.ant-select-selector:visited,
+.ant-select-selector:focus,
+.ant-select-selector:active {
+  background-color: black !important;
+  border-color: #f7dd5c !important;
+  color: white;
+  box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
+}
+
+.ant-table-tbody input, .ant-table-cell textarea {
+  box-shadow: none !important;
+}
+
+.ant-input, 
+.ant-input:hover,
+.ant-input:active,
+.ant-input:visited,
+.ant-input:focus {
+    background-color: black;
+    color: white;
+    border-color: #f7dd5c;
+    box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
 }

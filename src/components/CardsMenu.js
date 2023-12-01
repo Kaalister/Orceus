@@ -226,7 +226,7 @@ export default class CardMenu extends React.Component {
                             placeholder="Race..."
                             style={{ width: 200 }} />
                     </Form.Item>
-                    <Space style={{ height: 35 }}>
+                    <Space style={{ height: 33 }}>
                         <Form.Item name="tags">
                             <Select
                                 allowClear

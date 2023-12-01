@@ -14,6 +14,8 @@
     place-items: center start;
     padding: 30px;
     border: solid 2px #f7dd5c;
+    box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
 }
 
 .info-container > .lastname {
@@ -60,6 +62,8 @@
 
 .info-container > .image .preview-image {
     border: 1px solid #f7dd5c;
+    box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
     height: 300px;
     width: 300px;
     position: relative;
@@ -129,32 +133,6 @@
     border: none !important;
 }
 
-.ant-select-selection-search-input, .ant-select-selection-search {
-    color: white !important;
-    font-size: 2.5rem;
-    position: absolute;
-    min-width: 200px;
-}
-
-.ant-select-dropdown {
-    background-color: black !important;
-    border: 1px yellow solid;
-    color: white !important;
-}
-
-.ant-select-item-option {
-    color: white !important;
-}
-
-.ant-select-item-option-active:hover,
-.ant-select-item-option-active {
-    background-color: rgb(72, 72, 72) !important;
-}
-
-.ant-select-item-option-selected {
-    background-color: rgb(44, 44, 44) !important;
-}
-
 .icon-section{
     font-size: 1.5rem;
     color: #f7dd5c;
@@ -190,6 +168,8 @@
     border: solid 2px #f7dd5c;
     padding: 30px;
     height: fit-content;
+    box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
 }
 
 .title {
@@ -257,6 +237,10 @@
 
 .puissname .ant-select-selection-item {
     padding-right: 10px !important;
+}
+
+.puissname .ant-select-selector {
+    box-shadow: none !important;
 }
 
 .ant-select-disabled > .ant-select-selector,
