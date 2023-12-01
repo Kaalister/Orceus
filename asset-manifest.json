@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/Orceus/static/css/main.a256587d.chunk.css",
+    "main.css": "/Orceus/static/css/main.6b1af78d.chunk.css",
     "main.js": "/Orceus/static/js/main.eb275a39.chunk.js",
     "main.js.map": "/Orceus/static/js/main.eb275a39.chunk.js.map",
     "runtime-main.js": "/Orceus/static/js/runtime-main.311408fd.js",
@@ -12,7 +12,7 @@
     "static/js/3.a5f57987.chunk.js.map": "/Orceus/static/js/3.a5f57987.chunk.js.map",
     "index.html": "/Orceus/index.html",
     "static/css/2.cd98166c.chunk.css.map": "/Orceus/static/css/2.cd98166c.chunk.css.map",
-    "static/css/main.a256587d.chunk.css.map": "/Orceus/static/css/main.a256587d.chunk.css.map",
+    "static/css/main.6b1af78d.chunk.css.map": "/Orceus/static/css/main.6b1af78d.chunk.css.map",
     "static/js/2.df1b9325.chunk.js.LICENSE.txt": "/Orceus/static/js/2.df1b9325.chunk.js.LICENSE.txt",
     "static/media/errorBackground.a7b480f5.mp4": "/Orceus/static/media/errorBackground.a7b480f5.mp4",
     "static/media/loading.9154f971.gif": "/Orceus/static/media/loading.9154f971.gif",
@@ -24,7 +24,7 @@
     "static/js/runtime-main.311408fd.js",
     "static/css/2.cd98166c.chunk.css",
     "static/js/2.df1b9325.chunk.js",
-    "static/css/main.a256587d.chunk.css",
+    "static/css/main.6b1af78d.chunk.css",
     "static/js/main.eb275a39.chunk.js"
   ]
 }
