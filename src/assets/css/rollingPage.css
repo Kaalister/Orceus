@@ -24,6 +24,10 @@
     border: solid 1px #f7dd5c;
     box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
                 inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
+    -webkit-box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
+    -moz-box-shadow: 0px 0px 20px -6px rgba(247, 221, 92, 1), 
+                inset 0px 0px 16px -7px rgba(247, 221, 92, 1);
 }
 
 .back-arrow {
