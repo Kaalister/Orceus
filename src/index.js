@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import 'particles.js/particles';
+import { paramsParticles } from './constants';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -10,6 +12,9 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+const particlesJS = window.particlesJS;
+particlesJS('particles-js', paramsParticles);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

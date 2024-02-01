@@ -29,7 +29,7 @@ function PrivateRoute({...props}) {
 export default function App() {
 	return (
 		<Router>
-			<div>
+			<div id="particles-js">
 				<Switch>
 					<PrivateRoute path="/Orceus/cards" component={Cards} />
 					<PrivateRoute path="/Orceus/AdminSettings" component={AdminSettings} />

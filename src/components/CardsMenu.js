@@ -152,6 +152,32 @@ export default class CardMenu extends React.Component {
         this.props.history.push('/Orceus/');
     }
 
+    onMovingCard(e) {
+        let card = e.target;
+        let rect = card.getBoundingClientRect();
+    
+        let centerPointX = rect.x + rect.width / 2;
+        let centerPointY = rect.y + rect.height / 2;
+    
+        let maxRotation = 30;
+    
+        //Y rotation
+        const rotationFactorY = maxRotation / (rect.width / 2);
+        const yRotation = Math.ceil(e.clientX - centerPointX) * rotationFactorY;
+    
+        //Y rotation
+        const rotationFactorX =  maxRotation / (rect.height / 2);
+        const xRotation = -1 * Math.ceil(e.clientY - centerPointY) * rotationFactorX;
+    
+        card.style.cssText = `transform: rotateY(${yRotation}deg) rotateX(${xRotation}deg);`;
+      }
+    
+      onLeavingCard(e) {
+        let card = e.target;
+    
+        card.style.cssText = `transform: rotateY(0deg) rotateX(0deg);`;
+      }
+
     handleFilters() {
         clearTimeout(this.timer);
         let form = this.refFilters.current.getFieldsValue();
@@ -252,6 +278,8 @@ export default class CardMenu extends React.Component {
                         className="card-img"
                         src={cardItem.card}
                         alt=" "
+                        onMouseMove={this.onMovingCard}
+                        onMouseLeave={this.onLeavingCard}
                     />
                 </Link>
             );
