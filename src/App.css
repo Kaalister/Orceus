@@ -314,6 +314,8 @@ body {
 
 /*particles.js*/
 .particles-js-canvas-el {
-  position: absolute;
+  position: fixed;
   z-index: -1;
+  height: 100vh !important;
+  width: 100vw !important;
 }

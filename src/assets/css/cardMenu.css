@@ -5,7 +5,7 @@
     margin: 1rem;
     border-radius: 20px;
     background-color: transparent;
-    transition: transform .1s ease;
+    transition: transform .2s ease;
 }
 
 .container-card-menu {

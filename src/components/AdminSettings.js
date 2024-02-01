@@ -85,7 +85,6 @@ const SPECIESOPTIONS = [{
     value: 'other'
 }];
 export default class AdminSettings extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -270,7 +269,7 @@ export default class AdminSettings extends React.Component {
                         Nouveau
                     </Button>
                 </div>
-                <div>
+                <div className='setting-grid-container'>
                     <DataGrid 
                         rows={this.state.cards}
                         columns={columns}

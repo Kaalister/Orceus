@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { HttpPostRequest } from '../HttpRequests';
 import { Settings, Casino, Face } from '@material-ui/icons';
 import { Select, Form, Input, Row, Space } from 'antd';
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.min.css'
 
 import AppProfile from '../Profile';
 
@@ -160,14 +160,12 @@ export default class CardMenu extends React.Component {
         let centerPointY = rect.y + rect.height / 2;
     
         let maxRotation = 30;
-    
-        //Y rotation
+
         const rotationFactorY = maxRotation / (rect.width / 2);
-        const yRotation = Math.ceil(e.clientX - centerPointX) * rotationFactorY;
-    
-        //Y rotation
         const rotationFactorX =  maxRotation / (rect.height / 2);
-        const xRotation = -1 * Math.ceil(e.clientY - centerPointY) * rotationFactorX;
+        
+        const yRotation = Math.ceil(e.clientX - centerPointX) * rotationFactorX;
+        const xRotation = -1 * Math.ceil(e.clientY - centerPointY) * rotationFactorY;
     
         card.style.cssText = `transform: rotateY(${yRotation}deg) rotateX(${xRotation}deg);`;
       }

@@ -12,6 +12,7 @@ import AdminSettings from './components/AdminSettings';
 import RollingPage from "./components/RollingPage";
 import SelectCharacters from "./components/Character/SwitchCharacters";
 import AppProfile from './Profile';
+
 import './App.css';
 
 function PrivateRoute({...props}) {

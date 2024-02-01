@@ -1,9 +1,12 @@
 .character-container {
     color: white;
-    width: 100%;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: scroll;
 }
 
 .info-container {
+    background-color: black;
     display: grid;
     grid-template-columns: 1fr 1fr 400px;
     grid-template-rows: 100px 100px 100px;
@@ -172,6 +175,7 @@
 .lore-container,
 .note-container,
 .competencies-container {
+    background-color: black;
     display: flex;
     flex-direction: column;
     width: 100%;
