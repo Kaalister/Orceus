@@ -153,28 +153,34 @@ export default class CardMenu extends React.Component {
     }
 
     onMovingCard(e) {
+
         let card = e.target;
-        let rect = card.getBoundingClientRect();
+        const rect = card.getBoundingClientRect();
     
         let centerPointX = rect.x + rect.width / 2;
         let centerPointY = rect.y + rect.height / 2;
     
-        let maxRotation = 30;
+        let maxRotation = 20;
 
         const rotationFactorY = maxRotation / (rect.width / 2);
         const rotationFactorX =  maxRotation / (rect.height / 2);
         
-        const yRotation = Math.ceil(e.clientX - centerPointX) * rotationFactorX;
+        const yRotation = -1 * Math.ceil(e.clientX - centerPointX) * rotationFactorX;
         const xRotation = -1 * Math.ceil(e.clientY - centerPointY) * rotationFactorY;
+
+        card.classList.add('active-card');
+        card.style.setProperty("--card-rotate-y", `${yRotation}deg`);
+        card.style.setProperty("--card-rotate-x", `${xRotation}deg`);
+    }
     
-        card.style.cssText = `transform: rotateY(${yRotation}deg) rotateX(${xRotation}deg);`;
-      }
-    
-      onLeavingCard(e) {
+    onLeavingCard(e) {
         let card = e.target;
-    
-        card.style.cssText = `transform: rotateY(0deg) rotateX(0deg);`;
-      }
+
+        card.classList.remove('active-card');
+
+        card.style.setProperty("--card-rotate-y", '0deg');
+        card.style.setProperty("--card-rotate-x", '0deg');
+    }
 
     handleFilters() {
         clearTimeout(this.timer);

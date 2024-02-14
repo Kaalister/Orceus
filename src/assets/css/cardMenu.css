@@ -1,3 +1,8 @@
+:card-img {
+    --card-rotate-y: 0deg;
+    --card-rotate-x: 0deg;
+}
+
 .card-img {
     height: auto;
     width: auto;
@@ -6,6 +11,10 @@
     border-radius: 20px;
     background-color: transparent;
     transition: transform .2s ease;
+}
+
+.card-img.active-card {
+    transform: rotateY(var(--card-rotate-y)) rotateX(var(--card-rotate-x));
 }
 
 .container-card-menu {
