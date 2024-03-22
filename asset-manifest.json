@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/Orceus/static/css/main.cb5e88b9.css",
+    "main.css": "/Orceus/static/css/main.3836299a.css",
     "main.js": "/Orceus/static/js/main.2af76b63.js",
     "static/js/377.c85379f7.chunk.js": "/Orceus/static/js/377.c85379f7.chunk.js",
     "static/media/successBackground.mp4": "/Orceus/static/media/successBackground.8fe1101c0a2972953d93.mp4",
@@ -9,12 +9,12 @@
     "static/media/logoutBtn.png": "/Orceus/static/media/logoutBtn.8eb21a28ea7a8bed284a.png",
     "static/media/errorBackground.mp4": "/Orceus/static/media/errorBackground.a7b480f5cf219c55774b.mp4",
     "index.html": "/Orceus/index.html",
-    "main.cb5e88b9.css.map": "/Orceus/static/css/main.cb5e88b9.css.map",
+    "main.3836299a.css.map": "/Orceus/static/css/main.3836299a.css.map",
     "main.2af76b63.js.map": "/Orceus/static/js/main.2af76b63.js.map",
     "377.c85379f7.chunk.js.map": "/Orceus/static/js/377.c85379f7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cb5e88b9.css",
+    "static/css/main.3836299a.css",
     "static/js/main.2af76b63.js"
   ]
 }
