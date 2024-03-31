@@ -1,7 +1,10 @@
+import '../assets/css/cardMenu.css';
+
 import React from 'react';
+import { connect } from 'react-redux';
+import { getFilteredCards } from '../redux/reducers/card';
 import { Link } from 'react-router-dom';
 
-import { HttpPostRequest } from '../HttpRequests';
 import { Settings, Casino, Face } from '@material-ui/icons';
 import { Select, Form, Input, Row, Space } from 'antd';
 import 'antd/dist/antd.min.css'
@@ -10,88 +13,13 @@ import AppProfile from '../Profile';
 
 import logoutBtn from '../assets/images/logoutBtn.png';
 import loading from '../assets/images/loading.gif';
-import '../assets/css/cardMenu.css';
+import { TYPESOPTIONS, SPECIESOPTIONS } from '../constants';
 
-const TYPESOPTIONS = [{
-    label: 'Personnage',
-    value: 'character'
-}, {
-    label: 'Carte',
-    value: 'map'
-}, {
-    label: 'Peuple/Race',
-    value: 'class'
-}, {
-    label: 'Mineral',
-    value: 'mineral'
-}, {
-    label: 'Végétal',
-    value: 'vegetable'
-}, {
-    label: 'Ville',
-    value: 'city'
-}, {
-    label: 'Créature',
-    value: 'monster'
-}, {
-    label: 'Artefact',
-    value: 'artefact'
-}, {
-    label: 'Autre',
-    value: 'other'
-}];
-
-const SPECIESOPTIONS = [{
-    label: 'Inconnue',
-    value: 'unknown'
-}, {
-    label: 'Ciheuphe',
-    value: 'ciheuphe'
-}, {
-    label: 'Humain',
-    value: 'human'
-}, {
-    label: 'Shashouille',
-    value: 'shashouille'
-}, {
-    label: 'Robot',
-    value: 'robot'
-}, {
-    label: 'Hanylice',
-    value: 'hanylice'
-}, {
-    label: 'Suhera',
-    value: 'suhera'
-}, {
-    label: 'Ao-Nesa',
-    value: 'ao-nesa'
-}, {
-    label: 'Biri-Ozi',
-    value: 'biri-ozi'
-}, {
-    label: 'Wibsa-Thu',
-    value: 'wibsa-thu'
-}, {
-    label: 'Démon',
-    value: 'demon'
-}, {
-    label: 'Dieu/Déesse',
-    value: 'god'
-}, {
-    label: 'Sentinelle',
-    value: 'sentry'
-}, {
-    label: 'Autre',
-    value: 'other'
-}];
-
-export default class CardMenu extends React.Component {
+class CardMenu extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            cards: [],
-            loading: true,
             filters: {
                 search: '',
                 type: null,
@@ -115,6 +43,9 @@ export default class CardMenu extends React.Component {
     }
 
     getCardList() {
+        const {
+            dispatch
+        } = this.props;
         let filters = { ...this.state.filters }
 
         for (let value in filters) {
@@ -123,25 +54,9 @@ export default class CardMenu extends React.Component {
             }
         }
 
-        HttpPostRequest('/cards', filters)
-            .then(response => {
-                if (!response.ok) {
-                    throw Error()
-                }
-                return response.json();
-            })
-            .then(data => {
-                setTimeout(() => {
-                    this.setState({
-                        cards: data,
-                        loading: false,
-                    });
-                }, 2000);
-            })
-            .catch(() => {
-                this.setState({ loading: false });
-                console.log('Erreur lors de la recupération des datas');
-            })
+        dispatch(getFilteredCards({
+            filters: filters
+        }));
     }
 
     logout() {
@@ -275,9 +190,22 @@ export default class CardMenu extends React.Component {
     }
 
     render() {
-        let cards = this.state.cards.map((cardItem, index) => {
+        const {
+            cards,
+            isLoading,
+            dispatch,
+        } = this.props;
+
+        const cardsRender = cards.map((cardItem, index) => {
             return (
-                <Link to={"/Orceus/cards/" + cardItem.id} key={index}>
+                <Link
+                    to={"/Orceus/cards/" + cardItem.id}
+                    key={index}
+                    onClick={() => dispatch({
+                        type: 'Cards/selectCard',
+                        id: cardItem.id,
+                    })}
+                >
                     <img
                         className="card-img"
                         src={cardItem.card}
@@ -336,11 +264,11 @@ export default class CardMenu extends React.Component {
                     </div>
                 </div>
                 <div className="container-card-menu">
-                    {cards}
-                    {(cards.length === 0 && !this.state.loading) ? (
+                    {cardsRender}
+                    {(cards.length === 0 && !isLoading) ? (
                         <div style={{ color: 'white' }}>Aucune donnée</div>
                     ) : null}
-                    {(this.state.loading) ? (
+                    {(isLoading && cards.length === 0) ? (
                         <img
                             className='loading-cards'
                             src={loading}
@@ -352,3 +280,12 @@ export default class CardMenu extends React.Component {
         );
     }
 }
+
+const mapStateToProps = function(state) {
+    return {
+        isLoading: state.cards?.isLoading,
+        cards: state.cards?.cards || [],
+    }
+}
+
+export default connect(mapStateToProps)(CardMenu)

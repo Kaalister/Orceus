@@ -1,77 +1,51 @@
 import "../../assets/css/characterMenu.css";
 
 import React from 'react';
+import { connect } from 'react-redux';
+import {
+    createCharacter,
+    getCharacters,
+} from "../../redux/reducers/characters";
 import { Link, Redirect } from 'react-router-dom';
 import { Button } from 'antd';
-import { Settings, Casino, Book, Create } from '@material-ui/icons';
+import {
+    Settings,
+    Casino,
+    Book,
+    Create
+} from '@material-ui/icons';
 import {
     DataGrid,
-    GridColumnMenuContainer, 
-    GridFilterMenuItem, 
+    GridColumnMenuContainer,
+    GridFilterMenuItem,
     SortGridMenuItems
 } from '@material-ui/data-grid';
 
 import AppProfile from '../../Profile';
 
-import { HttpGetRequest, HttpPutRequest } from "../../HttpRequests";
-
-export default class CharacterMenu extends React.Component {
+class CharacterMenu extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            characters: [],
-            id: null,
-            loading: true,
-        };
 
         this.addNewCharacter = this.addNewCharacter.bind(this);
     }
 
     componentDidMount() {
-        HttpGetRequest('/characters')
-            .then(response => {
-                if (!response.ok) {
-                    throw Error()
-                }
-                return response.json();
-            })
-            .then(data => {
-                setTimeout(() => {
-                    this.setState({
-                        characters: data,
-                        loading: false,
-                    });
-                }, 2000);
-            })
-            .catch(() => {
-                this.setState({ loading: false });
-                console.log('Erreur lors de la recupération des datas');
-            })
+        this.props.dispatch(getCharacters());
     }
 
     addNewCharacter() {
-        HttpPutRequest('/characters/create')
-            .then(response => {
-                if (!response.ok) {
-                        throw Error()
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setTimeout(() => {
-                        this.setState({
-                            id : data.id,
-                            loading: false,
-                        });
-                    }, 2000);
-                })
-                .catch(() => {
-                    this.setState({ loading: false });
-                    console.log('Erreur lors de la recupération des datas');
-                })
+        this.props.dispatch(createCharacter());
     }
 
     render() {
+        const {
+            isLoading,
+            characters,
+            selectedCharacter,
+            dispatch,
+        } = this.props
+
         const CustomColumnMenu = (props) => {
             const { hideMenu, currentColumn } = props;
             return (
@@ -110,10 +84,16 @@ export default class CharacterMenu extends React.Component {
             width: 150,
             disableColumnFilter: true,
             disableColumnMenu: true,
-            renderCell: (params) =>(
+            renderCell: (params) => (
                 <div>
-                    <Link to={"/Orceus/SelectCharacters/" + params.row.id}>
-                        <Create className="action-btn"/>
+                    <Link
+                        to={`/Orceus/SelectCharacters/${params.row.id}`}
+                        onClick={() => dispatch({
+                            type: "Characters/selectCharacter",
+                            id: params.row.id,
+                        })}
+                    >
+                        <Create className="action-btn" />
                     </Link>
                     {/* <Delete className="action-btn"
                         onClick={()=> console.log("delete : " + params.row.name)}
@@ -122,8 +102,10 @@ export default class CharacterMenu extends React.Component {
             ),
         }]
 
-        if (this.state.id != null) {
-            return <Redirect to={"/Orceus/SelectCharacters/" + this.state.id} />
+        if (selectedCharacter) {
+            return (
+                <Redirect to={"/Orceus/SelectCharacters/" + selectedCharacter} />
+            );
         }
 
         return (
@@ -138,20 +120,20 @@ export default class CharacterMenu extends React.Component {
                         </Link>
                         {(AppProfile.get('sessionType') === "09c71624" ||
                             AppProfile.get('sessionType') === "a238a5dd") ? ([(
-                            <Link to="/Orceus/Rolls" key="toRoll">
-                                <Casino
-                                    style={{ color: 'white' }}
-                                    className='clickable'
-                                />
-                            </Link>
-                        ), (
-                            <Link to="/Orceus/AdminSettings" key="toAdmin">
-                                <Settings
-                                    style={{ color: 'white' }}
-                                    className='clickable'
-                                />
-                            </Link>
-                        )]) : null}
+                                <Link to="/Orceus/Rolls" key="toRoll">
+                                    <Casino
+                                        style={{ color: 'white' }}
+                                        className='clickable'
+                                    />
+                                </Link>
+                            ), (
+                                <Link to="/Orceus/AdminSettings" key="toAdmin">
+                                    <Settings
+                                        style={{ color: 'white' }}
+                                        className='clickable'
+                                    />
+                                </Link>
+                            )]) : null}
                     </div>
                 </div>
                 <div className="new-character-container">
@@ -164,8 +146,8 @@ export default class CharacterMenu extends React.Component {
                 </div>
                 <div className="grid-character">
                     <DataGrid
-                        loading={this.state.loading}
-                        rows={this.state.characters}
+                        loading={isLoading && characters.length === 0}
+                        rows={characters}
                         components={{
                             ColumnMenu: CustomColumnMenu
                         }}
@@ -178,3 +160,14 @@ export default class CharacterMenu extends React.Component {
         );
     }
 }
+
+const mapStateToProps = function (state) {
+    return {
+        isLoading: state.characters?.isLoading,
+        characters: state.characters?.characters || [],
+        selectedCharacter: state.characters?.selectedCharacter || null,
+    }
+}
+
+export default connect(mapStateToProps)(CharacterMenu)
+

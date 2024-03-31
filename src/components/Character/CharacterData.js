@@ -1,79 +1,22 @@
+import "../../assets/css/character.css";
+
 import React from 'react';
-import { notification } from 'antd';
+import { connect } from 'react-redux';
 import Character from './Character';
 import Inventory from './Inventory';
 import loadingImg from '../../assets/images/loading.gif';
-import { HttpGetRequest, HttpPutRequest } from "../../HttpRequests";
 
-import "../../assets/css/character.css";
-
-export default class CharacterData extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            character: null,
-            loading: true,
-        };
-
-        this.actualizeCharacter = this.actualizeCharacter.bind(this);
-    }
-
-    componentDidMount(prevProps) {
-        if (prevProps?.id !== this.props?.id) {
-            HttpGetRequest('/characters/' + this.props.id)
-            .then(response => {
-                if (!response.ok) {
-                    throw Error()
-                }
-                return response.json();
-            })
-            .then(data => {
-                setTimeout(() => {
-                    this.setState({
-                        character: data,
-                        loading: false,
-                    });
-                }, 2000);
-            })
-            .catch(() => {
-                this.setState({ loading: false });
-                console.log('Erreur lors de la recupération des datas');
-            })
-        }
-    }
-
-    actualizeCharacter = (character) => {
-        this.setState({ character });
-    }
-
-    saveCharacter = () => {
-        HttpPutRequest('/characters/' + this.props.id, this.state.character)
-            .then(response => {
-                if (!response.ok) {
-                    throw Error()
-                }
-                return response.json();
-            })
-            .then(data => {
-                notification.open({
-                    className: "notification",
-                    message: 'Sauvegarde réussie !'
-                });
-            })
-            .catch(() => {
-                this.setState({ loading: false });
-                console.log('Erreur lors de la recupération des datas');
-            })
-    }
-
+class CharacterData extends React.Component {
     render() {
-        let { character, loading } = this.state;
-        let { localisation } = this.props;
+        const {
+            isLoading,
+            localisation,
+            character,
+        } = this.props;
 
-        if (loading) {
+        if (isLoading && !character) {
             return (
-                <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
+                <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
                     <img
                         className="loading-character"
                         src={loadingImg}
@@ -84,21 +27,22 @@ export default class CharacterData extends React.Component {
         }
 
         if (localisation === "inventory") {
-            return (
-                <Inventory 
-                    character={character}
-                    actualizeCharacter={this.actualizeCharacter}
-                    saveCharacter={this.saveCharacter}
-                />
-            );
+            return (<Inventory />);
         }
-    
-        return (
-            <Character
-                character={character}
-                actualizeCharacter={this.actualizeCharacter}
-                saveCharacter={this.saveCharacter}
-            />
-        );
+
+        return (<Character />);
     }
 }
+
+const mapStateToProps = function (state) {
+    const character = state.characters.characters.find(char =>
+        char.id === state.characters?.selectedCharacter);
+
+    return {
+        isLoading: state.characters?.isLoading,
+        character: character || null,
+        selectedCharacter: state.characters?.selectedCharacter || null,
+    }
+}
+
+export default connect(mapStateToProps)(CharacterData)

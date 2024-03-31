@@ -1,97 +1,23 @@
+import '../assets/css/adminSettings.css';
+
 import React from 'react';
+import { connect } from 'react-redux';
+import { deleteCardById, getAllCards } from '../redux/reducers/card';
 import { DataGrid } from '@material-ui/data-grid';
-import { HttpGetRequest, HttpDeleteRequest } from '../HttpRequests';
 import { Delete, Create, ArrowBackIos, AddCircleOutline } from '@material-ui/icons';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { notification } from 'antd';
+import { TYPESOPTIONS, SPECIESOPTIONS } from '../constants';
 
 import AdminModale from './AdminModale';
-
 import AppProfile from '../Profile';
 
-import '../assets/css/adminSettings.css'
-
-const TYPESOPTIONS = [{
-    label: 'Personnage',
-    value: 'character'
-}, {
-    label: 'Carte',
-    value: 'map'
-}, {
-    label: 'Peuple/Race',
-    value: 'class'
-}, {
-    label: 'Mineral',
-    value: 'mineral'
-}, {
-    label: 'Végétal',
-    value: 'vegetable'
-}, {
-    label: 'Ville',
-    value: 'city'
-}, {
-    label: 'Créature',
-    value: 'monster'
-}, {
-    label: 'Artefact',
-    value: 'artefact'
-}, {
-    label: 'Autre',
-    value: 'other'
-}];
-
-const SPECIESOPTIONS = [{
-    label: 'Inconnue',
-    value: 'unknown'
-}, {
-    label: 'Ciheuphe',
-    value: 'ciheuphe'
-}, {
-    label: 'Humain',
-    value: 'human'
-}, {
-    label: 'Shashouille',
-    value: 'shashouille'
-}, {
-    label: 'Robot',
-    value: 'robot'
-}, {
-    label: 'Hanylice',
-    value: 'hanylice'
-}, {
-    label: 'Suhera',
-    value: 'suhera'
-}, {
-    label: 'Ao-Nesa',
-    value: 'ao-nesa'
-}, {
-    label: 'Biri-Ozi',
-    value: 'biri-ozi'
-}, {
-    label: 'Wibsa-Thu',
-    value: 'wibsa-thu'
-}, {
-    label: 'Démon',
-    value: 'demon'
-}, {
-    label: 'Dieu/Déesse',
-    value: 'god'
-}, {
-    label: 'Sentinelle',
-    value: 'sentry'
-}, {
-    label: 'Autre',
-    value: 'other'
-}];
-export default class AdminSettings extends React.Component {
+class AdminSettings extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cards: [],
-            selectedCard: null,
             openModal: false,
-            loading: true,
         }
 
         this.getCardList = this.getCardList.bind(this);
@@ -99,37 +25,20 @@ export default class AdminSettings extends React.Component {
     }
 
     componentDidMount() {
-        this.getCardList();
+        if (this.props.cards.length === 0)
+            this.getCardList();
     }
 
     getCardList() {
-        this.setState({
-            loading : true
-        });
-
-        HttpGetRequest('/cards')
-        .then(data => {
-            if (!data) {
-                throw Error()
-            }
-            return data.json();
-        })
-        .then(data => {
-            this.setState({
-                cards: data,
-                loading: false,
-            })
-        })
-        .catch(() => {
-            console.log('Erreur lors de la recupération des datas');
-        })
+        this.props.dispatch(getAllCards())
     }
 
     closeModal() {
         this.setState({
-            openModal: false,
-            selectedCard: null,
-        })
+            openModal: false
+        }, () => this.props.dispatch({
+            type: 'Cards/unselectCard'
+        }))
     }
 
     unauthorized() {
@@ -154,8 +63,12 @@ export default class AdminSettings extends React.Component {
             return;
         }
 
+        this.props.dispatch({
+            type: 'Cards/selectCard',
+            id: id,
+        })
+
         this.setState({
-            selectedCard: id,
             openModal: true 
         })
     }
@@ -165,22 +78,23 @@ export default class AdminSettings extends React.Component {
             this.unauthorized();
             return;
         }
-        HttpDeleteRequest('/card/' + id)
-        .then(response => {
-            if (!response.ok) {
-                throw Error()
-            }
-            return response.json();
+        this.props.dispatch({
+            type: "Cards/deleteCard",
+            id: id,
         })
-        .then(data => {
-            this.getCardList();
-        })
-        .catch(() => {
-            console.log('Erreur lors de la suppression');
-        })
+
+        this.props.dispatch(deleteCardById({
+            id: id,
+        }))
     }
 
     render() {
+        const {
+            cards,
+            isLoading,
+            selectedCard
+        } = this.props;
+
         const columns = [{
             headerName: 'N°',
             field: 'card_num',
@@ -241,13 +155,13 @@ export default class AdminSettings extends React.Component {
             sortable: false,
             field: 'actions',
             width: 150,
-            renderCell: (params) =>(
+            renderCell: (params) => (
                 <div>
                     <Create className="action-btn"
-                        onClick={()=> this.configureCard(params.row.id)}
+                        onClick={() => this.configureCard(params.row.id)}
                     />
                     <Delete className="action-btn"
-                        onClick={()=> this.deleteCard(params.row.id)}
+                        onClick={() => this.deleteCard(params.row.id)}
                     />
                 </div>
             ),
@@ -271,18 +185,18 @@ export default class AdminSettings extends React.Component {
                 </div>
                 <div className='setting-grid-container'>
                     <DataGrid 
-                        rows={this.state.cards}
+                        rows={cards}
                         columns={columns}
                         pageSize={20}
                         autoHeight
-                        loading={this.state.loading}
+                        loading={isLoading}
                      />
                     { (this.state.openModal) ? (
                         <AdminModale
                             show={this.state.openModal}
                             update={this.getCardList}
                             close={this.closeModal}
-                            id={this.state.selectedCard}
+                            id={selectedCard}
                         />
                     ): null}
                 </div>
@@ -290,3 +204,17 @@ export default class AdminSettings extends React.Component {
         );
     }
 }
+
+const mapStateToProps = function(state) {
+    let cards = state.cards.adminCards || [];
+
+    cards = cards.filter(card => (!!card.id));
+
+    return {
+        isLoading: state.cards?.isLoading,
+        selectedCard: state.cards.selectedCard,
+        cards: cards,
+    }
+}
+
+export default connect(mapStateToProps)(AdminSettings)

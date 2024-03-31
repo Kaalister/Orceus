@@ -940,3 +940,501 @@ export const ROCKS_ABYSS = [{
     in: [],
     notIn: [],
 }, ];
+
+export const CHAR_BASE = {
+    shashouille: {
+        pilleur: {
+            att: -2,
+            def: -2,
+            vit: -1,
+            agi: 4,
+            puiss: 2,
+            stren: -3,
+        },
+        artificier: {
+            att: 0,
+            def: -3,
+            vit: -1,
+            agi: 2,
+            puiss: 2,
+            stren: -3,
+        },
+        nomade: {
+            att: -2,
+            def: 0,
+            vit: -1,
+            agi: 4,
+            puiss: 2,
+            stren: -3,
+        },
+        artisan: {
+            att: -2,
+            def: -2,
+            vit: -1,
+            agi: 4,
+            puiss: 2,
+            stren: -3,
+        },
+        medecin: {
+            att: -2,
+            def: 0,
+            vit: -1,
+            agi: 4,
+            puiss: 2,
+            stren: -3,
+        },
+        illumine: {
+            att: -2,
+            def: 0,
+            vit: -1,
+            agi: 2,
+            puiss: 5,
+            stren: -3,
+        }
+    },
+    ciheuphe: {
+        dresseur: {
+            att: 1,
+            def: 0,
+            vit: 2,
+            agi: 3,
+            puiss: 1,
+            stren: 0,
+        },
+        chasseur: {
+            att: 2,
+            def: 0,
+            vit: 2,
+            agi: 2,
+            puiss: -2,
+            stren: 1,
+        },
+        danseur: {
+            att: -2,
+            def: -2,
+            vit: 2,
+            agi: 2,
+            puiss: 3,
+            stren: -1,
+        },
+        nomade: {
+            att: -2,
+            def: 0,
+            vit: 2,
+            agi: 2,
+            puiss: 0,
+            stren: 0,
+        },
+        herboriste: {
+            att: -2,
+            def: 0,
+            vit: 2,
+            agi: 3,
+            puiss: 0,
+            stren: 0,
+        },
+        erudit: {
+            att: -2,
+            def: 0,
+            vit: 2,
+            agi: 3,
+            puiss: 0,
+            stren: -1,
+        },
+        illumine: {
+            att: 0,
+            def: 0,
+            vit: 2,
+            agi: 2,
+            puiss: 3,
+            stren: 0,
+        }
+    },
+    humain: {
+        chevalier: {
+            att: 1,
+            def: 1,
+            vit: 0,
+            agi: -2,
+            puiss: 0,
+            stren: 2,
+        },
+        tireur: {
+            att: 2,
+            def: 0,
+            vit: 0,
+            agi: 2,
+            puiss: 0,
+            stren: 0,
+        },
+        barde: {
+            att: 1,
+            def: 0,
+            vit: 0,
+            agi: 1,
+            puiss: 2,
+            stren: 0,
+        },
+        illumine: {
+            att: 0,
+            def: 0,
+            vit: 0,
+            agi: 0,
+            puiss: 3,
+            stren: 0,
+        },
+        medecin: {
+            att: 0,
+            def: 0,
+            vit: 0,
+            agi: 1,
+            puiss: 0,
+            stren: 0,
+        },
+        createur: {
+            att: 1,
+            def: 0,
+            vit: 0,
+            agi: 1,
+            puiss: 0,
+            stren: 0,
+        },
+        nomade: {
+            att: -2,
+            def: 0,
+            vit: 0,
+            agi: 0,
+            puiss: 0,
+            stren: 0,
+        },
+    },
+    robot: {
+        assassin: {
+            att: 3,
+            def: -3,
+            vit: 4,
+            agi: 3,
+            puiss: 0,
+            stren: 2,
+        },
+        soigneur: {
+            att: -1,
+            def: 1,
+            vit: 0,
+            agi: 1,
+            puiss: 0,
+            stren: -1,
+        },
+        protecteur: {
+            att: -1,
+            def: 1,
+            vit: 0,
+            agi: 1,
+            puiss: 0,
+            stren: -1,
+        },
+        tireur: {
+            att: 4,
+            def: -4,
+            vit: 1,
+            agi: 1,
+            puiss: 0,
+            stren: 2,
+        },
+        createur: {
+            att: 0,
+            def: -4,
+            vit: 1,
+            agi: 4,
+            puiss: 0,
+            stren: 1,
+        },
+    },
+    suhera: {
+        sorciere: {
+            att: 0,
+            def: -3,
+            vit: -1,
+            agi: 1,
+            puiss: 4,
+            stren: 3,
+        },
+        angeliste: {
+            att: -3,
+            def: 1,
+            vit: -2,
+            agi: 1,
+            puiss: 5,
+            stren: -1,
+        },
+        distordeur: {
+            att: -3,
+            def: -3,
+            vit: 2,
+            agi: 3,
+            puiss: 5,
+            stren: 1,
+        },
+    },
+    hanylice: {
+        tele_kinesiste: {
+            att: -1,
+            def: 3,
+            vit: -2,
+            agi: -3,
+            puiss: 5,
+            stren: 1,
+        },
+        controleur: {
+            att: 0,
+            def: 3,
+            vit: -2,
+            agi: -2,
+            puiss: 5,
+            stren: 1,
+        },
+    }
+};
+
+export const RACESTYPES = [{
+    value: 'humain',
+    label: 'Humain',
+}, {
+    label: 'Shashouille',
+    value: 'shashouille'
+} ,{
+    label: 'Ciheuphe',
+    value: 'ciheuphe'
+}, {
+    label: 'Robot',
+    value: 'robot'
+}, {
+    label: 'Suhera',
+    value: 'suhera'
+}, {
+    label: 'Hanylice',
+    value: 'hanylice'
+}];
+
+export const JOBS = {
+    shashouille: [{
+        label: 'Pilleur',
+        value: 'pilleur',
+    }, {
+        label: 'Artificier',
+        value: 'artificier',
+    }, {
+        label: 'Nomade',
+        value: 'nomade',
+    }, {
+        label: 'Artisan',
+        value: 'artisan',
+    }, {
+        label: 'Médecin',
+        value: 'medecin',
+    }, {
+        label: 'Illuminé',
+        value: 'illumine',
+    }],
+    ciheuphe: [{
+        label: 'Dresseur',
+        value: 'dresseur',
+    }, {
+        label: 'Chasseur',
+        value: 'chasseur',
+    }, {
+        label: 'Danseur',
+        value: 'danseur',
+    }, {
+        label: 'Nomade',
+        value: 'nomade',
+    }, {
+        label: 'Herboriste',
+        value: 'herboriste',
+    }, {
+        label: 'Érudit',
+        value: 'erudit',
+    }, {
+        label: 'Illuminé',
+        value: 'illumine',
+    }],
+    humain: [{
+        label: 'Chevalier',
+        value: 'chevalier',
+    }, {
+        label: 'Tireur',
+        value: 'tireur',
+    }, {
+        label: 'Barde',
+        value: 'barde',
+    }, {
+        label: 'Illuminé',
+        value: 'illumine',
+    }, {
+        label: 'Médecin',
+        value: 'medecin',
+    }, {
+        label: 'Créateur',
+        value: 'createur',
+    }, {
+        label: 'Nomade',
+        value: 'nomade',
+    }],
+    robot: [{
+        label: 'Assassin',
+        value: 'assassin',
+    }, {
+        label: 'Soigneur',
+        value: 'soigneur',
+    }, {
+        label: 'Protecteur',
+        value: 'protecteur',
+    }, {
+        label: 'Tireur',
+        value: 'tireur',
+    }, {
+        label: 'Créateur',
+        value: 'createur',
+    }],
+    suhera: [{
+        label: 'Sorcière',
+        value: 'sorciere',
+    }, {
+        label: 'Angéliste',
+        value: 'angeliste',
+    }, {
+        label: 'Distordeur',
+        value: 'distordeur',
+    }],
+    hanylice: [{
+        label: 'Télé-Kinésiste',
+        value: 'tele_kinesiste',
+    }, {
+        label: 'Controleur',
+        value: 'controleur',
+    }]
+};
+
+export const NAMEPUISS = [{
+    label: "Puiss. Naty",
+    value: "puissance",
+}, {
+    label: "Malédiction",
+    value: "malediction"
+}, {
+    label: "Focus",
+    value: "focus"
+}]
+
+export const TYPES = [{
+    label: "Arme",
+    value: "weapon"
+}, {
+    label: "Bouclier",
+    value: "shield"
+}, {
+    label: "Armure",
+    value: "armor"
+}, {
+    label: "Amulette",
+    value: "amulet"
+}, {
+    label: "Vêtement",
+    value: "clothes"
+},{
+    label: "Pierre",
+    value: "rock"
+}, {
+    label: "Plante",
+    value: "plant"
+}, {
+    label: "Relique",
+    value: "relic"
+}, {
+    label: "Artefact",
+    value: "artefact"
+}, {
+    label: "Accessoire",
+    value: "accessory"
+}, {
+    label: "Consommable",
+    value: "consumable"
+}, {
+    label: "Autre",
+    value: "other"
+}];
+
+export const TYPESOPTIONS = [{
+    label: 'Personnage',
+    value: 'character'
+}, {
+    label: 'Carte',
+    value: 'map'
+}, {
+    label: 'Peuple/Race',
+    value: 'class'
+}, {
+    label: 'Mineral',
+    value: 'mineral'
+}, {
+    label: 'Végétal',
+    value: 'vegetable'
+}, {
+    label: 'Ville',
+    value: 'city'
+}, {
+    label: 'Créature',
+    value: 'monster'
+}, {
+    label: 'Artefact',
+    value: 'artefact'
+}, {
+    label: 'Autre',
+    value: 'other'
+}];
+
+export const SPECIESOPTIONS = [{
+    label: 'Inconnue',
+    value: 'unknown'
+}, {
+    label: 'Ciheuphe',
+    value: 'ciheuphe'
+}, {
+    label: 'Humain',
+    value: 'human'
+}, {
+    label: 'Shashouille',
+    value: 'shashouille'
+}, {
+    label: 'Robot',
+    value: 'robot'
+}, {
+    label: 'Hanylice',
+    value: 'hanylice'
+}, {
+    label: 'Suhera',
+    value: 'suhera'
+}, {
+    label: 'Ao-Nesa',
+    value: 'ao-nesa'
+}, {
+    label: 'Biri-Ozi',
+    value: 'biri-ozi'
+}, {
+    label: 'Wibsa-Thu',
+    value: 'wibsa-thu'
+}, {
+    label: 'Démon',
+    value: 'demon'
+}, {
+    label: 'Dieu/Déesse',
+    value: 'god'
+}, {
+    label: 'Sentinelle',
+    value: 'sentry'
+}, {
+    label: 'Autre',
+    value: 'other'
+}];
+
+export const URL_API = "https://kf3hmnez3b.execute-api.eu-west-3.amazonaws.com/Orceus";

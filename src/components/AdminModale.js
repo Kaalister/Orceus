@@ -1,86 +1,19 @@
+import '../assets/css/adminModale.css';
+
 import React from 'react';
+import { connect } from 'react-redux';
+import { getAdminCardById } from '../redux/reducers/card';
+import { createCard, updateCardById } from '../redux/reducers/card';
 import { Close, Delete, AddCircleOutline } from '@material-ui/icons';
 import { Button } from '@material-ui/core';
 import Select from 'react-select';
 import { Checkbox } from 'antd';
 import loading from '../assets/images/loading.gif';
 
-import { HttpGetRequest, HttpPostRequest } from '../HttpRequests';
-
-import '../assets/css/adminModale.css';
-
-const TYPESOPTIONS = [{
-    label: 'Personnage',
-    value: 'character'
-}, {
-    label: 'Carte',
-    value: 'map'
-}, {
-    label: 'Peuple/Race',
-    value: 'class'
-}, {
-    label: 'Mineral',
-    value: 'mineral'
-}, {
-    label: 'Végétal',
-    value: 'vegetable'
-}, {
-    label: 'Ville',
-    value: 'city'
-}, {
-    label: 'Créature',
-    value: 'monster'
-}, {
-    label: 'Artefact',
-    value: 'artefact'
-}, {
-    label: 'Autre',
-    value: 'other'
-}];
-
-const SPECIESOPTIONS = [{
-    label: 'Inconnue',
-    value: 'unknown'
-}, {
-    label: 'Ciheuphe',
-    value: 'ciheuphe'
-}, {
-    label: 'Humain',
-    value: 'human'
-}, {
-    label: 'Shashouille',
-    value: 'shashouille'
-}, {
-    label: 'Robot',
-    value: 'robot'
-}, {
-    label: 'Hanylice',
-    value: 'hanylice'
-}, {
-    label: 'Suhera',
-    value: 'suhera'
-}, {
-    label: 'Ao-Nesa',
-    value: 'ao-nesa'
-}, {
-    label: 'Biri-Ozi',
-    value: 'biri-ozi'
-}, {
-    label: 'Wibsa-Thu',
-    value: 'wibsa-thu'
-}, {
-    label: 'Démon',
-    value: 'demon'
-}, {
-    label: 'Dieu/Déesse',
-    value: 'god'
-}, {
-    label: 'Sentinelle',
-    value: 'sentry'
-}, {
-    label: 'Autre',
-    value: 'other'
-}];
+import {
+    TYPESOPTIONS,
+    SPECIESOPTIONS
+} from '../constants';
 
 const THEMESELECT = {
     placeholder: (provided) => ({
@@ -111,24 +44,12 @@ const THEMESELECT = {
     })
 }
 
-export default class AdminModale extends React.Component {
+class AdminModale extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            closing: false,
-            card: {
-                name: '',
-                desc: '',
-                type: null,
-                specie: null,
-                card: '',
-                big_card: '',
-                tags: [],
-                card_num: -1,
-                hidden: "false"
-            },
-            loading: true,
+            closing: false
         }
 
         this.getCard = this.getCard.bind(this);
@@ -148,31 +69,16 @@ export default class AdminModale extends React.Component {
     }
 
     getCard() {
-        if (!this.props.id)
-            return;
-        let url = "/cards/" + this.props.id;
+        const {
+            dispatch,
+            selectedCard,
+            card,
+        } = this.props;
 
-        this.setState({ loading: true });
-
-        HttpGetRequest(url)
-            .then( response => {
-                if (!response)
-                    throw Error();
-                
-                return response.json();
-            })
-            .then( data => {
-                if (!data)
-                    throw Error();
-
-                this.setState({
-                    card: data[0],
-                    loading: false
-                })
-            })
-            .catch( () => {
-                console.log("Erreur lors de l'update");
-            });
+        if (card && card.id && !card.big_card)
+            dispatch(getAdminCardById({
+                id: selectedCard
+            }));
     }
 
     close() {
@@ -190,27 +96,36 @@ export default class AdminModale extends React.Component {
     }
 
     switchHiddenCard() {
-        let card = this.state.card;
+        let card = {...this.props.card};
 
         card.hidden = (card.hidden === "true") ? "false" : "true";
         
-        this.setState({ card })
+        this.props.dispatch({
+            type: 'Cards/updateAdminCard',
+            card: card,
+        });
     }
 
     changeText(value, key) {
-        let card = { ...this.state.card };
+        let card = { ...this.props.card };
 
         card[key] = value.toLowerCase();
 
-        this.setState({ card });
+        this.props.dispatch({
+            type: 'Cards/updateAdminCard',
+            card: card,
+        });
     }
 
     handleSelect(key, option) {
-        let card = { ...this.state.card };
+        let card = { ...this.props.card };
 
         card[key] = option.value;
 
-        this.setState({ card });
+        this.props.dispatch({
+            type: 'Cards/updateAdminCard',
+            card: card,
+        });
     }
 
     handleImg(key) {
@@ -242,7 +157,7 @@ export default class AdminModale extends React.Component {
                     }
                     return response.json();
                 }).then(data => {
-                    let card = {...this.state.card}
+                    let card = {...this.props.card}
 
                     if (key === 'card') {
                         card.card = data.data.link;
@@ -250,39 +165,48 @@ export default class AdminModale extends React.Component {
                         card.big_card = data.data.link;
                     }
 
-                    this.setState({
-                        card,
-                        loading: false
+                    this.props.dispatch({
+                        type: 'Cards/updateAdminCard',
+                        card: card,
                     });
                 }).catch((error) => {
-                    console.log(error);
+                    console.error(error);
                 });
             });
         });
     }
 
     handleTags(index, value) {
-        let card = { ...this.state.card };
+        let card = { ...this.props.card };
 
         card.tags[index] = value.toLowerCase();
 
-        this.setState({ card });
+        this.props.dispatch({
+            type: 'Cards/updateAdminCard',
+            card: card,
+        });
     }
 
     removeTag(index) {
-        let card = { ...this.state.card };
+        let card = { ...this.props.card };
 
         card.tags.splice(index, 1);
 
-        this.setState({ card });
+        this.props.dispatch({
+            type: 'Cards/updateAdminCard',
+            card: card,
+        });
     }
 
     addTag() {
-        let card = { ...this.state.card };
+        let card = { ...this.props.card };
 
         card.tags.push('');
 
-        this.setState({ card });
+        this.props.dispatch({
+            type: 'Cards/updateAdminCard',
+            card: card,
+        });
     }
 
     getValueFromOptions(options, value) {
@@ -302,48 +226,25 @@ export default class AdminModale extends React.Component {
     }
 
     submit() {
+        const {
+            dispatch,
+            card,
+            selectedCard,
+            close,
+        } = this.props;
 
-        if (!!this.props.id) {
-            let url = '/card/' + this.props.id;
-
-            HttpPostRequest(url, { ...this.state.card })
-            .then( response => {
-                if (!response)
-                    throw Error();
-                
-                return response.json();
-            })
-            .then( data => {
-                if (!data)
-                    throw Error();
-                this.props.update();
-                this.props.close();
-            })
-            .catch( () => {
-                console.log("Erreur lors de l'update");
-            });
-            return;
+        if (card.id) {
+            dispatch(updateCardById({
+                id: selectedCard,
+                card: card,
+            }))
+        } else {
+            dispatch(createCard({
+                card: card
+            }))
         }
 
-        let url = '/card/';
-
-        HttpPostRequest(url, { ...this.state.card })
-        .then( response => {
-            if (!response)
-                throw Error();
-            
-            return response.json();
-        })
-        .then( data => {
-            if (!data)
-                throw Error();
-            this.props.update();
-            this.props.close()
-        })
-        .catch( () => {
-            console.log("Erreur lors de l'ajout");
-        });
-        return;        
+        close();
     }
 
     render() {
@@ -354,25 +255,30 @@ export default class AdminModale extends React.Component {
         let bigCardImage = null;
         let cardContainerClass = ['input-card', 'p-0'];
         let bigCardContainerClass = ['input-big-card', 'p-0'];
+        const {
+            selectedCard,
+            card,
+            isLoading,
+        } = this.props;
         
         if (this.props.show && !this.state.closing) {
             classModale.push('show');
         }
-        if (!!this.props.id) {
+        if (!!selectedCard) {
             title = 'Modification';
             submitText = 'Appliquer';
         }
 
-        if (!!this.state.card.card) {
+        if (!!card.card) {
             cardContainerClass.push('bg-transparent');
-            cardImage = this.state.card.card;
+            cardImage = card.card;
         }
-        if (!!this.state.card.big_card) {
+        if (!!card.big_card) {
             bigCardContainerClass.push('bg-transparent');
-            bigCardImage = this.state.card.big_card;
+            bigCardImage = card.big_card;
         }
 
-        if (this.state.loading) {
+        if (isLoading) {
             return (
                 <div className={classModale.join(' ')}>
                     <div className="header-modale pb-2">
@@ -400,47 +306,47 @@ export default class AdminModale extends React.Component {
                 <div className="body-modale">
                     <label className="label-modale">Cachée :</label><br/>
                     <Checkbox
-                        checked={(this.state.card.hidden === "true") ? true : false}
-                        onChange={() => this.switchHiddenCard()}
+                        checked={(card.hidden === "true")}
+                        onChange={this.switchHiddenCard}
                     /><br/>
                     <label className="label-modale">Numéro :</label><br/>
                     <input className="input-modale" 
-                     type="number"
-                     value={(this.state.card.card_num) ? this.state.card.card_num : 0}
-                     onChange={(e) => this.changeText(e.target.value, 'card_num')}
+                        type="number"
+                        value={(card.card_num) ? card.card_num : 0}
+                        onChange={(e) => this.changeText(e.target.value, 'card_num')}
                     />
                     <label className="label-modale">Nom :</label><br/>
                     <input className="input-modale" 
-                     type="text"
-                     value={(this.state.card.name) ? this.state.card.name : ''}
-                     onChange={(e) => this.changeText(e.target.value, 'name')}
+                        type="text"
+                        value={(card.name) ? card.name : ''}
+                        onChange={(e) => this.changeText(e.target.value, 'name')}
                     />
                     <label className="label-modale">Description :</label><br/>
                     <input className="input-modale"
-                     type="text"
-                     value={(this.state.card.desc) ? this.state.card.desc : ''}
-                     onChange={(e) => this.changeText(e.target.value, 'desc')}
+                        type="text"
+                        value={(card.desc) ? card.desc : ''}
+                        onChange={(e) => this.changeText(e.target.value, 'desc')}
                     />
 
                     <label className="label-modale">Type :</label><br/>
                     <Select
-                     className="input-modale"
-                     type="text"
-                     options={TYPESOPTIONS}
-                     value={this.getValueFromOptions('type', this.state.card.type)}
-                     onChange={(e) => {this.handleSelect('type', e)}}
-                     styles={THEMESELECT}
+                        className="input-modale"
+                        type="text"
+                        options={TYPESOPTIONS}
+                        value={this.getValueFromOptions('type', card.type)}
+                        onChange={(e) => {this.handleSelect('type', e)}}
+                        styles={THEMESELECT}
                     />
-                    { (this.state.card.type === 'character') ? (
+                    { (card.type === 'character') ? (
                         <div>
                             <label className="label-modale">Espèce :</label><br/>
                             <Select
-                             className="input-modale"
-                             type="text"
-                             options={SPECIESOPTIONS}
-                             value={this.getValueFromOptions('specie', this.state.card.specie)}
-                             onChange={(e) => {this.handleSelect('specie', e)}}
-                             styles={THEMESELECT}
+                                className="input-modale"
+                                type="text"
+                                options={SPECIESOPTIONS}
+                                value={this.getValueFromOptions('specie', card.specie)}
+                                onChange={(e) => {this.handleSelect('specie', e)}}
+                                styles={THEMESELECT}
                             />
                         </div>
                     ) : null}
@@ -448,19 +354,20 @@ export default class AdminModale extends React.Component {
                     <div>
                         <label className="label-modale">Carte (petite) :</label><br/>
                         <input
-                         type="file"
-                         id="card"
-                         className="d-none"
-                         alt=""
-                         accept=".jpg,.png"
+                            type="file"
+                            id="card"
+                            className="d-none"
+                            alt=""
+                            accept=".jpg,.png"
                         />
                         <div style={{textAlign: 'center'}}>
-                            <button className={cardContainerClass.join(' ')}
-                             onClick={() => { this.handleImg('card') }}
+                            <button
+                                className={cardContainerClass.join(' ')}
+                                onClick={() => { this.handleImg('card') }}
                             >
                                 <img className="input-image"
-                                 src={cardImage}
-                                 alt=""
+                                    src={cardImage}
+                                    alt=""
                                 />
                             </button>
                         </div>
@@ -469,19 +376,20 @@ export default class AdminModale extends React.Component {
                     <div>
                         <label className="label-modale">Fiche (grande) :</label><br/>
                         <input
-                         type="file"
-                         id="big_card"
-                         className="d-none"
-                         alt=""
-                         accept=".jpg,.png"
+                            type="file"
+                            id="big_card"
+                            className="d-none"
+                            alt=""
+                            accept=".jpg,.png"
                         />
                         <div style={{textAlign: 'center'}}>
-                            <button className={bigCardContainerClass.join(' ')}
-                             onClick={() => { this.handleImg('big_card') }}
+                            <button
+                                className={bigCardContainerClass.join(' ')}
+                                onClick={() => { this.handleImg('big_card') }}
                             >
                                 <img className="input-image"
-                                 src={bigCardImage}
-                                 alt=""
+                                    src={bigCardImage}
+                                    alt=""
                                 />
                             </button>
                         </div>
@@ -489,17 +397,20 @@ export default class AdminModale extends React.Component {
 
                     <label className="label-modale">Tags :</label>
                     <AddCircleOutline className="add-tag" onClick={this.addTag}/><br/>
-                    {this.state.card.tags.map( (tag, index) => (
+                    {card.tags.map((tag, index) => (
                         <div className="tag-container" key={'tag' + index}>
                             <input
-                             type="text"
-                             className="input-tag"
-                             value={tag}
-                             onChange={(e) => {
-                                this.handleTags(index, e.target.value);
-                             }}
+                                type="text"
+                                className="input-tag"
+                                value={tag}
+                                onChange={(e) => {
+                                    this.handleTags(index, e.target.value);
+                                }}
                             />
-                            <Delete className="delete-tag" onClick={() => this.removeTag(index)}/>
+                            <Delete
+                                className="delete-tag"
+                                onClick={() => this.removeTag(index)}
+                            />
                         </div>
                     ))}
                 </div>
@@ -509,7 +420,7 @@ export default class AdminModale extends React.Component {
                         variant="contained"
                         color="primary"
                         onClick={this.submit}
-                        disabled={this.state.loading}>
+                        disabled={isLoading}>
                         {submitText}
                     </Button>
                 </div>
@@ -517,3 +428,19 @@ export default class AdminModale extends React.Component {
         );
     }
 }
+
+const mapStateToProps = function(state) {
+    let card = state.cards.adminCards.find(card =>
+        card.id === state.cards.selectedCard);
+
+    if (!card)
+        card = state.cards.adminCards.find(card => (!card.id));
+    
+    return {
+        isLoading: state.cards?.isLoading,
+        selectedCard: state.cards.selectedCard,
+        card: JSON.parse(JSON.stringify(card)),
+    }
+}
+
+export default connect(mapStateToProps)(AdminModale)

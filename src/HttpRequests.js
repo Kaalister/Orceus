@@ -1,4 +1,4 @@
-const URL_API = "https://kf3hmnez3b.execute-api.eu-west-3.amazonaws.com/Orceus";
+import { URL_API } from "./constants";
 
 export async function HttpGetRequest(route) {
     try {
@@ -13,7 +13,7 @@ export async function HttpGetRequest(route) {
         });
         return(await response);
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -31,7 +31,7 @@ export async function HttpPostRequest(route, body) {
         });
         return(await response);
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -49,7 +49,7 @@ export async function HttpPutRequest(route, body) {
         });
         return(await response);
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -67,6 +67,6 @@ export async function HttpDeleteRequest(route, body) {
         });
         return(await response);
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }

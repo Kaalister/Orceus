@@ -1,4 +1,7 @@
+import "../../assets/css/inventory.css";
+
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     Table,
     Select,
@@ -12,54 +15,16 @@ import { v4 as uuid } from 'uuid';
 
 import CharacterHeader from './ChararcterHeader';
 
-import "../../assets/css/inventory.css";
+import { TYPES } from "../../constants";
+
 
 const { TextArea } = Input;
 
-const TYPES = [{
-    label: "Arme",
-    value: "weapon"
-}, {
-    label: "Bouclier",
-    value: "shield"
-}, {
-    label: "Armure",
-    value: "armor"
-}, {
-    label: "Amulette",
-    value: "amulet"
-}, {
-    label: "Vêtement",
-    value: "clothes"
-},{
-    label: "Pierre",
-    value: "rock"
-}, {
-    label: "Plante",
-    value: "plant"
-}, {
-    label: "Relique",
-    value: "relic"
-}, {
-    label: "Artefact",
-    value: "artefact"
-}, {
-    label: "Accessoire",
-    value: "accessory"
-}, {
-    label: "Consommable",
-    value: "consumable"
-}, {
-    label: "Autre",
-    value: "other"
-}];
-
-export default class Inventory extends React.Component {
+class Inventory extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            character: null,
             modalIsOpen: false,
             searchValue: "",
             initialForm: {
@@ -85,12 +50,8 @@ export default class Inventory extends React.Component {
         this.editItem = this.editItem.bind(this);
     }
 
-    componentDidMount() {
-        this.setState({ character : this.props.character });
-    }
-
     onChangeItem = (value, id, property) => {
-        let { character } = this.state;
+        let character = {...this.props.character};
         let index = character.inventory.findIndex((item) => item.id === id);
 
         if (index === -1) {
@@ -99,7 +60,10 @@ export default class Inventory extends React.Component {
 
         character.inventory[index][property] = value;
 
-        this.setState({ character }, () => this.props.actualizeCharacter(this.state.character));
+        this.props.dispatch({
+            type: 'Characters/updateCharacter',
+            character: character,
+        });
     }
 
     openModal = () => {
@@ -124,7 +88,7 @@ export default class Inventory extends React.Component {
     }
 
     removeItem = (id) => {
-        let { character } = this.state;
+        let character = {...this.props.character};
         let index = character.inventory.findIndex((item) => item.id === id);
 
 
@@ -145,11 +109,14 @@ export default class Inventory extends React.Component {
         character.equipment.other = character.equipment.other.filter(item => item !== id);
         
 
-        this.setState({ character }, () => this.props.actualizeCharacter(this.state.character));
+        this.props.dispatch({
+            type: 'Characters/updateCharacter',
+            character: character,
+        });
     }
 
     openEditModal = (id) => {
-        let items = this.state.character.inventory;
+        let items = this.props.character.inventory;
         let item = items.find(item => item.id === id);
         this.setState({
             modalIsOpen: true,
@@ -168,7 +135,7 @@ export default class Inventory extends React.Component {
     }
 
     editItem = (form) => {
-        let character = this.state.character;
+        let character = {...this.props.character};
         let item = {
             id: form.id,
             name: form.name,
@@ -182,7 +149,6 @@ export default class Inventory extends React.Component {
 
         character.inventory[indexCurrentItem] = item;
         this.setState({
-            character,
             initialForm: {
                 id: null,
                 name: "",
@@ -195,13 +161,16 @@ export default class Inventory extends React.Component {
             modalIsOpen: false,
         }, () => {
             this.newForm.current.resetFields();
-            this.props.actualizeCharacter(this.state.character);
+            this.props.dispatch({
+                type: 'Characters/updateCharacter',
+                character: character,
+            });
         });
 
     }
 
     addItem = () => {
-        let { character } = this.state;
+        let character = {...this.props.character};
 
         let form = this.newForm.current.getFieldsValue();
 
@@ -224,14 +193,16 @@ export default class Inventory extends React.Component {
             return;
         }
 
-        character.inventory.push(item);
+        character.inventory = [...character.inventory, item];
 
-        this.setState({ 
-            character,
+        this.setState({
             modalIsOpen: false
         }, () => {
             this.newForm.current.resetFields();
-            this.props.actualizeCharacter(this.state.character);
+            this.props.dispatch({
+                type: 'Characters/updateCharacter',
+                character: character,
+            });
         });
 
     }
@@ -255,12 +226,13 @@ export default class Inventory extends React.Component {
     }
 
     render() {
-        let { character, searchValue, initialForm } = this.state;
+        const { character }  = this.props;
+        let { searchValue, initialForm } = this.state;
         let { modalIsOpen } = this.state;
 
         let isMobile = window.screen.width < 900;
         let isTablet = window.screen.width >= 900 && window.screen.width < 1000;
-        let inventory = (!!character?.inventory) ? [...character.inventory] : [];
+        let inventory = [...character.inventory];
 
         if (!!searchValue) {
             inventory = inventory.filter(item => (
@@ -425,7 +397,7 @@ export default class Inventory extends React.Component {
 
         return (
             <div className="character-container">
-                <CharacterHeader saveCharacter={this.props.saveCharacter} currentPage="inventory"/>
+                <CharacterHeader currentPage="inventory"/>
                 <div className="search-container">
                     <Input
                         className="search-input"
@@ -529,3 +501,15 @@ export default class Inventory extends React.Component {
         );
     }
 }
+
+const mapStateToProps = function(state) {
+    const character = state.characters.characters.find(char =>
+        char.id === state.characters?.selectedCharacter);
+
+    return {
+        isLoading: state.characters?.isLoading,
+        character: JSON.parse(JSON.stringify(character)),
+    }
+}
+
+export default connect(mapStateToProps)(Inventory)

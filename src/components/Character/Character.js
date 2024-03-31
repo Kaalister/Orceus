@@ -1,4 +1,7 @@
+import "../../assets/css/character.css";
+
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     CloseOutlined,
     PlusCircleOutlined,
@@ -21,465 +24,26 @@ import {
 } from 'antd';
 import { v4 as uuid } from 'uuid';
 import CharacterHeader from './ChararcterHeader';
-import "../../assets/css/character.css";
+import {
+    NAMEPUISS,
+    CHAR_BASE,
+    RACESTYPES,
+    JOBS,
+} from "../../constants";
+
 
 const { TextArea } = Input;
 
-const CHAR_BASE = {
-    shashouille: {
-        pilleur: {
-            att: -2,
-            def: -2,
-            vit: -1,
-            agi: 4,
-            puiss: 2,
-            stren: -3,
-        },
-        artificier: {
-            att: 0,
-            def: -3,
-            vit: -1,
-            agi: 2,
-            puiss: 2,
-            stren: -3,
-        },
-        nomade: {
-            att: -2,
-            def: 0,
-            vit: -1,
-            agi: 4,
-            puiss: 2,
-            stren: -3,
-        },
-        artisan: {
-            att: -2,
-            def: -2,
-            vit: -1,
-            agi: 4,
-            puiss: 2,
-            stren: -3,
-        },
-        medecin: {
-            att: -2,
-            def: 0,
-            vit: -1,
-            agi: 4,
-            puiss: 2,
-            stren: -3,
-        },
-        illumine: {
-            att: -2,
-            def: 0,
-            vit: -1,
-            agi: 2,
-            puiss: 5,
-            stren: -3,
-        }
-    },
-    ciheuphe: {
-        dresseur: {
-            att: 1,
-            def: 0,
-            vit: 2,
-            agi: 3,
-            puiss: 1,
-            stren: 0,
-        },
-        chasseur: {
-            att: 2,
-            def: 0,
-            vit: 2,
-            agi: 2,
-            puiss: -2,
-            stren: 1,
-        },
-        danseur: {
-            att: -2,
-            def: -2,
-            vit: 2,
-            agi: 2,
-            puiss: 3,
-            stren: -1,
-        },
-        nomade: {
-            att: -2,
-            def: 0,
-            vit: 2,
-            agi: 2,
-            puiss: 0,
-            stren: 0,
-        },
-        herboriste: {
-            att: -2,
-            def: 0,
-            vit: 2,
-            agi: 3,
-            puiss: 0,
-            stren: 0,
-        },
-        erudit: {
-            att: -2,
-            def: 0,
-            vit: 2,
-            agi: 3,
-            puiss: 0,
-            stren: -1,
-        },
-        illumine: {
-            att: 0,
-            def: 0,
-            vit: 2,
-            agi: 2,
-            puiss: 3,
-            stren: 0,
-        }
-    },
-    humain: {
-        chevalier: {
-            att: 1,
-            def: 1,
-            vit: 0,
-            agi: -2,
-            puiss: 0,
-            stren: 2,
-        },
-        tireur: {
-            att: 2,
-            def: 0,
-            vit: 0,
-            agi: 2,
-            puiss: 0,
-            stren: 0,
-        },
-        barde: {
-            att: 1,
-            def: 0,
-            vit: 0,
-            agi: 1,
-            puiss: 2,
-            stren: 0,
-        },
-        illumine: {
-            att: 0,
-            def: 0,
-            vit: 0,
-            agi: 0,
-            puiss: 3,
-            stren: 0,
-        },
-        medecin: {
-            att: 0,
-            def: 0,
-            vit: 0,
-            agi: 1,
-            puiss: 0,
-            stren: 0,
-        },
-        createur: {
-            att: 1,
-            def: 0,
-            vit: 0,
-            agi: 1,
-            puiss: 0,
-            stren: 0,
-        },
-        nomade: {
-            att: -2,
-            def: 0,
-            vit: 0,
-            agi: 0,
-            puiss: 0,
-            stren: 0,
-        },
-    },
-    robot: {
-        assassin: {
-            att: 3,
-            def: -3,
-            vit: 4,
-            agi: 3,
-            puiss: 0,
-            stren: 2,
-        },
-        soigneur: {
-            att: -1,
-            def: 1,
-            vit: 0,
-            agi: 1,
-            puiss: 0,
-            stren: -1,
-        },
-        protecteur: {
-            att: -1,
-            def: 1,
-            vit: 0,
-            agi: 1,
-            puiss: 0,
-            stren: -1,
-        },
-        tireur: {
-            att: 4,
-            def: -4,
-            vit: 1,
-            agi: 1,
-            puiss: 0,
-            stren: 2,
-        },
-        createur: {
-            att: 0,
-            def: -4,
-            vit: 1,
-            agi: 4,
-            puiss: 0,
-            stren: 1,
-        },
-    },
-    suhera: {
-        sorciere: {
-            att: 0,
-            def: -3,
-            vit: -1,
-            agi: 1,
-            puiss: 4,
-            stren: 3,
-        },
-        angeliste: {
-            att: -3,
-            def: 1,
-            vit: -2,
-            agi: 1,
-            puiss: 5,
-            stren: -1,
-        },
-        distordeur: {
-            att: -3,
-            def: -3,
-            vit: 2,
-            agi: 3,
-            puiss: 5,
-            stren: 1,
-        },
-    },
-    hanylice: {
-        tele_kinesiste: {
-            att: -1,
-            def: 3,
-            vit: -2,
-            agi: -3,
-            puiss: 5,
-            stren: 1,
-        },
-        controleur: {
-            att: 0,
-            def: 3,
-            vit: -2,
-            agi: -2,
-            puiss: 5,
-            stren: 1,
-        },
-    }
-};
-
-const RACESTYPES = [{
-    value: 'humain',
-    label: 'Humain',
-}, {
-    label: 'Shashouille',
-    value: 'shashouille'
-} ,{
-    label: 'Ciheuphe',
-    value: 'ciheuphe'
-}, {
-    label: 'Robot',
-    value: 'robot'
-}, {
-    label: 'Suhera',
-    value: 'suhera'
-}, {
-    label: 'Hanylice',
-    value: 'hanylice'
-}];
-
-const JOBS = {
-    shashouille: [{
-        label: 'Pilleur',
-        value: 'pilleur',
-    }, {
-        label: 'Artificier',
-        value: 'artificier',
-    }, {
-        label: 'Nomade',
-        value: 'nomade',
-    }, {
-        label: 'Artisan',
-        value: 'artisan',
-    }, {
-        label: 'Médecin',
-        value: 'medecin',
-    }, {
-        label: 'Illuminé',
-        value: 'illumine',
-    }],
-    ciheuphe: [{
-        label: 'Dresseur',
-        value: 'dresseur',
-    }, {
-        label: 'Chasseur',
-        value: 'chasseur',
-    }, {
-        label: 'Danseur',
-        value: 'danseur',
-    }, {
-        label: 'Nomade',
-        value: 'nomade',
-    }, {
-        label: 'Herboriste',
-        value: 'herboriste',
-    }, {
-        label: 'Érudit',
-        value: 'erudit',
-    }, {
-        label: 'Illuminé',
-        value: 'illumine',
-    }],
-    humain: [{
-        label: 'Chevalier',
-        value: 'chevalier',
-    }, {
-        label: 'Tireur',
-        value: 'tireur',
-    }, {
-        label: 'Barde',
-        value: 'barde',
-    }, {
-        label: 'Illuminé',
-        value: 'illumine',
-    }, {
-        label: 'Médecin',
-        value: 'medecin',
-    }, {
-        label: 'Créateur',
-        value: 'createur',
-    }, {
-        label: 'Nomade',
-        value: 'nomade',
-    }],
-    robot: [{
-        label: 'Assassin',
-        value: 'assassin',
-    }, {
-        label: 'Soigneur',
-        value: 'soigneur',
-    }, {
-        label: 'Protecteur',
-        value: 'protecteur',
-    }, {
-        label: 'Tireur',
-        value: 'tireur',
-    }, {
-        label: 'Créateur',
-        value: 'createur',
-    }],
-    suhera: [{
-        label: 'Sorcière',
-        value: 'sorciere',
-    }, {
-        label: 'Angéliste',
-        value: 'angeliste',
-    }, {
-        label: 'Distordeur',
-        value: 'distordeur',
-    }],
-    hanylice: [{
-        label: 'Télé-Kinésiste',
-        value: 'tele_kinesiste',
-    }, {
-        label: 'Controleur',
-        value: 'controleur',
-    }]
-};
-
-const NAMEPUISS = [{
-    label: "Puiss. Naty",
-    value: "puissance",
-}, {
-    label: "Malédiction",
-    value: "malediction"
-}, {
-    label: "Focus",
-    value: "focus"
-}]
-
-export default class Character extends React.Component {
+class Character extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            loading: true,
             modalIsOpen: false,
             selectedSkill: null,
             modifiedSkill: {
                 name: "",
                 desc: "",
-            },
-            character: {
-                id: null,
-                equipment: {
-                    weapon: [],
-                    plastron: [],
-                    shield: [],
-                    helmet: [],
-                    glove: [],
-                    shoe: [],
-                    topClothes: [],
-                    botClothes: [],
-                    amulet: [],
-                    other: []
-                },
-                fight: {
-                    att: 0,
-                    def: 0,
-                    vit: 0,
-                    agi: 0,
-                    puiss: 0,
-                    stren: 0,
-                    
-                    cac: 0,
-                    dist: 0,
-                    mag: 0,
-                    def_phy: 0,
-                    def_mag: 0,
-                    dodge: 0,
-                },
-                firstname: "",
-                lastname: "",
-                hp_max: 1,
-                hp: 1,
-                image: null,
-                job: null,
-                level: 1,
-                specie: null,
-                stats: {
-                    agi: 1,
-                    att: 1,
-                    char: 1,
-                    def: 1,
-                    luck: 1,
-                    obs: 1,
-                    prec: 1,
-                    pui: 1,
-                    stren: 1,
-                    vit: 1,
-                    know: 1,
-                },
-                years_old: 0,
-                config: {
-                    puissName: null,
-                },
-                lore: '',
-                notes: '',
-                inventory: [],
-                skills: []
             },
             sectionState: {
                 statisitcs: true,
@@ -488,7 +52,8 @@ export default class Character extends React.Component {
                 equipment: true,
                 story: true,
                 notes: true
-            }
+            },
+            statsFightChange: false,
         }
 
         this.newForm = React.createRef();
@@ -506,13 +71,9 @@ export default class Character extends React.Component {
         this.deleteSkill = this.deleteSkill.bind(this);
         this.validateSkillModification = this.validateSkillModification.bind(this);
         this.swithSection = this.swithSection.bind(this);
-        this.renderSkills = this.renderSkills.bind(this);
-        this.renderEquipment = this.renderEquipment.bind(this);
-        this.renderEquiped = this.renderEquiped.bind(this);
     }
 
     componentDidMount() {
-        this.setState({ character: this.props.character });
         this.actualizeFightStats();
     }
 
@@ -521,9 +82,10 @@ export default class Character extends React.Component {
             this.actualizeFightStats();
         }
     }
- 
+
     actualizeFightStats() {
-        let { character } = this.state;
+        let character = { ...this.props.character };
+
         if (!character.specie || !character.job) {
             return;
         }
@@ -543,52 +105,72 @@ export default class Character extends React.Component {
             stren: base.stren + character.fight.stren,
         }
 
+        let fight = { ...character.fight };
+
         character.hp_max = base.att + (8 * base.def) + (3 * base.vit) + (3 * base.agi) + base.puiss + (6 * base.stren);
-        character.fight.cac = Math.round(Math.sqrt(character.level * base.att) + (Math.pow(base.stren, 2) / 15));
-        character.fight.dist = Math.round(Math.pow(character.level, 2) / 10 + ( Math.pow(base.att, 2) * 0.02) * (1 + base.stren * 0.2));
-        character.fight.mag = Math.round((base.att + base.puiss + (character.level / 10)) * (base.puiss / 20 + base.att / 40 + character.level / 100));
-        character.fight.def_phy = Math.round(13 * Math.log(base.def));
-        character.fight.def_mag = Math.round(13 * Math.log(base.def));
-        character.fight.dodge = 6 + Math.round((4 * Math.log((base.vit + base.agi) / 2)) / 1.3);
+        fight.cac = Math.round(Math.sqrt(character.level * base.att) + (Math.pow(base.stren, 2) / 15));
+        fight.dist = Math.round(Math.pow(character.level, 2) / 10 + (Math.pow(base.att, 2) * 0.02) * (1 + base.stren * 0.2));
+        fight.mag = Math.round((base.att + base.puiss + (character.level / 10)) * (base.puiss / 20 + base.att / 40 + character.level / 100));
+        fight.def_phy = Math.round(13 * Math.log(base.def));
+        fight.def_mag = Math.round(13 * Math.log(base.def));
+        fight.dodge = 6 + Math.round((4 * Math.log((base.vit + base.agi) / 2)) / 1.3);
 
         if (character.specie === "suhera" || character?.specie === "hanylice") {
-            character.fight.cac = 0;
-            character.fight.dist = 0;
-            character.fight.mag = Math.round(Math.pow(character.level, 2) / 10 + ( Math.pow(base.puiss, 2) * 0.02) * (1 + base.att * 0.2));
+            fight.cac = 0;
+            fight.dist = 0;
+            fight.mag = Math.round(Math.pow(character.level, 2) / 10 + (Math.pow(base.puiss, 2) * 0.02) * (1 + base.att * 0.2));
         }
 
-        this.setState({statsFightChange: false}, () => this.props.actualizeCharacter(character));
+        character.fight = fight;
+
+        this.setState({
+            statsFightChange: false
+        }, () => this.props.dispatch({
+            type: 'Characters/updateCharacter',
+            character: character,
+        }));
     }
 
     changeCharacterInfo(key, value) {
-        let character = {...this.state.character};
+        let character = { ...this.props.character };
+
         character[key] = value;
 
-        this.setState({
-            character,
-            statsFightChange: true
-        }, () => this.props.actualizeCharacter(this.state.character));
+        this.props.dispatch({
+            type: 'Characters/updateCharacter',
+            character: character,
+        });
+
+        //timeout permet d'actualiser les stats de combats
+        setTimeout(() => this.setState({ statsFightChange: true }), 100);
     }
 
     changeCharacterStats(key, value) {
-        let character = {...this.state.character};
+        let character = { ...this.props.character };
+
         if (value > 75) {
             value = 75;
         }
 
-        character.stats[key] = value; 
+        character.stats[key] = value;
 
-        this.setState({ character }, () => this.props.actualizeCharacter(character));
+        this.props.dispatch({
+            type: 'Characters/updateCharacter',
+            character: character,
+        });
     }
 
     changeCharacterFight(key, value) {
-        let character = {...this.state.character};
-        character.fight[key] = parseInt(value); 
+        let character = { ...this.props.character };
+
+        character.fight[key] = parseInt(value);
 
         this.setState({
-            character,
-            statsFightChange: true,
-        }, () => this.props.actualizeCharacter(character));
+            statsFightChange: true
+        }, () => this.props.dispatch({
+            type: 'Characters/updateCharacter',
+            character: character,
+        }));
     }
 
     changeSearchValue(key, value) {
@@ -596,34 +178,43 @@ export default class Character extends React.Component {
     }
 
     setImageCharacter(data) {
-        let { character } = this.state;
+        let character = { ...this.props.character };
 
         let reader = new FileReader();
         reader.onload = (e) => {
             character.image = e.target.result;
-            this.setState({ character }, () => this.props.actualizeCharacter(character));
+            this.props.dispatch({
+                type: 'Characters/updateCharacter',
+                character: character,
+            });
         };
         reader.readAsDataURL(data.fileList[0].originFileObj);
     }
 
     removeImageCharacter() {
-        let { character } = this.state;
+        let character = { ...this.props.character };
         character.image = null;
 
-        this.setState({ character }, () => this.props.actualizeCharacter(character));
+        this.props.dispatch({
+            type: 'Characters/updateCharacter',
+            character: character,
+        });
     }
 
     unequipItem(part, id) {
-        let { character } = this.state;
+        let character = { ...this.props.character };
         let equipedPartIDs = [...character.equipment[part]];
 
         character.equipment[part] = equipedPartIDs.filter((item) => item !== id);
 
-        this.setState({ character }, () => this.props.actualizeCharacter(character))
+        this.props.dispatch({
+            type: 'Characters/updateCharacter',
+            character: character,
+        });
     }
 
     openModal() {
-        this.setState({ modalIsOpen : true });
+        this.setState({ modalIsOpen: true });
     }
 
     closeModal() {
@@ -631,7 +222,7 @@ export default class Character extends React.Component {
     }
 
     addSkill() {
-        let { character } = this.state;
+        let character = { ...this.props.character };
 
         let form = this.newForm.current.getFieldsValue();
 
@@ -650,34 +241,36 @@ export default class Character extends React.Component {
         character.skills.push(skill);
 
         this.setState({
-            character,
             modalIsOpen: false
         }, () => {
             this.newForm.current.resetFields();
-            this.props.actualizeCharacter(this.state.character);
+            this.props.dispatch({
+                type: 'Characters/updateCharacter',
+                character: character,
+            });
         });
     }
 
     selectSkill(id) {
-        let modifiedSkill = {...this.state.modifiedSkill};
-        let skills = !!this.state.character.skills ? [...this.state.character.skills] : [];
+        let modifiedSkill = { ...this.state.modifiedSkill };
+        let skills = [...this.props.character.skills];
 
         if (id !== null) {
             skills.forEach((skill) => {
                 if (skill.id === id) {
-                    modifiedSkill  = {
+                    modifiedSkill = {
                         name: skill.name,
                         desc: skill.desc
                     }
                 }
             })
         } else {
-            modifiedSkill  = {
+            modifiedSkill = {
                 name: "",
                 desc: ""
             }
         }
-        
+
         this.setState({
             selectedSkill: id,
             modifiedSkill
@@ -685,7 +278,7 @@ export default class Character extends React.Component {
     }
 
     changeSkill(part, value) {
-        let modifiedSkill = {...this.state.modifiedSkill};
+        let modifiedSkill = { ...this.state.modifiedSkill };
 
         modifiedSkill[part] = value;
 
@@ -694,8 +287,8 @@ export default class Character extends React.Component {
 
     validateSkillModification() {
         let selectedSkill = this.state.selectedSkill;
-        let modifiedSkill = {...this.state.modifiedSkill};
-        let character = this.state.character;
+        let modifiedSkill = { ...this.state.modifiedSkill };
+        let character = { ...this.props.character };
         let skills = !!character.skills ? [...character.skills] : [];
 
         skills.forEach((skill) => {
@@ -705,7 +298,7 @@ export default class Character extends React.Component {
             }
         })
 
-        modifiedSkill  = {
+        modifiedSkill = {
             name: "",
             desc: ""
         }
@@ -714,27 +307,33 @@ export default class Character extends React.Component {
 
         this.setState({
             modifiedSkill,
-            character,
             modalIsOpen: false,
             selectedSkill: null
+        });
+        this.props.dispatch({
+            type: 'Characters/updateCharacter',
+            character: character,
         });
     }
 
     deleteSkill(id) {
-        let character = this.state.character;
+        let character = { ...this.props.character };
         let skills = !!character.skills ? [...character.skills] : [];
 
         character.skills = skills.filter(skill => {
             return skill.id !== id;
         })
 
-        this.setState({ character });
+        this.props.dispatch({
+            type: 'Characters/updateCharacter',
+            character: character,
+        });
     }
 
     swithSection(section) {
         let sectionState = this.state.sectionState;
 
-        switch(section) {
+        switch (section) {
             case "statisitcs":
                 sectionState.statisitcs = !sectionState.statisitcs;
                 break;
@@ -751,7 +350,7 @@ export default class Character extends React.Component {
                 sectionState.story = !sectionState.story;
                 break;
             case "notes":
-            sectionState.notes = !sectionState.notes;
+                sectionState.notes = !sectionState.notes;
                 break;
             default:
                 break;
@@ -760,64 +359,64 @@ export default class Character extends React.Component {
         this.setState({ sectionState });
     }
 
-    renderSkills() {
-        let skills = !!this.state.character.skills ? [...this.state.character.skills] : [];
-        let modifiedSkill = {...this.state.modifiedSkill};
+    _renderSkills() {
+        let skills = [...this.props.character.skills];
+        let modifiedSkill = { ...this.state.modifiedSkill };
 
-        return skills.map(skill => {
+        return skills.map((skill, index) => {
             if (!this.state.selectedSkill || this.state.selectedSkill !== skill.id) {
                 return (
-                    <div className="skill-container">
-                    <div className="skill-title-container">
-                        <div className="skill-name-text">
-                            {skill.name} :
+                    <div className="skill-container" key={`skills-${index}`}>
+                        <div className="skill-title-container">
+                            <div className="skill-name-text">
+                                {skill.name} :
+                            </div>
+                            <EditOutlined
+                                className="skill-icon clickable"
+                                onClick={() => this.selectSkill(skill.id)}
+                            />
+                            <DeleteOutlined
+                                className="skill-icon clickable"
+                                onClick={() => this.deleteSkill(skill.id)}
+                            />
                         </div>
-                        <EditOutlined
-                         className="skill-icon clickable"
-                         onClick={() => this.selectSkill(skill.id)}
-                        />
-                        <DeleteOutlined
-                         className="skill-icon clickable"
-                         onClick={() => this.deleteSkill(skill.id)}
-                        />
+                        <div className="skill-desc-text">
+                            <TextArea
+                                defaultValue={skill.desc}
+                                readOnly
+                                autoSize
+                            />
+                        </div>
                     </div>
-                    <div className="skill-desc-text">
-                        <TextArea
-                            defaultValue={skill.desc}
-                            readOnly
-                            autoSize
-                        />
-                    </div>
-                </div>
                 )
             }
             return (
-                <div className="skill-container" key={skill.id}>
+                <div className="skill-container" key={`skills-${index}`}>
                     <div className="skill-title-container">
                         <div className="skill-edited-name-text">
                             <Input
-                             type="text" 
-                             defaultValue={modifiedSkill.name}
-                             onChange={(e) => this.changeSkill("name", e.target.value)}
+                                type="text"
+                                defaultValue={modifiedSkill.name}
+                                onChange={(e) => this.changeSkill("name", e.target.value)}
                             /> :
                             <CloseCircleOutlined
-                             className="skill-icon clickable"
-                             onClick={() => this.selectSkill(null)}
+                                className="skill-icon clickable"
+                                onClick={() => this.selectSkill(null)}
                             />
                             <CheckCircleOutlined
-                             className="skill-icon clickable"
-                             onClick={() => this.validateSkillModification()}
+                                className="skill-icon clickable"
+                                onClick={() => this.validateSkillModification()}
                             />
                         </div>
                     </div>
                     <div className="skill-edited-desc-text">
-                        <TextArea 
-                         autoSize={{
-                            minRows: 2,
-                            maxRows: 5,
-                         }}
-                         defaultValue={modifiedSkill.desc}
-                         onChange={(e) => this.changeSkill("desc", e.target.value)}
+                        <TextArea
+                            autoSize={{
+                                minRows: 2,
+                                maxRows: 5,
+                            }}
+                            defaultValue={modifiedSkill.desc}
+                            onChange={(e) => this.changeSkill("desc", e.target.value)}
                         />
                     </div>
                 </div>
@@ -825,10 +424,10 @@ export default class Character extends React.Component {
         });
     }
 
-    renderEquiped(part) {
-        let equipedPartIDs = [...this.state.character.equipment[part]];
+    _renderEquiped(part) {
+        let equipedPartIDs = [...this.props.character.equipment[part]];
 
-        let equipedPart = this.state.character.inventory.filter((item) => (
+        let equipedPart = this.props.character.inventory.filter((item) => (
             equipedPartIDs.includes(item.id)
         ));
 
@@ -852,10 +451,10 @@ export default class Character extends React.Component {
         })
     }
 
-    renderEquipment(filter, part) {
-        let { character } = this.state;
+    _renderEquipment(filter, part) {
+        const { character } = this.props;
         let options = [];
-        
+
         let inventory = character?.inventory.filter((item) => (item.nb > 0))
 
         if (!inventory) {
@@ -878,22 +477,26 @@ export default class Character extends React.Component {
                 value={null}
                 notFoundContent={"Rien Trouvé"}
                 onChange={(value) => {
-                    let { character } = this.state;
+                    let character = { ...this.props.character };
 
                     character.equipment[part].push(value);
 
-                    this.setState({ character }, () => this.props.actualizeCharacter(character));
+                    this.props.dispatch({
+                        type: 'Characters/updateCharacter',
+                        character: character,
+                    });
                 }}
             />
         );
     }
 
     render() {
-        const { character, modalIsOpen, sectionState } = this.state;
+        const { character } = this.props;
+        const { modalIsOpen, sectionState } = this.state;
 
         return (
             <div className="character-container">
-                <CharacterHeader saveCharacter={this.props.saveCharacter} currentPage="character"/>
+                <CharacterHeader currentPage="character" />
                 <div className="info-container">
                     <div className="lastname">
                         <span>Nom : </span>
@@ -901,14 +504,14 @@ export default class Character extends React.Component {
                             placeholder="Nom"
                             value={character?.lastname}
                             onChange={(e) => this.changeCharacterInfo("lastname", e.target.value)}
-                            />
+                        />
                     </div>
                     <div className="firstname">
                         <span>Prénom : </span>
                         <input
                             placeholder="Prénom"
                             value={character?.firstname}
-                            onChange={(e) => this.changeCharacterInfo("firstname", e.target.value) }
+                            onChange={(e) => this.changeCharacterInfo("firstname", e.target.value)}
                         />
                     </div>
                     <div className="age">
@@ -956,8 +559,8 @@ export default class Character extends React.Component {
                         <span>P.V. : </span>
                         <input
                             className={
-                                (character?.hp <= 0) ? 
-                                    (character?.hp < (-1 * character?.hp_max)) ? 
+                                (character?.hp <= 0) ?
+                                    (character?.hp < (-1 * character?.hp_max)) ?
                                         "dead-hp"
                                         : "critical-hp"
                                     : (character?.hp > character?.hp_max) ?
@@ -980,14 +583,14 @@ export default class Character extends React.Component {
                             onChange={this.setImageCharacter}
                         >
                             <div className="preview-image">
-                                <div className="background-image"/>
+                                <div className="background-image" />
                                 <CloseOutlined
                                     onClick={this.removeImageCharacter}
                                     className={
                                         (!!character?.image)
-                                        ? "remove-image"
-                                        : "remove-image hidden"
-                                    } 
+                                            ? "remove-image"
+                                            : "remove-image hidden"
+                                    }
                                 />
                                 <Button className="button-upload" type="text">
                                     {(!!character?.image) ? (
@@ -1012,12 +615,12 @@ export default class Character extends React.Component {
                             <div className="d-flex row">
                                 <div className="title flex-2">Statistiques</div>
                                 {(sectionState.statisitcs) ? (
-                                    <DownOutlined 
+                                    <DownOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("statisitcs")}
                                     />
                                 ) : (
-                                    <UpOutlined 
+                                    <UpOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("statisitcs")}
                                     />
@@ -1041,7 +644,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.att % 100 + "%"}}
+                                            style={{ width: character?.stats?.att % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1062,7 +665,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.def % 100 + "%"}}
+                                            style={{ width: character?.stats?.def % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1083,7 +686,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.vit % 100 + "%"}}
+                                            style={{ width: character?.stats?.vit % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1104,7 +707,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.agi % 100 + "%"}}
+                                            style={{ width: character?.stats?.agi % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1114,11 +717,12 @@ export default class Character extends React.Component {
                                         options={NAMEPUISS}
                                         value={character?.config?.puissName || "puissance"}
                                         onChange={(val) => {
-                                            let { character } = this.state;
-                                            character.config.puissName = val; 
-                                            this.setState({
-                                                character
-                                            }, () => this.props.actualizeCharacter(character));
+                                            let character = { ...this.props.character };
+                                            character.config.puissName = val;
+                                            this.props.dispatch({
+                                                type: 'Characters/updateCharacter',
+                                                character: character,
+                                            });
                                         }}
                                     /> :
                                     <input
@@ -1134,7 +738,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.pui % 100 + "%"}}
+                                            style={{ width: character?.stats?.pui % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1155,7 +759,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.char % 100 + "%"}}
+                                            style={{ width: character?.stats?.char % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1176,7 +780,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.prec % 100 + "%"}}
+                                            style={{ width: character?.stats?.prec % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1197,7 +801,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.obs % 100 + "%"}}
+                                            style={{ width: character?.stats?.obs % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1218,7 +822,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.luck % 100 + "%"}}
+                                            style={{ width: character?.stats?.luck % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1239,7 +843,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.stren % 100 + "%"}}
+                                            style={{ width: character?.stats?.stren % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1260,7 +864,7 @@ export default class Character extends React.Component {
                                     <div className="graph-background">
                                         <div
                                             className="graph"
-                                            style={{width: character?.stats?.know % 100 + "%"}}
+                                            style={{ width: character?.stats?.know % 100 + "%" }}
                                         />
                                     </div>
                                 </div>
@@ -1271,12 +875,12 @@ export default class Character extends React.Component {
                             <div className="d-flex row">
                                 <div className="title flex-2">Statistiques de combat</div>
                                 {(sectionState.fight) ? (
-                                    <DownOutlined 
+                                    <DownOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("fight")}
                                     />
                                 ) : (
-                                    <UpOutlined 
+                                    <UpOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("fight")}
                                     />
@@ -1289,7 +893,7 @@ export default class Character extends React.Component {
                                             ? RACESTYPES.find(
                                                 item => character.specie === item.value
                                             )?.label
-                                            :"-"
+                                            : "-"
                                     }
                                 </div>
                                 <div className="job">
@@ -1322,16 +926,16 @@ export default class Character extends React.Component {
                                     />
                                 </div>
                                 <div className="def">
-                                    Défense : 
+                                    Défense :
                                     <input
                                         type="number"
-                                        placeholder= {0}
+                                        placeholder={0}
                                         value={character?.fight?.def}
                                         onChange={(val) => this.changeCharacterFight("def", val.target.value)}
                                     />
                                 </div>
                                 <div className="vit">
-                                    Vitesse : 
+                                    Vitesse :
                                     <input
                                         type="number"
                                         placeholder={0}
@@ -1340,7 +944,7 @@ export default class Character extends React.Component {
                                     />
                                 </div>
                                 <div className="agi">
-                                    Agilité : 
+                                    Agilité :
                                     <input
                                         type="number"
                                         placeholder={0}
@@ -1384,7 +988,7 @@ export default class Character extends React.Component {
                                     Dégâts (Dist.) :
                                     <input
                                         type="number"
-                                        placeholder= {0}
+                                        placeholder={0}
                                         value={character?.fight?.dist}
                                         disabled
                                     />
@@ -1399,7 +1003,7 @@ export default class Character extends React.Component {
                                     />
                                 </div>
                                 <div className="def_phy">
-                                    Déf. Phy. : 
+                                    Déf. Phy. :
                                     <input
                                         type="number"
                                         placeholder={0}
@@ -1408,7 +1012,7 @@ export default class Character extends React.Component {
                                     />
                                 </div>
                                 <div className="def_mag">
-                                    Déf. Mag. : 
+                                    Déf. Mag. :
                                     <input
                                         type="number"
                                         placeholder={0}
@@ -1440,12 +1044,12 @@ export default class Character extends React.Component {
                                     />
                                 </div>
                                 {(sectionState.comptencies) ? (
-                                    <DownOutlined 
+                                    <DownOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("comptencies")}
                                     />
                                 ) : (
-                                    <UpOutlined 
+                                    <UpOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("comptencies")}
                                     />
@@ -1495,7 +1099,7 @@ export default class Character extends React.Component {
                                                 message: 'La description est obligatoire.',
                                             }]}
                                         >
-                                            <TextArea 
+                                            <TextArea
                                                 autoSize={{
                                                     minRows: 2,
                                                     maxRows: 5,
@@ -1504,20 +1108,20 @@ export default class Character extends React.Component {
                                         </Form.Item>
                                     </Form>
                                 </Modal>
-                                {this.renderSkills()}
+                                {this._renderSkills()}
                             </div>
                         </div>
-                        
+
                         <div className="equip-container">
                             <div className="d-flex row">
                                 <div className="title flex-2">Équipement</div>
                                 {(sectionState.equipment) ? (
-                                    <DownOutlined 
+                                    <DownOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("equipment")}
                                     />
                                 ) : (
-                                    <UpOutlined 
+                                    <UpOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("equipment")}
                                     />
@@ -1528,7 +1132,7 @@ export default class Character extends React.Component {
                                     Arme :
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("weapon", "weapon")}
+                                        content={this._renderEquipment("weapon", "weapon")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1536,13 +1140,13 @@ export default class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this.renderEquiped("weapon")}
+                                    {this._renderEquiped("weapon")}
                                 </div>
                                 <div>
                                     Plastron :
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("armor", "plastron")}
+                                        content={this._renderEquipment("armor", "plastron")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1550,13 +1154,13 @@ export default class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this.renderEquiped("plastron")}
+                                    {this._renderEquiped("plastron")}
                                 </div>
                                 <div>
-                                    Bouclier : 
+                                    Bouclier :
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("shield", "shield")}
+                                        content={this._renderEquipment("shield", "shield")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1564,12 +1168,12 @@ export default class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                {this.renderEquiped("shield")}
+                                    {this._renderEquiped("shield")}
                                 </div>
-                                <div>Casque : 
+                                <div>Casque :
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("armor", "helmet")}
+                                        content={this._renderEquipment("armor", "helmet")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1577,12 +1181,12 @@ export default class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this.renderEquiped("helmet")}
+                                    {this._renderEquiped("helmet")}
                                 </div>
-                                <div>Gants : 
+                                <div>Gants :
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("clothes", "glove")}
+                                        content={this._renderEquipment("clothes", "glove")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1590,12 +1194,12 @@ export default class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this.renderEquiped("glove")}
+                                    {this._renderEquiped("glove")}
                                 </div>
-                                <div>Chaussures : 
+                                <div>Chaussures :
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("clothes", "shoe")}
+                                        content={this._renderEquipment("clothes", "shoe")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1603,12 +1207,12 @@ export default class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this.renderEquiped("shoe")}
+                                    {this._renderEquiped("shoe")}
                                 </div>
-                                <div>Vêtement Haut : 
+                                <div>Vêtement Haut :
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("clothes", "topClothes")}
+                                        content={this._renderEquipment("clothes", "topClothes")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1616,12 +1220,12 @@ export default class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this.renderEquiped("topClothes")}
+                                    {this._renderEquiped("topClothes")}
                                 </div>
-                                <div>Vêtement Bas : 
+                                <div>Vêtement Bas :
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("clothes", "botClothes")}
+                                        content={this._renderEquipment("clothes", "botClothes")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1629,12 +1233,12 @@ export default class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this.renderEquiped("botClothes")}
+                                    {this._renderEquiped("botClothes")}
                                 </div>
-                                <div>Amulette : 
+                                <div>Amulette :
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment("amulet", "amulet")}
+                                        content={this._renderEquipment("amulet", "amulet")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1642,12 +1246,12 @@ export default class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this.renderEquiped("amulet")}
+                                    {this._renderEquiped("amulet")}
                                 </div>
-                                <div>Autre : 
+                                <div>Autre :
                                     <Popover
                                         color="black"
-                                        content={this.renderEquipment(null, "other")}
+                                        content={this._renderEquipment(null, "other")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1655,7 +1259,7 @@ export default class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this.renderEquiped("other")}
+                                    {this._renderEquiped("other")}
                                 </div>
                             </div>
                         </div>
@@ -1664,12 +1268,12 @@ export default class Character extends React.Component {
                             <div className="d-flex row">
                                 <div className="title flex-2">Lore</div>
                                 {(sectionState.story) ? (
-                                    <DownOutlined 
+                                    <DownOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("story")}
                                     />
                                 ) : (
-                                    <UpOutlined 
+                                    <UpOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("story")}
                                     />
@@ -1682,17 +1286,17 @@ export default class Character extends React.Component {
                                 onChange={(val) => this.changeCharacterInfo("lore", val.target.value)}
                             />
                         </div>
-                        
+
                         <div className="note-container">
                             <div className="d-flex row">
                                 <div className="title flex-2">Notes</div>
                                 {(sectionState.notes) ? (
-                                    <DownOutlined 
+                                    <DownOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("notes")}
                                     />
                                 ) : (
-                                    <UpOutlined 
+                                    <UpOutlined
                                         className="icon-section"
                                         onClick={() => this.swithSection("notes")}
                                     />
@@ -1711,3 +1315,15 @@ export default class Character extends React.Component {
         );
     }
 }
+
+const mapStateToProps = function (state) {
+    const character = state.characters.characters.find(char =>
+        char.id === state.characters?.selectedCharacter);
+
+    return {
+        isLoading: state.characters?.isLoading,
+        character: JSON.parse(JSON.stringify(character)),
+    }
+}
+
+export default connect(mapStateToProps)(Character)

@@ -1,4 +1,8 @@
+import "../assets/css/card.css";
+
 import React from 'react';
+import { connect } from 'react-redux';
+import { getCardById } from "../redux/reducers/card";
 import {  
     ArrowBack,
     Add,
@@ -6,56 +10,40 @@ import {
     ZoomOutMap,
 } from '@material-ui/icons';
 
-import "../assets/css/card.css";
 import { MapInteractionCSS } from 'react-map-interaction';
 import { Link } from 'react-router-dom';
 
-import { HttpGetRequest } from '../HttpRequests';
-
-export default class CardMenu extends React.Component {
+class Card extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            card: '',
             infoImg: {
                 scale: 1,
-                translation: { x: 0, y: 0 }
+                translation: {
+                    x: 0,
+                    y: 0
+                }
             }
         };
 
-        this.getCard = this.getCard.bind(this);
         this.reset = this.reset.bind(this);
         this.zoomIn = this.zoomIn.bind(this);
         this.zoomOut = this.zoomOut.bind(this);
     }
 
     componentDidMount() {
-        this.getCard();
-    }
-
-    getCard() {
-        if (!this.props.id)
-            return;
-        let url = "/cards/" + this.props.id;
-
-        HttpGetRequest(url)
-            .then( response => {
-                if (!response)
-                    throw Error();
-                
-                return response.json();
-            })
-            .then( data => {
-                if (!data)
-                    throw Error();
-
-                this.setState({card: data[0]})
-            })
-            .catch( () => {
-                console.log("Erreur lors de l'update");
-            });
+        const {
+            dispatch,
+            selectedCard,
+            card,
+        } = this.props;
+        
+        if (!card || !card.big_card)
+            dispatch(getCardById({
+                id: selectedCard
+            }));
     }
 
     reset() {
@@ -94,6 +82,11 @@ export default class CardMenu extends React.Component {
     }
 
     render() {
+        const {
+            dispatch,
+            card,
+        } = this.props;
+
         return (
             <div
                 className="center"
@@ -108,13 +101,17 @@ export default class CardMenu extends React.Component {
                 >
                     <img
                         className="full-card" 
-                        src={this.state.card.big_card}
+                        src={card.big_card}
                         alt=""
                     />
                 </MapInteractionCSS>
                 <Link
                     className="tool-btn tool-back-arrow"
-                    to="/Orceus/cards">
+                    to="/Orceus/cards"
+                    onClick={() => dispatch({
+                        type: "Cards/unselectCard"
+                    })}
+                >
                     <ArrowBack/>
                 </Link>
                 <div
@@ -139,3 +136,16 @@ export default class CardMenu extends React.Component {
         );
     }
 }
+
+const mapStateToProps = function(state) {
+    const card = state.cards.cards.find(card =>
+        card.id === state.cards.selectedCard);
+
+    return {
+        isLoading: state.cards?.isLoading,
+        selectedCard: state.cards.selectedCard,
+        card: card,
+    }
+}
+
+export default connect(mapStateToProps)(Card)
