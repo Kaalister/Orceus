@@ -11,7 +11,7 @@ import { notification } from 'antd';
 import { TYPESOPTIONS, SPECIESOPTIONS } from '../constants';
 
 import AdminModale from './AdminModale';
-import AppProfile from '../Profile';
+import { AuthConsumer } from '../Profile';
 
 class AdminSettings extends React.Component {
     constructor(props) {
@@ -57,8 +57,8 @@ class AdminSettings extends React.Component {
         });
     }
 
-    configureCard(id) {
-        if (AppProfile.get('sessionType') !== "09c71624") {
+    configureCard(sessionType, id) {
+        if (sessionType !== "09c71624") {
             this.unauthorized();
             return;
         }
@@ -73,8 +73,8 @@ class AdminSettings extends React.Component {
         })
     }
 
-    deleteCard(id) {
-        if (AppProfile.get('sessionType') !== "09c71624") {
+    deleteCard(sessionType, id) {
+        if (sessionType !== "09c71624") {
             this.unauthorized();
             return;
         }
@@ -95,112 +95,132 @@ class AdminSettings extends React.Component {
             selectedCard
         } = this.props;
 
-        const columns = [{
-            headerName: 'N°',
-            field: 'card_num',
-            width: 80,
-        }, {
-            headerName: 'Name',
-            field: 'name',
-            width: 150,
-        }, {
-            headerName: 'Desc',
-            field: 'desc',
-            width: 200,
-        }, {
-            headerName: 'Type',
-            field: 'type',
-            width: 150,
-            renderCell: (params) => {
-                let value = params.value;
-
-                if (!value) {
-                    return (<span/>);
-                }
-
-                let obj = TYPESOPTIONS.filter( type => (type.value === value));
-
-                return (
-                    <span>{(obj.lenth !== 0) ? obj[0].label : null}</span>
-                );
-            }
-        }, {
-            headerName: 'Espèce',
-            field: 'specie',
-            width: 150,
-            renderCell: (params) => {
-                let value = params.value;
-
-                if (!value) {
-                    return (<span/>)
-                }
-
-                let obj = SPECIESOPTIONS.filter( species => (species.value === value));
-
-                return (
-                    <span>{(obj.lenth !== 0) ? obj[0].label : null}</span>
-                );
-            }
-        }, {
-            headerName: 'Tags',
-            field: 'tags',
-            flex: 1,
-        }, {
-            headerName: 'Cachée',
-            field: 'hidden',
-            flex: 1,
-            renderCell: (params) => (params.value === "true" ? "oui" : "")
-        }, {
-            headerName: 'Actions',
-            sortable: false,
-            field: 'actions',
-            width: 150,
-            renderCell: (params) => (
-                <div>
-                    <Create className="action-btn"
-                        onClick={() => this.configureCard(params.row.id)}
-                    />
-                    <Delete className="action-btn"
-                        onClick={() => this.deleteCard(params.row.id)}
-                    />
-                </div>
-            ),
-        }];
-
         return (
-            <div className='adminsetting-container'>
-                <div className="d-flex row pb-2">
-                    <Link to="/Orceus/cards/" style={{ color: 'white' }}>
-                        <ArrowBackIos />
-                    </Link>                 
-                    <Button
-                        className="add-card-btn"
-                        variant="contained"
-                        color="primary"
-                        startIcon = {<AddCircleOutline />}
-                        onClick={() => { this.configureCard(null) }}
-                    >
-                        Nouveau
-                    </Button>
-                </div>
-                <div className='setting-grid-container'>
-                    <DataGrid 
-                        rows={cards}
-                        columns={columns}
-                        pageSize={20}
-                        autoHeight
-                        loading={isLoading}
-                     />
-                    { (this.state.openModal) ? (
-                        <AdminModale
-                            show={this.state.openModal}
-                            update={this.getCardList}
-                            close={this.closeModal}
-                            id={selectedCard}
-                        />
-                    ): null}
-                </div>
-            </div>
+            <AuthConsumer>
+                {({ sessionType }) => {
+                    const columns = [{
+                        headerName: 'N°',
+                        field: 'card_num',
+                        width: 80,
+                    }, {
+                        headerName: 'Name',
+                        field: 'name',
+                        width: 150,
+                    }, {
+                        headerName: 'Desc',
+                        field: 'desc',
+                        width: 200,
+                    }, {
+                        headerName: 'Type',
+                        field: 'type',
+                        width: 150,
+                        renderCell: (params) => {
+                            let value = params.value;
+            
+                            if (!value) return (<span/>);
+            
+                            let obj = TYPESOPTIONS.filter(
+                                type => (type.value === value)
+                            );
+            
+                            return (
+                                <span>
+                                    {(obj.lenth !== 0) && obj[0].label}
+                                </span>
+                            );
+                        }
+                    }, {
+                        headerName: 'Espèce',
+                        field: 'specie',
+                        width: 150,
+                        renderCell: (params) => {
+                            let value = params.value;
+            
+                            if (!value) return (<span/>)
+            
+                            let obj = SPECIESOPTIONS.filter(
+                                species => (species.value === value)
+                            );
+            
+                            return (
+                                <span>
+                                    {(obj.lenth !== 0) && obj[0].label}
+                                </span>
+                            );
+                        }
+                    }, {
+                        headerName: 'Tags',
+                        field: 'tags',
+                        flex: 1,
+                    }, {
+                        headerName: 'Cachée',
+                        field: 'hidden',
+                        flex: 1,
+                        renderCell: (params) => (
+                            params.value === "true" ? "oui" : ""
+                        )
+                    }, {
+                        headerName: 'Actions',
+                        sortable: false,
+                        field: 'actions',
+                        width: 150,
+                        renderCell: (params) => (
+                            <div>
+                                <Create className="action-btn"
+                                    onClick={() => this.configureCard(
+                                        sessionType,
+                                        params.row.id,
+                                    )}
+                                />
+                                <Delete className="action-btn"
+                                    onClick={() => this.deleteCard(
+                                        sessionType,
+                                        params.row.id,
+                                    )}
+                                />
+                            </div>
+                        ),
+                    }];
+
+                    return (
+                        <div className='adminsetting-container'>
+                            <div className="d-flex row pb-2">
+                                <Link to="/cards/" style={{ color: 'white' }}>
+                                    <ArrowBackIos />
+                                </Link>                 
+                                <Button
+                                    className="add-card-btn"
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon = {<AddCircleOutline />}
+                                    onClick={() => {
+                                        this.configureCard(sessionType, null)
+                                    }}
+                                >
+                                    Nouveau
+                                </Button>
+                            </div>
+                            <div className='setting-grid-container'>
+                                <DataGrid 
+                                    rows={cards}
+                                    columns={columns}
+                                    pageSize={20}
+                                    autoHeight
+                                    loading={isLoading}
+                                    />
+                                {this.state.openModal && (
+                                    <AdminModale
+                                    show={this.state.openModal}
+                                    update={this.getCardList}
+                                    close={this.closeModal}
+                                    id={selectedCard}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    )
+            }}
+            </AuthConsumer>
         );
     }
 }

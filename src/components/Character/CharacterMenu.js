@@ -21,7 +21,7 @@ import {
     SortGridMenuItems
 } from '@material-ui/data-grid';
 
-import AppProfile from '../../Profile';
+import { AuthConsumer } from '../../Profile';
 
 class CharacterMenu extends React.Component {
     constructor(props) {
@@ -87,7 +87,7 @@ class CharacterMenu extends React.Component {
             renderCell: (params) => (
                 <div>
                     <Link
-                        to={`/Orceus/SelectCharacters/${params.row.id}`}
+                        to={`/SelectCharacters/${params.row.id}`}
                         onClick={() => dispatch({
                             type: "Characters/selectCharacter",
                             id: params.row.id,
@@ -104,59 +104,66 @@ class CharacterMenu extends React.Component {
 
         if (selectedCharacter) {
             return (
-                <Redirect to={"/Orceus/SelectCharacters/" + selectedCharacter} />
+                <Redirect to={"/SelectCharacters/" + selectedCharacter} />
             );
         }
 
         return (
-            <div style={{ height: "100vh", width: "100vw" }}>
-                <div className="header-character">
-                    <div className="header-link-container">
-                        <Link to="/Orceus/Cards" key="toCards">
-                            <Book
-                                style={{ color: 'white' }}
-                                className='clickable'
+            <AuthConsumer>
+                {({ sessionType }) => (
+                    <div style={{ height: "100vh", width: "100vw" }}>
+                        <div className="header-character">
+                            <div className="header-link-container">
+                                <Link to="/Cards" key="toCards">
+                                    <Book
+                                        style={{ color: 'white' }}
+                                        className='clickable'
+                                    />
+                                </Link>
+                                {(sessionType === "09c71624" ||
+                                    sessionType === "a238a5dd") && (
+                                    [(
+                                        <Link to="/Rolls" key="toRoll">
+                                            <Casino
+                                                style={{ color: 'white' }}
+                                                className='clickable'
+                                            />
+                                        </Link>
+                                    ), (
+                                        <Link to="/AdminSettings" key="toAdmin">
+                                            <Settings
+                                                style={{ color: 'white' }}
+                                                className='clickable'
+                                            />
+                                        </Link>
+                                    )]
+                                )}
+                            </div>
+                        </div>
+                        <div className="new-character-container">
+                            <Button
+                                className="new-character-btn"
+                                onClick={this.addNewCharacter}
+                            >
+                                Nouveau
+                            </Button>
+                        </div>
+                        <div className="grid-character">
+                            <DataGrid
+                                loading={isLoading ||
+                                    (!isLoading && characters.length === 0)}
+                                rows={characters}
+                                components={{
+                                    ColumnMenu: CustomColumnMenu
+                                }}
+                                columns={columns}
+                                pageSize={10}
+                                rowsPerPageOptions={[10]}
                             />
-                        </Link>
-                        {(AppProfile.get('sessionType') === "09c71624" ||
-                            AppProfile.get('sessionType') === "a238a5dd") ? ([(
-                                <Link to="/Orceus/Rolls" key="toRoll">
-                                    <Casino
-                                        style={{ color: 'white' }}
-                                        className='clickable'
-                                    />
-                                </Link>
-                            ), (
-                                <Link to="/Orceus/AdminSettings" key="toAdmin">
-                                    <Settings
-                                        style={{ color: 'white' }}
-                                        className='clickable'
-                                    />
-                                </Link>
-                            )]) : null}
+                        </div>
                     </div>
-                </div>
-                <div className="new-character-container">
-                    <Button
-                        className="new-character-btn"
-                        onClick={this.addNewCharacter}
-                    >
-                        Nouveau
-                    </Button>
-                </div>
-                <div className="grid-character">
-                    <DataGrid
-                        loading={isLoading && characters.length === 0}
-                        rows={characters}
-                        components={{
-                            ColumnMenu: CustomColumnMenu
-                        }}
-                        columns={columns}
-                        pageSize={10}
-                        rowsPerPageOptions={[10]}
-                    />
-                </div>
-            </div>
+                )}
+            </AuthConsumer>
         );
     }
 }

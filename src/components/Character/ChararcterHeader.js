@@ -22,7 +22,7 @@ export default function CharacterHeader(props) {
                         "Avant de quitter, pense à sauvegarder !"
                     </div>
                     <div className="modal-back-button-container">
-                        <Link to="/Orceus/SelectCharacters">
+                        <Link to="/SelectCharacters">
                             <Button
                                 onClick={() => dispatch({
                                     type: 'Characters/unselectCharacter',
@@ -59,12 +59,12 @@ export default function CharacterHeader(props) {
                     );
                 }} />
                 {(props.currentPage === "inventory") ? (
-                    <Link to={"/Orceus/SelectCharacters/" + id}>
+                    <Link to={"/SelectCharacters/" + id}>
                         <Face />
                     </Link>
                 ) : null}
                 {(props.currentPage === "character") ? (
-                    <Link to={"/Orceus/SelectCharacters/" + id + "/inventory"}>
+                    <Link to={"/SelectCharacters/" + id + "/inventory"}>
                         <Backpack />
                     </Link>
                 ) : null}

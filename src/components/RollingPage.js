@@ -147,7 +147,7 @@ export default class RollingPage extends React.Component {
         return (
             <div style={{width: '100vw', height: '100vh', overflow: 'hidden'}}>
                 <div className="p-2">
-                    <Link to="/Orceus/cards/" style={{ color: 'white' }}>
+                    <Link to="/cards/" style={{ color: 'white' }}>
                         <ArrowBackIos className="back-arrow" />
                     </Link>
                 </div>

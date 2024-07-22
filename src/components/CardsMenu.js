@@ -9,7 +9,7 @@ import { Settings, Casino, Face } from '@material-ui/icons';
 import { Select, Form, Input, Row, Space } from 'antd';
 import 'antd/dist/antd.min.css'
 
-import AppProfile from '../Profile';
+import { AuthConsumer } from '../Profile';
 
 import logoutBtn from '../assets/images/logoutBtn.png';
 import loading from '../assets/images/loading.gif';
@@ -33,8 +33,6 @@ class CardMenu extends React.Component {
         this.refFilters = new React.createRef();
 
         this.getCardList = this.getCardList.bind(this);
-        this.logout = this.logout.bind(this);
-
         this.handleFilters = this.handleFilters.bind(this);
     }
 
@@ -57,14 +55,6 @@ class CardMenu extends React.Component {
         dispatch(getFilteredCards({
             filters: filters
         }));
-    }
-
-    logout() {
-        AppProfile.profile.connected = false;
-        AppProfile.profile.sessionType = "";
-
-        localStorage.removeItem('Orceus');
-        this.props.history.push('/Orceus/');
     }
 
     onMovingCard(e) {
@@ -199,7 +189,7 @@ class CardMenu extends React.Component {
         const cardsRender = cards.map((cardItem, index) => {
             return (
                 <Link
-                    to={"/Orceus/cards/" + cardItem.id}
+                    to={"/cards/" + cardItem.id}
                     key={index}
                     onClick={() => dispatch({
                         type: 'Cards/selectCard',
@@ -218,65 +208,77 @@ class CardMenu extends React.Component {
         });
 
         return (
-            <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-                <div className="header-background">
-                    <button className="invisible" onClick={this.logout}>
-                        <img
-                            src={logoutBtn}
-                            alt=""
-                            style={{
-                                width: 55,
-                                height: 80,
-                                position: 'absolute',
-                                top: 10,
-                                left: 10,
-                                cursor: 'pointer'
-                            }}
-                        />
-                    </button>
-                    <div className="filters">
-                        {this.displayFilters()}
-                    </div>
-                    <div className="menu-links">
-                        <Link to="/Orceus/SelectCharacters" key="toSelectCharacter">
-                            <Face
-                                style={{ color: 'white' }}
-                                className='clickable'
-                            />
-                        </Link>
-                        {(AppProfile.get('sessionType') === "09c71624"
-                            || AppProfile.get('sessionType') === "a238a5dd") ? ([
-                            (
-                                <Link to="/Orceus/Rolls" key="toRoll">
-                                    <Casino
+            <AuthConsumer>
+                {({ sessionType, logout }) => (
+                    <div
+                        style={{
+                            width: '100vw',
+                            height: '100vh',
+                            overflow: 'hidden',
+                        }}
+                    >
+                        <div className="header-background">
+                            <button className="invisible" onClick={logout}>
+                                <img
+                                    src={logoutBtn}
+                                    alt=""
+                                    style={{
+                                        width: 55,
+                                        height: 80,
+                                        position: 'absolute',
+                                        top: 10,
+                                        left: 10,
+                                        cursor: 'pointer'
+                                    }}
+                                />
+                            </button>
+                            <div className="filters">
+                                {this.displayFilters()}
+                            </div>
+                            <div className="menu-links">
+                                <Link to="/SelectCharacters" key="toSelectCharacter">
+                                    <Face
                                         style={{ color: 'white' }}
                                         className='clickable'
                                     />
                                 </Link>
-                            ), (
-                                <Link to="/Orceus/AdminSettings" key="toAdmin">
-                                    <Settings
-                                        style={{ color: 'white' }}
-                                        className='clickable'
-                                    />
-                                </Link>
-                            )]) : null}
+                                {(sessionType === "09c71624" ||
+                                    sessionType === "a238a5dd") && ([
+                                    (
+                                        <Link to="/Rolls" key="toRoll">
+                                            <Casino
+                                                style={{ color: 'white' }}
+                                                className='clickable'
+                                            />
+                                        </Link>
+                                    ), (
+                                        <Link to="/AdminSettings" key="toAdmin">
+                                            <Settings
+                                                style={{ color: 'white' }}
+                                                className='clickable'
+                                            />
+                                        </Link>
+                                    )])}
+                            </div>
+                        </div>
+                        <div className="container-card-menu">
+                            {cardsRender}
+                            {(cards.length === 0 && !isLoading) && (
+                                <div style={{ color: 'white' }}>
+                                    Aucune donnée
+                                </div>
+                            )}
+                            {(isLoading && cards.length === 0) && (
+                                <img
+                                    className='loading-cards'
+                                    src={loading}
+                                    alt="loading"
+                                />
+                            )}
+                        </div>
                     </div>
-                </div>
-                <div className="container-card-menu">
-                    {cardsRender}
-                    {(cards.length === 0 && !isLoading) ? (
-                        <div style={{ color: 'white' }}>Aucune donnée</div>
-                    ) : null}
-                    {(isLoading && cards.length === 0) ? (
-                        <img
-                            className='loading-cards'
-                            src={loading}
-                            alt="loading"
-                        />
-                    ) : null}
-                </div>
-            </div>
+                )}
+            </AuthConsumer>
         );
     }
 }

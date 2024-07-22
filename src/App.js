@@ -2,7 +2,7 @@ import {
 	BrowserRouter as Router,
 	Switch,
 	Route,
-	useHistory,
+	Redirect,
 } from "react-router-dom";
 
 import React from "react";
@@ -11,34 +11,65 @@ import Cards from './components/Cards';
 import AdminSettings from './components/AdminSettings';
 import RollingPage from "./components/RollingPage";
 import SelectCharacters from "./components/Character/SwitchCharacters";
-import AppProfile from './Profile';
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { AuthConsumer, AuthProvider } from './Profile';
 
 import './App.css';
 
-function PrivateRoute({...props}) {
+const PrivateRoute = ({ component: Component, sessionTypeNeed, ...rest }) => {
 	let history = useHistory();
 
-	if (!AppProfile.get('connected')) {
-		history.push('/Orceus/')
-	}
-
 	return (
-		<Route history={history} path={props.path} component={props.component}/>
-	);
+		<AuthConsumer>
+    		{({ isAuthenticated, sessionType }) => (
+				<Route
+					{...rest}
+					history={history}
+					render={props =>
+						(isAuthenticated &&
+							(!sessionTypeNeed ||
+								sessionTypeNeed === sessionType))
+						? (
+							<Component {...props} />
+						) : (
+							<Redirect to="/" />
+						)
+					}
+				/>
+    		)}
+  		</AuthConsumer>
+  	);
 }
 
 export default function App() {
+
 	return (
-		<Router>
-			<div id="particles-js">
+		<AuthProvider>
+			<Router>
 				<Switch>
-					<PrivateRoute path="/Orceus/cards" component={Cards} />
-					<PrivateRoute path="/Orceus/AdminSettings" component={AdminSettings} />
-					<PrivateRoute path="/Orceus/SelectCharacters" component={SelectCharacters} />
-					<PrivateRoute path="/Orceus/Rolls" component={RollingPage} />
-					<Route exact path="/Orceus/" component={Login} />
+					<PrivateRoute
+						path="/cards"
+						component={Cards} 
+					/>
+					<PrivateRoute
+						path="/AdminSettings"
+						component={AdminSettings}
+					/>
+					<PrivateRoute
+						path="/SelectCharacters"
+						component={SelectCharacters}
+					/>
+					<PrivateRoute
+						path="/Rolls"
+						component={RollingPage}
+					/>
+					<Route
+						exact
+						path="/"
+						component={Login}
+					/>
 				</Switch>
-			</div>
-		</Router>
+			</Router>
+		</AuthProvider>
 	);
 }

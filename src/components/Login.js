@@ -2,7 +2,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import AppProfile from '../Profile';
+import { AuthConsumer } from '../Profile';
 
 import { HttpPostRequest } from '../HttpRequests';
 import BackgroundVideo from './BackgroundVideo';
@@ -12,6 +12,8 @@ import loginBackground from '../assets/background/loginBackground.mp4';
 import successBackground from '../assets/background/successBackground.mp4';
 import errorBackground from '../assets/background/errorBackground.mp4';
 
+
+
 export default class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -20,59 +22,36 @@ export default class Login extends React.Component {
             password: '',
             error: false,
             loginState: null,
-            connected: AppProfile.get('connected'),
+            connected: false,
         }
 
         this.handlePassword = this.handlePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
-        let savePassword = localStorage.getItem('Orceus');
-
-        if (savePassword === null) {
-            let currentUrl = window.location.href;
-            let urlObject = new URL(currentUrl);
-            
-            savePassword = urlObject.searchParams.get("access");
-        }
-
-        if (savePassword !== null) {
-            this.handleSubmit(savePassword);
-        }
-    }
-
     handlePassword(e) {
         this.setState({password: e.target.value});
     }
 
-    handleSubmit(pass) {
-
-        let password = !!pass ? pass : this.state.password;
-
+    handleSubmit(login) {
         HttpPostRequest("/login", {
-            password
+            password: this.state.password
         })
         .then(response => {
-            if (!response.ok) {
-                throw Error();
-            }
-            return response.json()
+            if (!response.ok) throw Error();
+            return response.json();
         })
         .then(data => {
             this.setState({ loginState: "success" }, () => {
-                localStorage.setItem('Orceus', password);
-                AppProfile.profile = {
-                    connected: data.connected,
-                    sessionType: data.session_type,
-                }
+                localStorage.setItem('Orceus', this.state.password);
+                login(data.session_type);
                 setTimeout(() => {
                     this.setState({
                         connected: true,
                         loginState: null,
                     })
                     if (!this.props.location.state) {
-                        this.props.history.push('/Orceus/cards');
+                        this.props.history.push('/cards');
                     } else {
                         this.props.history.push(this.props.location.state.referrer);
                     }
@@ -102,43 +81,51 @@ export default class Login extends React.Component {
         }
 
         return (
-            <div className="login-container">
-                { (this.state.loginState === null && !isMobile) ? (
-                        <BackgroundVideo
-                            source={loginBackground}
-                            vKey={"login"}
-                        />
-                ) : null}
-                { (this.state.loginState === "success" && !isMobile) ? (
-                        <BackgroundVideo
-                            source={successBackground}
-                            vKey={"login-success"}
-                        />
-                ) : null}
-                { (this.state.loginState === "error" && !isMobile) ? (
-                        <BackgroundVideo
-                            source={errorBackground}
-                            vKey={"login-success"}
-                        />
-                ) : null}
-                <div className={inputClass.join(' ')}>
-                    <TextField
-                        onChange={this.handlePassword}
-                        value={this.state.password}
-                        placeholder="Mot de passe"
-                        style={{marginRight: "15px"}}
-                    />
-                    <Button
-                        variant="contained"
-                        onClick={() => { this.handleSubmit() }}
-                        >
-                        Enter
-                    </Button><br/>
-                    <span className={this.state.error ? "error" : "hide-error"}>
-                        mauvais mot de passe
-                    </span>
-                </div>
-            </div>
+            <AuthConsumer>
+                {({ login }) => (
+                    <div className="login-container">
+                        {(this.state.loginState === null && !isMobile) && (
+                            <BackgroundVideo
+                                source={loginBackground}
+                                vKey={"login"}
+                            />
+                        )}
+                        {(this.state.loginState === "success" && !isMobile) && (
+                            <BackgroundVideo
+                                source={successBackground}
+                                vKey={"login-success"}
+                            />
+                        )}
+                        {(this.state.loginState === "error" && !isMobile) && (
+                            <BackgroundVideo
+                                source={errorBackground}
+                                vKey={"login-success"}
+                            />
+                        )}
+                        <div className={inputClass.join(' ')}>
+                            <TextField
+                                onChange={this.handlePassword}
+                                value={this.state.password}
+                                placeholder="Mot de passe"
+                                style={{marginRight: "15px"}}
+                            />
+                            <Button
+                                variant="contained"
+                                onClick={() => { this.handleSubmit(login) }}
+                            >
+                                Enter
+                            </Button><br/>
+                            <span
+                                className={
+                                    this.state.error ? "error" : "hide-error"
+                                }
+                            >
+                                mauvais mot de passe
+                            </span>
+                        </div>
+                    </div>
+                )}
+            </AuthConsumer>
         )
     }
 }

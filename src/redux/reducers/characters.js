@@ -8,6 +8,12 @@ const initialState = {
     selectedCharacter: null,
 }
 
+export const getCharacterById = createAsyncThunk('getCharacterById', async (action) => {
+    const response = await HttpGetRequest(`/characters/${action.id}`)
+
+    return response.json();
+})
+
 export const getCharacters = createAsyncThunk('getCharacters', async () => {
     const response = await HttpGetRequest('/characters');
 
@@ -80,7 +86,7 @@ export const charactersSlice = createSlice({
         builder.addCase(saveCharacter.pending, (state) => {
             state.isLoading = true;
         });
-        builder.addCase(saveCharacter.fulfilled, (state, action) => {
+        builder.addCase(saveCharacter.fulfilled, (state) => {
             state.isLoading = false;
             notification.open({
                 className: "notification",
@@ -90,6 +96,23 @@ export const charactersSlice = createSlice({
         builder.addCase(saveCharacter.rejected, (state) => {
             state.isLoading = false;
             console.error('Erreur lors de la création de personnage');
+        });
+
+        builder.addCase(getCharacterById.pending, (state) => {
+            state.isLoading = true;
+        })
+        builder.addCase(getCharacterById.fulfilled, (state, action) => {
+            state.selectedCharacter = action.payload.id;
+            state.characters = [
+                ...(state.characters || [])
+                    .filter((c) => c.id !== action.payload.id),
+                action.payload,
+            ]
+            state.isLoading = false;
+        })
+        builder.addCase(getCharacterById.rejected, (state, action) => {
+            state.isLoading = false;
+            console.error(`Erreur lors de la recupération du personnage: ${action.id}`);
         });
     }
 })

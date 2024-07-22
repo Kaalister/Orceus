@@ -2,21 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { paramsParticles } from './constants';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
+import { paramsParticles } from './constants';
 
 import './index.css';
 import 'particles.js/particles';
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
+    <div id="particles-js">
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </div>,
     document.getElementById('root')
 );
 
-const particlesJS = window.particlesJS;
-particlesJS('particles-js', paramsParticles);
-
 reportWebVitals();
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const particlesJS = window.particlesJS;
+    particlesJS('particles-js', paramsParticles);
+})

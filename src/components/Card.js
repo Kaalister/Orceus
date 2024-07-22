@@ -87,6 +87,8 @@ class Card extends React.Component {
             card,
         } = this.props;
 
+        if (!card) return ('loading...')
+
         return (
             <div
                 className="center"
@@ -107,7 +109,7 @@ class Card extends React.Component {
                 </MapInteractionCSS>
                 <Link
                     className="tool-btn tool-back-arrow"
-                    to="/Orceus/cards"
+                    to="/cards"
                     onClick={() => dispatch({
                         type: "Cards/unselectCard"
                     })}
@@ -138,13 +140,20 @@ class Card extends React.Component {
 }
 
 const mapStateToProps = function(state) {
-    const card = state.cards.cards.find(card =>
-        card.id === state.cards.selectedCard);
+    const path = window.location.pathname;
+    const segments = path.split('/');
+    const selectedCard = state.cards.selectedCard
+        ? state.cards.selectedCard
+        : segments.pop() || segments.pop();
+
+    const card = state.cards.cards
+        ? state.cards.cards.find(card => card.id === selectedCard)
+        : null;
 
     return {
+        selectedCard,
+        card,
         isLoading: state.cards?.isLoading,
-        selectedCard: state.cards.selectedCard,
-        card: card,
     }
 }
 

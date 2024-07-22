@@ -1,5 +1,4 @@
 {
-  "homepage": "http://Kaalister.github.io/Orceus",
   "name": "orceus",
   "version": "0.1.0",
   "private": true,
@@ -33,7 +32,7 @@
   "scripts": {
     "predeploy": "npm run build",
     "preinstall": "npx npm-force-resolutions",
-    "deploy": "gh-pages -d build",
+    "deploy": "scp -r build/* root@217.160.24.165:/var/www/orceus.fr/html",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

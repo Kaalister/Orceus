@@ -125,8 +125,15 @@ export const cardsSlice = createSlice({
         });
         builder.addCase(getCardById.fulfilled, (state, action) => {
             state.isLoading = false;
-            const index = state.cards.findIndex(card => card.id === action.payload[0].id);
-            state.cards[index].big_card = action.payload[0].big_card;
+            const index = (state.cards || [])
+                .findIndex(card => card.id === action.payload[0].id);
+
+            if (index !== -1) {
+                state.cards[index].big_card = action.payload[0].big_card;
+            } else {
+                if (!state.cards) state.cards = []
+                state.cards.push(action.payload[0])
+            }
         });
         builder.addCase(getCardById.rejected, (state) => {
             state.isLoading = false;

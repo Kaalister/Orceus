@@ -12,8 +12,8 @@ import {
 import { DeleteOutline, AddCircleOutline } from '@mui/icons-material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { v4 as uuid } from 'uuid'; 
-
 import CharacterHeader from './ChararcterHeader';
+import loadingImg from '../../assets/images/loading.gif';
 
 import { TYPES } from "../../constants";
 
@@ -226,13 +226,29 @@ class Inventory extends React.Component {
     }
 
     render() {
-        const { character }  = this.props;
+        const { character, isLoading, isTablet, isMobile }  = this.props;
         let { searchValue, initialForm } = this.state;
         let { modalIsOpen } = this.state;
 
-        let isMobile = window.screen.width < 900;
-        let isTablet = window.screen.width >= 900 && window.screen.width < 1000;
-        let inventory = [...character.inventory];
+        let inventory = character?.inventory ? [...character.inventory] : [];
+
+        if ((!isLoading && character === null) || isLoading) {
+            return (
+                <div 
+                    style={{ 
+                        width: "100%", 
+                        display: "flex", 
+                        justifyContent: "center"
+                    }}
+                >
+                    <img
+                        className="loading-character"
+                        src={loadingImg}
+                        alt="loading"
+                    />
+                </div>
+            );
+        }
 
         if (!!searchValue) {
             inventory = inventory.filter(item => (
@@ -503,12 +519,18 @@ class Inventory extends React.Component {
 }
 
 const mapStateToProps = function(state) {
-    const character = state.characters.characters.find(char =>
+
+    const character = state.characters?.characters?.find(char =>
         char.id === state.characters?.selectedCharacter);
 
+    const isMobile = window.screen.width < 900;
+    const isTablet = window.screen.width >= 900 && window.screen.width < 1000;
+
     return {
+        isMobile,
+        isTablet,
         isLoading: state.characters?.isLoading,
-        character: JSON.parse(JSON.stringify(character)),
+        character: character ? JSON.parse(JSON.stringify(character)) : null,
     }
 }
 
