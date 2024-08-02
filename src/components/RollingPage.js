@@ -187,26 +187,6 @@ export default class RollingPage extends React.Component {
                         </ul>
                     )}
                 </div>
-                <Button
-                    onClick={async () => {
-                        try {
-                            let headers = new Headers ({
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json',
-                            });
-                    
-                            const response = await fetch('https://www.orceus.fr/api/', {
-                                method: "GET",
-                                headers,
-                                mode: 'no-cors',
-                            });
-                            return(response);
-                        } catch (error) {
-                            console.error(error);
-                        }
-                    }}>
-                    test
-                </Button>
             </div>
         )
     };
