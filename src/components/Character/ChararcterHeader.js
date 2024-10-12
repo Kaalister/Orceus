@@ -1,17 +1,17 @@
+import "../../assets/css/Character/characterHeader.css";
+
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { saveCharacter } from '../../redux/reducers/characters';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowBack, Backpack, Face, Save } from '@mui/icons-material';
 import { Modal, Button } from 'antd';
 
-import "../../assets/css/characterHeader.css";
-
 export default function CharacterHeader(props) {
     let { id } = useParams();
-    let [modalIsOpen, setModal] = useState(false);
+    let [ modalIsOpen, setModal ] = useState(false);
     const dispatch = useDispatch();
-    const store = useSelector((state) => state.characters);
+    const { character } = props;
 
     return (
         <div className="character-header-container">
@@ -47,27 +47,24 @@ export default function CharacterHeader(props) {
             </div>
             <div className="ch-btn-container">
                 <Save onClick={() => {
-                    const index = store.characters.findIndex(char =>
-                        char.id === store.selectedCharacter
-                    );
-
+                    console.log(character);
                     dispatch(
                         saveCharacter({
-                            id: store.selectedCharacter,
-                            character: store.characters[index],
+                            id: character.id,
+                            character: character,
                         })
                     );
                 }} />
-                {(props.currentPage === "inventory") ? (
+                {(props.currentPage === "inventory") && (
                     <Link to={"/SelectCharacters/" + id}>
                         <Face />
                     </Link>
-                ) : null}
-                {(props.currentPage === "character") ? (
+                )}
+                {(props.currentPage === "character") && (
                     <Link to={"/SelectCharacters/" + id + "/inventory"}>
                         <Backpack />
                     </Link>
-                ) : null}
+                )}
             </div>
         </div>
     );

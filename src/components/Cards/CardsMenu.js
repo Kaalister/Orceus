@@ -1,19 +1,21 @@
-import '../assets/css/cardMenu.css';
+import '../../assets/css/Cards/cardMenu.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { getFilteredCards } from '../redux/reducers/card';
+import { getFilteredCards } from '../../redux/reducers/cards';
 import { Link } from 'react-router-dom';
 
 import { Settings, Casino, Face } from '@material-ui/icons';
 import { Select, Form, Input, Row, Space } from 'antd';
 import 'antd/dist/antd.min.css'
 
-import { AuthConsumer } from '../Profile';
+import { AuthConsumer } from '../../Profile';
 
-import logoutBtn from '../assets/images/logoutBtn.png';
-import loading from '../assets/images/loading.gif';
-import { TYPESOPTIONS, SPECIESOPTIONS } from '../constants';
+import logoutBtn from '../../assets/images/logoutBtn.png';
+import loading from '../../assets/images/loading.gif';
+import { TYPESOPTIONS, SPECIESOPTIONS } from '../../constants';
+
+import { getUrlFromImage } from '../utils';
 
 class CardMenu extends React.Component {
     constructor(props) {
@@ -198,7 +200,7 @@ class CardMenu extends React.Component {
                 >
                     <img
                         className="card-img"
-                        src={cardItem.card}
+                        src={getUrlFromImage(cardItem.mainImage)}
                         alt=" "
                         onMouseMove={this.onMovingCard}
                         onMouseLeave={this.onLeavingCard}

@@ -1,8 +1,8 @@
-import "../assets/css/card.css";
+import "../../assets/css/Cards/card.css";
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { getCardById } from "../redux/reducers/card";
+import { getCardById } from "../../redux/reducers/cards";
 import {  
     ArrowBack,
     Add,
@@ -12,6 +12,8 @@ import {
 
 import { MapInteractionCSS } from 'react-map-interaction';
 import { Link } from 'react-router-dom';
+
+import { getUrlFromImage } from "../utils";
 
 class Card extends React.Component {
 
@@ -40,7 +42,7 @@ class Card extends React.Component {
             card,
         } = this.props;
         
-        if (!card || !card.big_card)
+        if (!card)
             dispatch(getCardById({
                 id: selectedCard
             }));
@@ -103,7 +105,7 @@ class Card extends React.Component {
                 >
                     <img
                         className="full-card" 
-                        src={card.big_card}
+                        src={getUrlFromImage(card.images[0])}
                         alt=""
                     />
                 </MapInteractionCSS>

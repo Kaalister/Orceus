@@ -1,17 +1,17 @@
-import '../assets/css/adminSettings.css';
+import '../../assets/css/Admin/adminSettings.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { deleteCardById, getAllCards } from '../redux/reducers/card';
+import { deleteCardById, getAllCards } from '../../redux/reducers/cards';
 import { DataGrid } from '@material-ui/data-grid';
 import { Delete, Create, ArrowBackIos, AddCircleOutline } from '@material-ui/icons';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { notification } from 'antd';
-import { TYPESOPTIONS, SPECIESOPTIONS } from '../constants';
+import { TYPESOPTIONS, SPECIESOPTIONS } from '../../constants';
 
 import AdminModale from './AdminModale';
-import { AuthConsumer } from '../Profile';
+import { AuthConsumer } from '../../Profile';
 
 class AdminSettings extends React.Component {
     constructor(props) {
@@ -45,7 +45,7 @@ class AdminSettings extends React.Component {
         notification.open({
             message: 'Action non autorisée !',
             description:
-              'Vous n\'êtes pas autorisé à faire des modifications. Profitez du site et touchez avec les yeux ;P',
+                'Vous n\'êtes pas autorisé à faire des modifications. Profitez du site et touchez avec les yeux ;P',
             placement: "top",
             style: {
                 background: "rgba(255, 255, 255, 0.12)",
@@ -69,7 +69,7 @@ class AdminSettings extends React.Component {
         })
 
         this.setState({
-            openModal: true 
+            openModal: true
         })
     }
 
@@ -100,8 +100,8 @@ class AdminSettings extends React.Component {
                 {({ sessionType }) => {
                     const columns = [{
                         headerName: 'N°',
-                        field: 'card_num',
-                        width: 80,
+                        field: 'cardNum',
+                        width: 100,
                     }, {
                         headerName: 'Name',
                         field: 'name',
@@ -116,16 +116,16 @@ class AdminSettings extends React.Component {
                         width: 150,
                         renderCell: (params) => {
                             let value = params.value;
-            
-                            if (!value) return (<span/>);
-            
+
+                            if (!value) return (<span />);
+
                             let obj = TYPESOPTIONS.filter(
                                 type => (type.value === value)
                             );
-            
+
                             return (
                                 <span>
-                                    {(obj.lenth !== 0) && obj[0].label}
+                                    {(obj.lenth !== 0) && obj[0]?.label}
                                 </span>
                             );
                         }
@@ -135,16 +135,16 @@ class AdminSettings extends React.Component {
                         width: 150,
                         renderCell: (params) => {
                             let value = params.value;
-            
-                            if (!value) return (<span/>)
-            
+
+                            if (!value) return (<span />)
+
                             let obj = SPECIESOPTIONS.filter(
                                 species => (species.value === value)
                             );
-            
+
                             return (
                                 <span>
-                                    {(obj.lenth !== 0) && obj[0].label}
+                                    {obj.lenth !== 0 && obj[0]?.label}
                                 </span>
                             );
                         }
@@ -155,10 +155,8 @@ class AdminSettings extends React.Component {
                     }, {
                         headerName: 'Cachée',
                         field: 'hidden',
-                        flex: 1,
-                        renderCell: (params) => (
-                            params.value === "true" ? "oui" : ""
-                        )
+                        width: 150,
+                        renderCell: (params) => params.value ? "oui" : ""
                     }, {
                         headerName: 'Actions',
                         sortable: false,
@@ -187,12 +185,12 @@ class AdminSettings extends React.Component {
                             <div className="d-flex row pb-2">
                                 <Link to="/cards/" style={{ color: 'white' }}>
                                     <ArrowBackIos />
-                                </Link>                 
+                                </Link>
                                 <Button
                                     className="add-card-btn"
                                     variant="contained"
                                     color="primary"
-                                    startIcon = {<AddCircleOutline />}
+                                    startIcon={<AddCircleOutline />}
                                     onClick={() => {
                                         this.configureCard(sessionType, null)
                                     }}
@@ -201,31 +199,31 @@ class AdminSettings extends React.Component {
                                 </Button>
                             </div>
                             <div className='setting-grid-container'>
-                                <DataGrid 
+                                <DataGrid
                                     rows={cards}
                                     columns={columns}
                                     pageSize={20}
                                     autoHeight
                                     loading={isLoading}
-                                    />
+                                />
                                 {this.state.openModal && (
                                     <AdminModale
-                                    show={this.state.openModal}
-                                    update={this.getCardList}
-                                    close={this.closeModal}
-                                    id={selectedCard}
+                                        show={this.state.openModal}
+                                        update={this.getCardList}
+                                        close={this.closeModal}
+                                        id={selectedCard}
                                     />
                                 )}
                             </div>
                         </div>
                     )
-            }}
+                }}
             </AuthConsumer>
         );
     }
 }
 
-const mapStateToProps = function(state) {
+const mapStateToProps = function (state) {
     let cards = state.cards.adminCards || [];
 
     cards = cards.filter(card => (!!card.id));

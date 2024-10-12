@@ -28,7 +28,7 @@ export default class Login extends React.Component {
         this.handlePassword = this.handlePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
+    
     handlePassword(e) {
         this.setState({password: e.target.value});
     }
@@ -44,7 +44,7 @@ export default class Login extends React.Component {
         .then(data => {
             this.setState({ loginState: "success" }, () => {
                 localStorage.setItem('Orceus', this.state.password);
-                login(data.session_type);
+                login(data.sessionType);
                 setTimeout(() => {
                     this.setState({
                         connected: true,
@@ -104,6 +104,11 @@ export default class Login extends React.Component {
                         )}
                         <div className={inputClass.join(' ')}>
                             <TextField
+                                inputProps={{
+                                    onKeyDown: (e) => e.code === 'Enter'
+                                        ? this.handleSubmit(login)
+                                        : null                                        
+                                }}
                                 onChange={this.handlePassword}
                                 value={this.state.password}
                                 placeholder="Mot de passe"

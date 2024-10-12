@@ -88,6 +88,10 @@ body {
   flex-direction: row;
 }
 
+.column {
+  flex-direction: column;
+}
+
 .ai-center{
   align-items: center;
 }

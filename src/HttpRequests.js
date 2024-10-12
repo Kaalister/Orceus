@@ -2,34 +2,38 @@ import { URL_API } from "./constants";
 
 export async function HttpGetRequest(route) {
     try {
-        let headers = new Headers ({
+        let headers = new Headers({
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         });
 
         const response = await fetch(URL_API + route, {
-            method: "GET",
-            headers
+            method: 'GET',
+            headers,
+            mode: 'cors',
         });
-        return(await response);
+        return response;
     } catch (error) {
         console.error(error);
     }
 }
 
-export async function HttpPostRequest(route, body) {
+export async function HttpPostRequest(route, body, isFormData=false) {
     try {
-        let headers = new Headers ({
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+        let headers = new Headers({
+            'Accept': '*/*',
+            'Content-Type': 'application/json',
         });
 
         const response = await fetch(URL_API + route, {
-            method: "POST",
-            headers,
-            body: JSON.stringify(body)
+            method: 'POST',
+            headers: isFormData ? undefined : headers,
+            mode: 'cors',
+            body: isFormData
+                ? body
+                : JSON.stringify(body)
         });
-        return(await response);
+        return response;
     } catch (error) {
         console.error(error);
     }
@@ -37,17 +41,18 @@ export async function HttpPostRequest(route, body) {
 
 export async function HttpPutRequest(route, body) {
     try {
-        let headers = new Headers ({
+        let headers = new Headers({
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         });
 
         const response = await fetch(URL_API + route, {
-            method: "PUT",
+            method: 'PUT',
             headers,
+            mode: 'cors',
             body: JSON.stringify(body)
         });
-        return(await response);
+        return response;
     } catch (error) {
         console.error(error);
     }
@@ -55,17 +60,18 @@ export async function HttpPutRequest(route, body) {
 
 export async function HttpDeleteRequest(route, body) {
     try {
-        let headers = new Headers ({
+        let headers = new Headers({
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         });
 
         const response = await fetch(URL_API + route, {
-            method: "DELETE",
+            method: 'DELETE',
             headers,
+            mode: 'cors',
             body: JSON.stringify(body)
         });
-        return(await response);
+        return response;
     } catch (error) {
         console.error(error);
     }

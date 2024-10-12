@@ -1,4 +1,4 @@
-import "../../assets/css/inventory.css";
+import "../../assets/css/Character/inventory.css";
 
 import React from 'react';
 import { connect } from 'react-redux';
@@ -16,7 +16,6 @@ import CharacterHeader from './ChararcterHeader';
 import loadingImg from '../../assets/images/loading.gif';
 
 import { TYPES } from "../../constants";
-
 
 const { TextArea } = Input;
 
@@ -51,18 +50,17 @@ class Inventory extends React.Component {
     }
 
     onChangeItem = (value, id, property) => {
-        let character = {...this.props.character};
-        let index = character.inventory.findIndex((item) => item.id === id);
+        const character =  JSON.parse(JSON.stringify(this.props.character));
+        let inventory = [ ...character.inventory ];
+        const index = inventory.findIndex(item => item.id === id);
 
-        if (index === -1) {
-            return;
-        }
+        if (index === -1) return;
 
-        character.inventory[index][property] = value;
+        inventory[index][property] = value;
 
-        this.props.dispatch({
-            type: 'Characters/updateCharacter',
-            character: character,
+        this.props.updateCharacter({
+            ...character,
+            inventory: inventory,
         });
     }
 
@@ -91,10 +89,7 @@ class Inventory extends React.Component {
         let character = {...this.props.character};
         let index = character.inventory.findIndex((item) => item.id === id);
 
-
-        if (index === -1) {
-            return;
-        }
+        if (index === -1) return;
 
         character.inventory.splice(index, 1);
         character.equipment.amulet = character.equipment.amulet.filter(item => item !== id);
@@ -109,10 +104,7 @@ class Inventory extends React.Component {
         character.equipment.other = character.equipment.other.filter(item => item !== id);
         
 
-        this.props.dispatch({
-            type: 'Characters/updateCharacter',
-            character: character,
-        });
+        this.props.updateCharacter(character);
     }
 
     openEditModal = (id) => {
@@ -135,7 +127,8 @@ class Inventory extends React.Component {
     }
 
     editItem = (form) => {
-        let character = {...this.props.character};
+        const character = {...this.props.character};
+        let inventory = [...character.inventory];
         let item = {
             id: form.id,
             name: form.name,
@@ -145,9 +138,12 @@ class Inventory extends React.Component {
             carac: form.carac,
             nb: form.nb,
         };
-        let indexCurrentItem = character.inventory.findIndex(item => item.id === form.id);
+        const indexCurrentItem = inventory.findIndex(item =>
+            item.id === form.id
+        );
 
-        character.inventory[indexCurrentItem] = item;
+        inventory[indexCurrentItem] = item;
+
         this.setState({
             initialForm: {
                 id: null,
@@ -161,9 +157,9 @@ class Inventory extends React.Component {
             modalIsOpen: false,
         }, () => {
             this.newForm.current.resetFields();
-            this.props.dispatch({
-                type: 'Characters/updateCharacter',
-                character: character,
+            this.props.updateCharacter({
+                ...character,
+                inventory: inventory,
             });
         });
 
@@ -171,7 +167,6 @@ class Inventory extends React.Component {
 
     addItem = () => {
         let character = {...this.props.character};
-
         let form = this.newForm.current.getFieldsValue();
 
         if (form.id !== null) {
@@ -181,6 +176,7 @@ class Inventory extends React.Component {
 
         let item = {
             id: uuid(),
+            isNew: true,
             name: form.name,
             type: form.type,
             stage: form.stage,
@@ -189,9 +185,7 @@ class Inventory extends React.Component {
             nb: form.nb,
         };
 
-        if (!item.name || !item.nb || !item.type) {
-            return;
-        }
+        if (!item.name || !item.nb || !item.type) return;
 
         character.inventory = [...character.inventory, item];
 
@@ -199,10 +193,7 @@ class Inventory extends React.Component {
             modalIsOpen: false
         }, () => {
             this.newForm.current.resetFields();
-            this.props.dispatch({
-                type: 'Characters/updateCharacter',
-                character: character,
-            });
+            this.props.updateCharacter(character);
         });
 
     }
@@ -268,7 +259,9 @@ class Inventory extends React.Component {
                     <Input
                         value={name}
                         bordered={false}
-                        onChange={(val) => this.onChangeItem(val.target.value, item.id, "name")}
+                        onChange={val =>
+                            this.onChangeItem(val.target.value, item.id, "name")
+                        }
                     />
                 </div>
             )
@@ -413,14 +406,19 @@ class Inventory extends React.Component {
 
         return (
             <div className="character-container">
-                <CharacterHeader currentPage="inventory"/>
+                <CharacterHeader
+                    currentPage="inventory"
+                    character={character}
+                />
                 <div className="search-container">
                     <Input
                         className="search-input"
                         placeholder="Nom Recherché..."
                         value={searchValue}
                         allowClear
-                        onChange={(val) => this.setState({ searchValue: val.target.value })}
+                        onChange={val => this.setState({
+                            searchValue: val.target.value
+                        })}
                     />
                 </div>
                 <div className="margin-table">
@@ -519,10 +517,6 @@ class Inventory extends React.Component {
 }
 
 const mapStateToProps = function(state) {
-
-    const character = state.characters?.characters?.find(char =>
-        char.id === state.characters?.selectedCharacter);
-
     const isMobile = window.screen.width < 900;
     const isTablet = window.screen.width >= 900 && window.screen.width < 1000;
 
@@ -530,7 +524,6 @@ const mapStateToProps = function(state) {
         isMobile,
         isTablet,
         isLoading: state.characters?.isLoading,
-        character: character ? JSON.parse(JSON.stringify(character)) : null,
     }
 }
 

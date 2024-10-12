@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { HttpGetRequest, HttpPutRequest } from "../../HttpRequests";
+import {
+    HttpGetRequest,
+    HttpPutRequest,
+    HttpPostRequest,
+} from "../../HttpRequests";
 import { notification } from 'antd';
 
 const initialState = {
@@ -21,15 +25,63 @@ export const getCharacters = createAsyncThunk('getCharacters', async () => {
 });
 
 export const createCharacter = createAsyncThunk('createCharacter', async () => {
-    const response = await HttpPutRequest('/characters/create');
+    const response = await HttpPostRequest('/characters');
 
     return response.json();
 });
 
 export const saveCharacter = createAsyncThunk('saveCharacter', async (action) => {
+    const character = action.character;
+    let skills = [ ...character.skills ];
+    let inventory = [ ...character.inventory ];
+
+    skills = skills.map(skill => {
+        if (skill.isNew) {
+            return {
+                name: skill.name,
+                desc: skill.desc,
+            }
+        }
+
+        return {
+            id: skill.id,
+            name: skill.name,
+            desc: skill.desc,
+        }
+    })
+
+    inventory = inventory.map(item => {
+        if (item.stage === '') item.stage = null;
+
+        if (item.isNew) {
+            return {
+                name: item.name,
+                type: item.type,
+                stage: item.stage,
+                desc: item.desc,
+                carac: item.carac,
+                nb: item.nb,
+            }
+        }
+
+        return {
+            id: item.id,
+            name: item.name,
+            type: item.type,
+            stage: item.stage,
+            desc: item.desc,
+            carac: item.carac,
+            nb: item.nb,
+        }
+    })
+
     const response = await HttpPutRequest(
         `/characters/${action.id}`,
-        action.character
+        {
+            ...character,
+            skills,
+            inventory,
+        }
     );
 
     return response.json();
@@ -77,6 +129,10 @@ export const charactersSlice = createSlice({
         builder.addCase(createCharacter.fulfilled, (state, action) => {
             state.isLoading = false;
             state.selectedCharacter = action.payload.id;
+            state.characters = [
+                ...state.characters,
+                action.payload,
+            ];
         });
         builder.addCase(createCharacter.rejected, (state) => {
             state.isLoading = false;

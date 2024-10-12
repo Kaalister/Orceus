@@ -1,9 +1,10 @@
-import "../../assets/css/character.css";
+import "../../assets/css/Character/character.css";
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { uploadImage } from '../../redux/reducers/images';
+import { getUrlFromImage } from "../utils";
 import {
-    CloseOutlined,
     PlusCircleOutlined,
     MinusCircleOutlined,
     EditOutlined,
@@ -15,8 +16,6 @@ import {
 } from '@ant-design/icons';
 import {
     Select,
-    Upload,
-    Button,
     Popover,
     Modal,
     Form,
@@ -26,7 +25,6 @@ import { v4 as uuid } from 'uuid';
 import CharacterHeader from './ChararcterHeader';
 import {
     NAMEPUISS,
-    CHAR_BASE,
     RACESTYPES,
     JOBS,
 } from "../../constants";
@@ -73,62 +71,13 @@ class Character extends React.Component {
         this.swithSection = this.swithSection.bind(this);
     }
 
-    componentDidMount() {
-        this.actualizeFightStats();
-    }
-
-    componentDidUpdate() {
-        if (this.state.statsFightChange) {
-            this.actualizeFightStats();
+    componentDidUpdate(prevProps) {
+        if (!this.props.imageLoading && prevProps.imageLoading) {
+            this.props.updateCharacter({
+                ...this.props.character,
+                image: this.props.newImage,
+            });
         }
-    }
-
-    actualizeFightStats() {
-        let character = { ...this.props.character };
-
-        if (!character.specie || !character.job) {
-            return;
-        }
-
-        let base = CHAR_BASE[character.specie][character.job] || null;
-
-        if (base === null) {
-            return;
-        }
-
-        base = {
-            att: base.att + character.fight.att,
-            def: base.def + character.fight.def,
-            vit: base.vit + character.fight.vit,
-            agi: base.agi + character.fight.agi,
-            puiss: base.puiss + character.fight.puiss,
-            stren: base.stren + character.fight.stren,
-        }
-
-        let fight = { ...character.fight };
-
-        character.hp_max = base.att + (8 * base.def) + (3 * base.vit) + (3 * base.agi) + base.puiss + (6 * base.stren);
-        fight.cac = Math.round(Math.sqrt(character.level * base.att) + (Math.pow(base.stren, 2) / 15));
-        fight.dist = Math.round(Math.pow(character.level, 2) / 10 + (Math.pow(base.att, 2) * 0.02) * (1 + base.stren * 0.2));
-        fight.mag = Math.round((base.att + base.puiss + (character.level / 10)) * (base.puiss / 20 + base.att / 40 + character.level / 100));
-        fight.def_phy = Math.round(13 * Math.log(base.def));
-        fight.def_mag = Math.round(13 * Math.log(base.def));
-        fight.dodge = 6 + Math.round((4 * Math.log((base.vit + base.agi) / 2)) / 1.3);
-
-        if (character.specie === "suhera" || character?.specie === "hanylice") {
-            fight.cac = 0;
-            fight.dist = 0;
-            fight.mag = Math.round(Math.pow(character.level, 2) / 10 + (Math.pow(base.puiss, 2) * 0.02) * (1 + base.att * 0.2));
-        }
-
-        character.fight = fight;
-
-        this.setState({
-            statsFightChange: false
-        }, () => this.props.dispatch({
-            type: 'Characters/updateCharacter',
-            character: character,
-        }));
     }
 
     changeCharacterInfo(key, value) {
@@ -136,80 +85,76 @@ class Character extends React.Component {
 
         character[key] = value;
 
-        this.props.dispatch({
-            type: 'Characters/updateCharacter',
-            character: character,
-        });
-
-        //timeout permet d'actualiser les stats de combats
-        setTimeout(() => this.setState({ statsFightChange: true }), 100);
+        this.props.updateCharacter(character);
     }
 
     changeCharacterStats(key, value) {
         let character = { ...this.props.character };
+        let stats = { ...character.stats };
 
         if (value > 75) {
             value = 75;
         }
 
-        character.stats[key] = value;
+        stats[key] = parseInt(value);
 
-        this.props.dispatch({
-            type: 'Characters/updateCharacter',
-            character: character,
+        
+        this.props.updateCharacter({
+            ...character,
+            stats,
         });
     }
 
     changeCharacterFight(key, value) {
         let character = { ...this.props.character };
+        let statFight = { ...character.fight };
 
-        character.fight[key] = parseInt(value);
+        statFight[key] = parseInt(value);
+
+        this.props.updateCharacter({
+            ...character,
+            fight: statFight,
+        });
 
         this.setState({
             statsFightChange: true
-        }, () => this.props.dispatch({
-            type: 'Characters/updateCharacter',
-            character: character,
-        }));
-    }
-
-    changeSearchValue(key, value) {
-        this.setState({ [key]: value });
-    }
-
-    setImageCharacter(data) {
-        let character = { ...this.props.character };
-
-        let reader = new FileReader();
-        reader.onload = (e) => {
-            character.image = e.target.result;
-            this.props.dispatch({
-                type: 'Characters/updateCharacter',
-                character: character,
-            });
-        };
-        reader.readAsDataURL(data.fileList[0].originFileObj);
-    }
-
-    removeImageCharacter() {
-        let character = { ...this.props.character };
-        character.image = null;
-
-        this.props.dispatch({
-            type: 'Characters/updateCharacter',
-            character: character,
         });
     }
 
-    unequipItem(part, id) {
+    setImageCharacter(key) {
+        let input = document.getElementById(key);
+
+        input.click();
+        input.addEventListener("change", (e) => {
+            let file = e.target.files[0];
+            let formData = new FormData();
+
+            formData.append('file', file);
+            
+            this.props.dispatch(uploadImage(formData))
+        });
+    }
+
+    removeImageCharacter(e) {
+        e.preventDefault();
+
+        this.props.updateCharacter({
+            ...this.props.character,
+            image: null,
+        });
+    }
+
+    unequipItem(part, equipedItem) {
         let character = { ...this.props.character };
-        let equipedPartIDs = [...character.equipment[part]];
 
-        character.equipment[part] = equipedPartIDs.filter((item) => item !== id);
-
-        this.props.dispatch({
-            type: 'Characters/updateCharacter',
-            character: character,
+        this.props.updateCharacter({
+            ...character,
+            equipment: {
+                ...character.equipment,
+                [part]: character.equipment[part].filter(item =>
+                    item.id !== equipedItem.id
+                ),
+            }
         });
     }
 
@@ -223,11 +168,13 @@ class Character extends React.Component {
 
     addSkill() {
         let character = { ...this.props.character };
+        let skills = [ ...character.skills ];
 
         let form = this.newForm.current.getFieldsValue();
 
         let skill = {
             id: uuid(),
+            isNew: true,
             name: form.name,
             desc: form.desc,
         };
@@ -235,18 +182,18 @@ class Character extends React.Component {
         if (!skill.name | !skill.desc)
             return;
 
-        if (!character.skills)
-            character.skills = [];
+        if (!skills)
+            skills = [];
 
-        character.skills.push(skill);
+        skills.push(skill);
 
         this.setState({
             modalIsOpen: false
         }, () => {
             this.newForm.current.resetFields();
-            this.props.dispatch({
-                type: 'Characters/updateCharacter',
-                character: character,
+            this.props.updateCharacter({
+                ...character,
+                skills: skills,
             });
         });
     }
@@ -288,10 +235,10 @@ class Character extends React.Component {
     validateSkillModification() {
         let selectedSkill = this.state.selectedSkill;
         let modifiedSkill = { ...this.state.modifiedSkill };
-        let character = { ...this.props.character };
-        let skills = !!character.skills ? [...character.skills] : [];
+        let character = { ...JSON.parse(JSON.stringify(this.props.character)) };
+        let skills = [ ...character.skills ];
 
-        skills.forEach((skill) => {
+        skills.forEach(skill => {
             if (skill.id === selectedSkill) {
                 skill.name = modifiedSkill.name;
                 skill.desc = modifiedSkill.desc;
@@ -303,16 +250,14 @@ class Character extends React.Component {
             desc: ""
         }
 
-        character.skills = skills;
-
         this.setState({
             modifiedSkill,
             modalIsOpen: false,
             selectedSkill: null
         });
-        this.props.dispatch({
-            type: 'Characters/updateCharacter',
-            character: character,
+        this.props.updateCharacter({
+            ...character,
+            skills: skills,
         });
     }
 
@@ -324,10 +269,7 @@ class Character extends React.Component {
             return skill.id !== id;
         })
 
-        this.props.dispatch({
-            type: 'Characters/updateCharacter',
-            character: character,
-        });
+        this.props.updateCharacter(character);
     }
 
     swithSection(section) {
@@ -426,10 +368,9 @@ class Character extends React.Component {
 
     _renderEquiped(part) {
         let equipedPartIDs = [...this.props.character.equipment[part]];
-
-        let equipedPart = this.props.character.inventory.filter((item) => (
-            equipedPartIDs.includes(item.id)
-        ));
+        let equipedPart = this.props.character.inventory.filter((item) => 
+            equipedPartIDs.map(equiped => equiped.id).includes(item.id)
+        );
 
         return equipedPart.map((item) => {
             return (
@@ -443,7 +384,7 @@ class Character extends React.Component {
                     <div className="equiped-item-actions">
                         <MinusCircleOutlined
                             className="clickable"
-                            onClick={() => this.unequipItem(part, item.id)}
+                            onClick={() => this.unequipItem(part, item)}
                         />
                     </div>
                 </div>
@@ -454,12 +395,9 @@ class Character extends React.Component {
     _renderEquipment(filter, part) {
         const { character } = this.props;
         let options = [];
-
         let inventory = character?.inventory.filter((item) => (item.nb > 0))
 
-        if (!inventory) {
-            return null;
-        }
+        if (!inventory) return null;
 
         if (!!filter) {
             inventory = inventory.filter((item) => (item.type === filter))
@@ -477,14 +415,19 @@ class Character extends React.Component {
                 value={null}
                 notFoundContent={"Rien Trouvé"}
                 onChange={(value) => {
-                    let character = { ...this.props.character };
+                    const updatedCharacter = {
+                        ...character,
+                        equipment: {
+                            ...character.equipment,
+                            [part]: [...character.equipment[part], {
+                                id: value
+                            }]
+                        }
+                    };
 
-                    character.equipment[part].push(value);
-
-                    this.props.dispatch({
-                        type: 'Characters/updateCharacter',
-                        character: character,
-                    });
+                    console.log(updatedCharacter)
+                    
+                    this.props.updateCharacter(updatedCharacter);
                 }}
             />
         );
@@ -496,14 +439,22 @@ class Character extends React.Component {
 
         return (
             <div className="character-container">
-                <CharacterHeader currentPage="character" />
+                <CharacterHeader
+                    currentPage="character"
+                    character={character}
+                />
                 <div className="info-container">
                     <div className="lastname">
                         <span>Nom : </span>
                         <input
                             placeholder="Nom"
                             value={character?.lastname}
-                            onChange={(e) => this.changeCharacterInfo("lastname", e.target.value)}
+                            onChange={(e) => 
+                                this.changeCharacterInfo(
+                                    "lastname",
+                                    e.target.value,
+                                )
+                            }
                         />
                     </div>
                     <div className="firstname">
@@ -511,7 +462,11 @@ class Character extends React.Component {
                         <input
                             placeholder="Prénom"
                             value={character?.firstname}
-                            onChange={(e) => this.changeCharacterInfo("firstname", e.target.value)}
+                            onChange={(e) =>
+                                this.changeCharacterInfo(
+                                    "firstname",
+                                    e.target.value,
+                                )}
                         />
                     </div>
                     <div className="age">
@@ -519,8 +474,12 @@ class Character extends React.Component {
                         <input
                             placeholder="Age"
                             type="number"
-                            value={character?.years_old}
-                            onChange={(e) => this.changeCharacterInfo("years_old", e.target.value)}
+                            value={character?.yearOld}
+                            onChange={e =>
+                                this.changeCharacterInfo(
+                                    "yearOld",
+                                    e.target.value,
+                                )}
                         />
                     </div>
                     <div className="species">
@@ -529,30 +488,21 @@ class Character extends React.Component {
                             options={RACESTYPES}
                             placeholder="Race"
                             value={character?.specie}
-                            onChange={(val) => this.changeCharacterInfo("specie", val)}
+                            onChange={val =>
+                                this.changeCharacterInfo("specie", val)
+                            }
                         />
                     </div>
                     <div className='job'>
                         <span>Métier : </span>
                         <Select
-                            showSearch
-                            options={(!!character?.specie) ? JOBS[character.specie] : null}
-                            searchValue={this.state.jobSearch}
+                            options={JOBS[character.specie]}
+                            notFoundContent={"Veuillez choisir une race en premier"}
                             placeholder="Métier"
                             value={character?.job}
-                            notFoundContent={null}
-                            onChange={(val) => this.changeCharacterInfo("job", val)}
-                            onSearch={(val) => {
-                                this.changeCharacterInfo("job", val);
-                                this.changeSearchValue("jobSearch", val);
-                            }}
-                            onInputKeyDown={(input) => {
-                                if (input.key === "Enter") {
-                                    this.changeCharacterInfo("job", this.state.jobSearch);
-                                    this.changeSearchValue("jobSearch", '');
-                                }
-                            }}
-
+                            onChange={val =>
+                                this.changeCharacterInfo("job", val)
+                            }
                         />
                     </div>
                     <div className='hp'>
@@ -575,37 +525,32 @@ class Character extends React.Component {
                         />
                     </div>
                     <div className="image">
-                        <Upload
-                            name='file'
-                            action={null}
-                            itemRender={null}
-                            showUploadList={false}
-                            onChange={this.setImageCharacter}
-                        >
-                            <div className="preview-image">
-                                <div className="background-image" />
-                                <CloseOutlined
-                                    onClick={this.removeImageCharacter}
-                                    className={
-                                        (!!character?.image)
-                                            ? "remove-image"
-                                            : "remove-image hidden"
-                                    }
-                                />
-                                <Button className="button-upload" type="text">
-                                    {(!!character?.image) ? (
-                                        <img
-                                            alt="example"
-                                            style={{
-                                                width: '100%',
-                                                height: '100%'
-                                            }}
-                                            src={character?.image}
-                                        />
-                                    ) : "Pas d'image"}
-                                </Button>
+                        <input
+                            type="file"
+                            id="mainImage"
+                            className="d-none"
+                            alt=""
+                            accept=".jpg,.png"
+                        />
+                        {character?.image && (
+                            <div
+                                className="character-remove-image"
+                                onClick={this.removeImageCharacter}
+                            >
+                                X
                             </div>
-                        </Upload>
+                        )}
+                        <div style={{ textAlign: 'center' }}>
+                            <div
+                                className="character-add-image"
+                                onClick={() => this.setImageCharacter('mainImage')}
+                            >
+                                <img className="preview-image"
+                                    src={getUrlFromImage(character?.image) || undefined}
+                                    alt=""
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -716,12 +661,13 @@ class Character extends React.Component {
                                         className="puissname"
                                         options={NAMEPUISS}
                                         value={character?.config?.puissName || "puissance"}
-                                        onChange={(val) => {
-                                            let character = { ...this.props.character };
-                                            character.config.puissName = val;
-                                            this.props.dispatch({
-                                                type: 'Characters/updateCharacter',
-                                                character: character,
+                                        onChange={val => {
+                                            this.props.updateCharacter({
+                                                ...this.props.character,
+                                                config: {
+                                                    ...this.props.character.config,
+                                                    puissName: val,
+                                                }
                                             });
                                         }}
                                     /> :
@@ -1132,7 +1078,7 @@ class Character extends React.Component {
                                     Arme :
                                     <Popover
                                         color="black"
-                                        content={this._renderEquipment("weapon", "weapon")}
+                                        content={this._renderEquipment("weapon", "weapons")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1140,13 +1086,13 @@ class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this._renderEquiped("weapon")}
+                                    {this._renderEquiped("weapons")}
                                 </div>
                                 <div>
                                     Plastron :
                                     <Popover
                                         color="black"
-                                        content={this._renderEquipment("armor", "plastron")}
+                                        content={this._renderEquipment("armor", "plastrons")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1154,13 +1100,13 @@ class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this._renderEquiped("plastron")}
+                                    {this._renderEquiped("plastrons")}
                                 </div>
                                 <div>
                                     Bouclier :
                                     <Popover
                                         color="black"
-                                        content={this._renderEquipment("shield", "shield")}
+                                        content={this._renderEquipment("shield", "shields")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1168,12 +1114,12 @@ class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this._renderEquiped("shield")}
+                                    {this._renderEquiped("shields")}
                                 </div>
                                 <div>Casque :
                                     <Popover
                                         color="black"
-                                        content={this._renderEquipment("armor", "helmet")}
+                                        content={this._renderEquipment("armor", "helmets")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1181,12 +1127,12 @@ class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this._renderEquiped("helmet")}
+                                    {this._renderEquiped("helmets")}
                                 </div>
                                 <div>Gants :
                                     <Popover
                                         color="black"
-                                        content={this._renderEquipment("clothes", "glove")}
+                                        content={this._renderEquipment("clothes", "gloves")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1194,12 +1140,12 @@ class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this._renderEquiped("glove")}
+                                    {this._renderEquiped("gloves")}
                                 </div>
                                 <div>Chaussures :
                                     <Popover
                                         color="black"
-                                        content={this._renderEquipment("clothes", "shoe")}
+                                        content={this._renderEquipment("clothes", "shoes")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1207,7 +1153,7 @@ class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this._renderEquiped("shoe")}
+                                    {this._renderEquiped("shoes")}
                                 </div>
                                 <div>Vêtement Haut :
                                     <Popover
@@ -1238,7 +1184,7 @@ class Character extends React.Component {
                                 <div>Amulette :
                                     <Popover
                                         color="black"
-                                        content={this._renderEquipment("amulet", "amulet")}
+                                        content={this._renderEquipment("amulet", "amulets")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1246,12 +1192,12 @@ class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this._renderEquiped("amulet")}
+                                    {this._renderEquiped("amulets")}
                                 </div>
                                 <div>Autre :
                                     <Popover
                                         color="black"
-                                        content={this._renderEquipment(null, "other")}
+                                        content={this._renderEquipment(null, "others")}
                                     >
                                         <PlusCircleOutlined
                                             className="add-equipment clickable"
@@ -1259,7 +1205,7 @@ class Character extends React.Component {
                                     </Popover>
                                 </div>
                                 <div>
-                                    {this._renderEquiped("other")}
+                                    {this._renderEquiped("others")}
                                 </div>
                             </div>
                         </div>
@@ -1317,12 +1263,10 @@ class Character extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-    const character = state.characters.characters.find(char =>
-        char.id === state.characters?.selectedCharacter);
-
     return {
         isLoading: state.characters?.isLoading,
-        character: JSON.parse(JSON.stringify(character)),
+        imageLoading: state.images.isLoading,
+        newImage: state.images.lastImage,
     }
 }
 

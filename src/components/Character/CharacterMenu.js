@@ -1,4 +1,4 @@
-import "../../assets/css/characterMenu.css";
+import "../../assets/css/Character/characterMenu.css";
 
 import React from 'react';
 import { connect } from 'react-redux';
@@ -150,8 +150,7 @@ class CharacterMenu extends React.Component {
                         </div>
                         <div className="grid-character">
                             <DataGrid
-                                loading={isLoading ||
-                                    (!isLoading && characters.length === 0)}
+                                loading={isLoading}
                                 rows={characters}
                                 components={{
                                     ColumnMenu: CustomColumnMenu

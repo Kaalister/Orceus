@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import {
     HttpPostRequest,
+    HttpPutRequest,
     HttpGetRequest,
     HttpDeleteRequest
 } from "../../HttpRequests";
@@ -19,14 +20,27 @@ export const getAllCards = createAsyncThunk('getAllCards', async () => {
 });
 
 export const getFilteredCards = createAsyncThunk('getFilteredCards', async (action) => {
-    const response = await HttpPostRequest('/cards', action.filters);
+    let url = '/cards?hidden=false';
+
+    const filters = Object.entries(action.filters).map(([key, value]) => {
+        return {
+            key: key,
+            value: value
+        };
+    });
+
+    filters.forEach(filter => {
+        url += `&${filter.key}=${filter.value}`
+    })
+
+    const response = await HttpGetRequest(url);
 
     return response.json();
 });
 
 export const getCardById = createAsyncThunk('getCardById', async (action) => {
     const response = await HttpGetRequest(`/cards/${action.id}`);
-  
+
     return response.json();
 });
 
@@ -38,13 +52,13 @@ export const getAdminCardById = createAsyncThunk('getAdminCardById',
 });
 
 export const deleteCardById = createAsyncThunk('deleteCardById', async (action) => {
-    const response = await HttpDeleteRequest(`/card/${action.id}`);
-  
+    const response = await HttpDeleteRequest(`/cards/${action.id}`);
+
     return response.json();
 })
 
 export const updateCardById = createAsyncThunk('updateCardById', async (action) => {
-    const response = await HttpPostRequest(`/card/${action.id}`, {
+    const response = await HttpPutRequest(`/cards/${action.id}`, {
         ...action.card,
      });
   
@@ -52,7 +66,7 @@ export const updateCardById = createAsyncThunk('updateCardById', async (action) 
 })
 
 export const createCard = createAsyncThunk('createCard', async (action) => {
-    const response = await HttpPostRequest(`/card/`, {
+    const response = await HttpPostRequest(`/cards`, {
         ...action.card,
      });
   
@@ -65,18 +79,6 @@ export const cardsSlice = createSlice({
     reducers: {
         selectCard: (state, action) => {
             state.selectedCard = action.id;
-            if (action.id === null)
-                state.adminCards.push({
-                    name: '',
-                    desc: '',
-                    type: null,
-                    specie: null,
-                    card: '',
-                    big_card: '',
-                    tags: [],
-                    card_num: -1,
-                    hidden: "false"
-                })
         },
         unselectCard: (state) => {
             state.selectedCard = false;
@@ -125,14 +127,15 @@ export const cardsSlice = createSlice({
         });
         builder.addCase(getCardById.fulfilled, (state, action) => {
             state.isLoading = false;
-            const index = (state.cards || [])
-                .findIndex(card => card.id === action.payload[0].id);
+            const index = (state.cards || []).findIndex(card =>
+                card.id === action.payload.id
+            );
 
-            if (index !== -1) {
-                state.cards[index].big_card = action.payload[0].big_card;
-            } else {
+            if (index !== -1)
+                state.cards[index].big_card = action.payload;
+            else {
                 if (!state.cards) state.cards = []
-                state.cards.push(action.payload[0])
+                state.cards.push(action.payload)
             }
         });
         builder.addCase(getCardById.rejected, (state) => {
@@ -145,9 +148,11 @@ export const cardsSlice = createSlice({
             state.isLoading = true;
         });
         builder.addCase(getAdminCardById.fulfilled, (state, action) => {
+            const index = state.adminCards.findIndex(card =>
+                card.id === action.payload.id
+            );
             state.isLoading = false;
-            const index = state.adminCards.findIndex(card => card.id === action.payload[0].id);
-            state.adminCards[index].big_card = action.payload[0].big_card;
+            state.adminCards[index] = action.payload;
         });
         builder.addCase(getAdminCardById.rejected, (state) => {
             state.isLoading = false;
@@ -169,12 +174,25 @@ export const cardsSlice = createSlice({
         builder.addCase(updateCardById.pending, (state) => {
             state.isLoading = true;
         });
-        builder.addCase(updateCardById.fulfilled, (state) => {
+        builder.addCase(updateCardById.fulfilled, (state, action) => {
+            const indexAdmin = (state.adminCards || []).findIndex(card =>
+                card.id === action.payload.id
+            );
+            const index = (state.cards || []).findIndex(card =>
+                card.id === action.payload.id
+            );
+            
+            if (indexAdmin !== -1)
+                state.adminCards[indexAdmin] = action.payload;
+
+            if (index !== -1)
+                state.adminCards[index] = action.payload;
+
             state.isLoading = false;
         });
         builder.addCase(updateCardById.rejected, (state) => {
             state.isLoading = false;
-            console.error('Erreur lors de la récupération des cartes administrateurs');
+            console.error('Erreur lors de la mise a jour de la carte');
         });
 
         builder.addCase(createCard.pending, (state) => {
@@ -182,14 +200,11 @@ export const cardsSlice = createSlice({
         });
         builder.addCase(createCard.fulfilled, (state, action) => {
             state.isLoading = false;
-
-            const index = state.adminCards.findIndex(card => !card.id)
-
-            state.adminCards[index].id = action.payload.id
+            state.adminCards.push(action.payload)
         });
         builder.addCase(createCard.rejected, (state) => {
             state.isLoading = false;
-            console.error('Erreur lors de la récupération des cartes administrateurs');
+            console.error('Erreur lors de la creation de la carte');
         });
     }
 })

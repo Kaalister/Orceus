@@ -7,8 +7,8 @@ import {
 
 import React from "react";
 import Login from './components/Login';
-import Cards from './components/Cards';
-import AdminSettings from './components/AdminSettings';
+import Cards from './components/Cards/Cards';
+import AdminSettings from './components/Admin/AdminSettings';
 import RollingPage from "./components/RollingPage";
 import SelectCharacters from "./components/Character/SwitchCharacters";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
@@ -21,7 +21,7 @@ const PrivateRoute = ({ component: Component, sessionTypeNeed, ...rest }) => {
 
 	return (
 		<AuthConsumer>
-    		{({ isAuthenticated, sessionType }) => (
+			{({ isAuthenticated, sessionType }) => (
 				<Route
 					{...rest}
 					history={history}
@@ -29,16 +29,16 @@ const PrivateRoute = ({ component: Component, sessionTypeNeed, ...rest }) => {
 						(isAuthenticated &&
 							(!sessionTypeNeed ||
 								sessionTypeNeed === sessionType))
-						? (
-							<Component {...props} />
-						) : (
-							<Redirect to="/" />
-						)
+							? (
+								<Component {...props} />
+							) : (
+								<Redirect to="/" />
+							)
 					}
 				/>
-    		)}
-  		</AuthConsumer>
-  	);
+			)}
+		</AuthConsumer>
+	);
 }
 
 export default function App() {
@@ -49,7 +49,7 @@ export default function App() {
 				<Switch>
 					<PrivateRoute
 						path="/cards"
-						component={Cards} 
+						component={Cards}
 					/>
 					<PrivateRoute
 						path="/AdminSettings"

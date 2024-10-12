@@ -1437,4 +1437,5 @@ export const SPECIESOPTIONS = [{
     value: 'other'
 }];
 
-export const URL_API = "https://kf3hmnez3b.execute-api.eu-west-3.amazonaws.com/Orceus";
+export const URL_API = "https://www.orceus.fr/api";
+//export const URL_API = "http://localhost:3001";
