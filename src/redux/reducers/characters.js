@@ -84,6 +84,9 @@ export const saveCharacter = createAsyncThunk('saveCharacter', async (action) =>
         }
     );
 
+    if (response.status !== 200)
+        throw new Error(response.statusText);
+
     return response.json();
 })
 
@@ -151,6 +154,10 @@ export const charactersSlice = createSlice({
         });
         builder.addCase(saveCharacter.rejected, (state) => {
             state.isLoading = false;
+            notification.open({
+                className: "notification",
+                message: 'Une erreur est survenue, contacter l\'administrateur',
+            });
             console.error('Erreur lors de la création de personnage');
         });
 

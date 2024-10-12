@@ -91,20 +91,28 @@ class Inventory extends React.Component {
 
         if (index === -1) return;
 
-        character.inventory.splice(index, 1);
-        character.equipment.amulet = character.equipment.amulet.filter(item => item !== id);
-        character.equipment.botClothes = character.equipment.botClothes.filter(item => item !== id);
-        character.equipment.topClothes = character.equipment.topClothes.filter(item => item !== id);
-        character.equipment.glove = character.equipment.glove.filter(item => item !== id);
-        character.equipment.helmet = character.equipment.helmet.filter(item => item !== id);
-        character.equipment.plastron = character.equipment.plastron.filter(item => item !== id);
-        character.equipment.shield = character.equipment.shield.filter(item => item !== id);
-        character.equipment.shoe = character.equipment.shoe.filter(item => item !== id);
-        character.equipment.weapon = character.equipment.weapon.filter(item => item !== id);
-        character.equipment.other = character.equipment.other.filter(item => item !== id);
-        
-
-        this.props.updateCharacter(character);
+        this.props.updateCharacter({
+            ...character,
+            inventory: character.inventory.filter(item => item.id !== id),
+            equipment: {
+                amulets: character.equipment.amulets
+                    ?.filter(item => item.id !== id),
+                botClothes: character.equipment.botClothes
+                    ?.filter(item => item.id !== id),
+                topClothes: character.equipment.topClothes
+                    ?.filter(item => item.id !== id),
+                gloves: character.equipment.gloves
+                    ?.filter(item => item.id !== id),
+                helmets: character.equipment.helmets
+                    ?.filter(item => item.id !== id),
+                plastrons: character.equipment.plastrons
+                    ?.filter(item => item.id !== id),
+                shoes: character.equipment.shoes
+                    ?.filter(item => item.id !== id),
+                weapons: character.equipment.weapons
+                    ?.filter(item => item.id !== id),
+            }
+        });
     }
 
     openEditModal = (id) => {

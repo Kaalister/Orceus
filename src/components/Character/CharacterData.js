@@ -66,12 +66,12 @@ class CharacterData extends React.Component {
         let fight = { ...character.fight };
 
         character.hp_max = base.att + (8 * base.def) + (3 * base.vit) + (3 * base.agi) + base.puiss + (6 * base.stren);
-        fight.cac = Math.round(Math.sqrt(character.level * base.att) + (Math.pow(base.stren, 2) / 15));
-        fight.dist = Math.round(Math.pow(character.level, 2) / 10 + (Math.pow(base.att, 2) * 0.02) * (1 + base.stren * 0.2));
-        fight.mag = Math.round((base.att + base.puiss + (character.level / 10)) * (base.puiss / 20 + base.att / 40 + character.level / 100));
-        fight.def_phy = Math.round(13 * Math.log(base.def));
-        fight.def_mag = Math.round(13 * Math.log(base.def));
-        fight.dodge = 6 + Math.round((4 * Math.log((base.vit + base.agi) / 2)) / 1.3);
+        fight.cac = Math.round(Math.sqrt(character.level * base.att) + (Math.pow(base.stren, 2) / 15)) || 0;
+        fight.dist = Math.round(Math.pow(character.level, 2) / 10 + (Math.pow(base.att, 2) * 0.02) * (1 + base.stren * 0.2)) || 0;
+        fight.mag = Math.round((base.att + base.puiss + (character.level / 10)) * (base.puiss / 20 + base.att / 40 + character.level / 100)) || 0;
+        fight.def_phy = Math.round(13 * Math.log(base.def)) || 0;
+        fight.def_mag = Math.round(13 * Math.log(base.def)) || 0;
+        fight.dodge = 6 + Math.round((4 * Math.log((base.vit + base.agi) / 2)) / 1.3) || 0;
 
         if (character.specie === "suhera" || character?.specie === "hanylice") {
             fight.cac = 0;

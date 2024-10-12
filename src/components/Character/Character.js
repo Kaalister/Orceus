@@ -400,7 +400,9 @@ class Character extends React.Component {
         if (!inventory) return null;
 
         if (!!filter) {
-            inventory = inventory.filter((item) => (item.type === filter))
+            inventory = inventory.filter((item) => 
+                item.type === filter || item.type === "artefact"
+            )
         }
 
         options = inventory.map((item) => ({
