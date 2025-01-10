@@ -95,6 +95,7 @@ class Inventory extends React.Component {
             ...character,
             inventory: character.inventory.filter(item => item.id !== id),
             equipment: {
+                id: character.equipment.id,
                 amulets: character.equipment.amulets
                     ?.filter(item => item.id !== id),
                 botClothes: character.equipment.botClothes
@@ -109,7 +110,11 @@ class Inventory extends React.Component {
                     ?.filter(item => item.id !== id),
                 shoes: character.equipment.shoes
                     ?.filter(item => item.id !== id),
+                shields: character.equipment.shields
+                    ?.filter(item => item.id !== id),
                 weapons: character.equipment.weapons
+                    ?.filter(item => item.id !== id),
+                others: character.equipment.others
                     ?.filter(item => item.id !== id),
             }
         });

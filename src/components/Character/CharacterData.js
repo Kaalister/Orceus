@@ -65,7 +65,7 @@ class CharacterData extends React.Component {
 
         let fight = { ...character.fight };
 
-        character.hp_max = base.att + (8 * base.def) + (3 * base.vit) + (3 * base.agi) + base.puiss + (6 * base.stren);
+        character.hp_max = (3 * base.att) + (15 * base.def) + (3 * base.vit) + (3 * base.agi) + (2 * base.puiss) + (5 * base.stren);
         fight.cac = Math.round(Math.sqrt(character.level * base.att) + (Math.pow(base.stren, 2) / 15)) || 0;
         fight.dist = Math.round(Math.pow(character.level, 2) / 10 + (Math.pow(base.att, 2) * 0.02) * (1 + base.stren * 0.2)) || 0;
         fight.mag = Math.round((base.att + base.puiss + (character.level / 10)) * (base.puiss / 20 + base.att / 40 + character.level / 100)) || 0;
